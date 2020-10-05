@@ -1,9 +1,13 @@
+* {
+  box-sizing: border-box;
+}
+
 .newspaper {
   white-space: pre-wrap;
   padding: 20px;
   background-color: gainsboro;
   line-height: 2.5rem;
-  margin-top: 100px;
+  margin-top: 120px;
   text-align: justify;
   font-size: 1.3rem;
 }
@@ -17,4 +21,14 @@ button {
   margin-right: 10px;
   border-radius: 5px;
   cursor: pointer;
+}
+
+a {
+  color: black;
+  text-decoration: none;
+}
+
+.para {
+  line-height: 1.4rem;
+  padding: 10px;
 }

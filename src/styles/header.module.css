@@ -1,0 +1,11 @@
+.header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  box-shadow: 0 0 5px gray;
+  padding: 10px 5px;
+}
+
+.newsgamer {
+  font-size: 2rem;
+}

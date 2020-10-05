@@ -125,12 +125,12 @@ const GamePage = ({ user, location }) => {
         <>
           <div
             style={{
-              height: "100px",
+              height: "120px",
               position: "fixed",
               top: 0,
               background: "white",
               width: "100vw",
-              paddingLeft: "10px",
+              padding: "10px",
               boxShadow: "0 0 10px grey",
             }}
           >
@@ -157,7 +157,7 @@ const GamePage = ({ user, location }) => {
                         color: user.displayName === player ? "green" : "red",
                       }}
                     >
-                      <div>{player}</div>
+                      <div>{player.split(" ")[0]}</div>
                       <div style={{ textAlign: "center", fontSize: "2rem" }}>
                         {currGame[player]}
                       </div>
@@ -170,7 +170,15 @@ const GamePage = ({ user, location }) => {
           {!currGame.start ? (
             <div style={{ marginTop: "120px" }}>
               {currGame.createdby === user.displayName ? (
-                <button onClick={startgame}>start game</button>
+                <div
+                  style={{
+                    height: "100px",
+                    display: "grid",
+                    placeItems: "center",
+                  }}
+                >
+                  <button onClick={startgame}>start game</button>
+                </div>
               ) : (
                 <h2>Game is not started by {currGame.createdby} yet.</h2>
               )}

@@ -6,6 +6,7 @@ import Login from "./components/Login";
 import PrivateRoute from "./routes/PrivateRoute";
 import Home from "./components/Home";
 import firebase from "./firebase";
+import HowToPlay from "./components/HowToPlay";
 
 const db = firebase.firestore();
 
@@ -72,6 +73,10 @@ function App() {
             user={user}
             component={GamePage}
           />
+
+          <Route path="/how-to-play">
+            <HowToPlay />
+          </Route>
         </Switch>
       )}
     </div>
