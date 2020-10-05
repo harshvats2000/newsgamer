@@ -18,6 +18,7 @@ const Home = ({ history, user, setIsAuthenticated, availGames }) => {
         createdby: user.displayName,
         gameid: id,
         over: false,
+        start: false,
       })
       .then(() => {
         setCreatingGame(false);
@@ -34,9 +35,13 @@ const Home = ({ history, user, setIsAuthenticated, availGames }) => {
 
   return (
     <>
+      <div style={{ fontSize: "2.5rem", textAlign: "center" }}>Newsgamer</div>
+      <hr />
       <h2>Hello, {user && user.displayName}</h2>
       <button onClick={(e) => createGame(e)}>create new game</button>
-      <button onClick={logout}>Logout</button>
+      <button style={{ background: "red" }} onClick={logout}>
+        Logout
+      </button>
 
       {creatingGame ? "Creating new game..." : null}
 

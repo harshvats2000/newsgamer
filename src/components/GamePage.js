@@ -1,32 +1,50 @@
 import { firestore } from "firebase";
 import React, { useEffect, useState } from "react";
-import { withRouter } from "react-router-dom";
-import { content } from "../constants";
+import { Link, withRouter } from "react-router-dom";
+import { content, max_score } from "../constants";
 import firebase from "../firebase";
+import { getRandomAlphabet } from "../functions/getRandomAlphabet";
 
 const db = firebase.firestore();
 
 const GamePage = ({ user, location }) => {
   const gameId = location.pathname.split("/")[2];
+  const games_doc = db.collection("games").doc(gameId);
   const [currGame, setCurrGame] = useState({});
   const [words, setWords] = useState([]);
-  const [word, setWord] = useState("");
   const [gameOver, setGameOver] = useState(false);
   const [alphabet, setAlphabet] = useState(null);
+  const [changeAlphabet, setChangeAlphabet] = useState(true);
 
   useEffect(() => {
-    var emptyString = "";
-    var alphabet = "abcdefghijklmnopqrstuvwxyz";
+    let randomAlphabet = getRandomAlphabet();
 
-    while (emptyString.length < 1) {
-      emptyString += alphabet[Math.floor(Math.random() * alphabet.length)];
+    if (
+      content[0].split(" ").map((word) => word.indexOf(randomAlphabet) === 0)
+        .length >= max_score
+    ) {
+      games_doc.get().then((doc) => {
+        if (!doc.data().alphabet) {
+          console.log(gameId);
+          games_doc
+            .update({
+              alphabet: randomAlphabet,
+            })
+            .then(() => {
+              setAlphabet(randomAlphabet);
+            });
+        } else {
+          setAlphabet(doc.data().alphabet);
+        }
+      });
+    } else {
+      setChangeAlphabet(!changeAlphabet);
     }
-    setAlphabet(emptyString);
-  }, []);
+  }, [changeAlphabet]);
 
   useEffect(() => {
     if (gameOver) {
-      db.collection("games").doc(gameId).update({
+      games_doc.update({
         over: true,
       });
     }
@@ -34,11 +52,9 @@ const GamePage = ({ user, location }) => {
 
   useEffect(() => {
     // Listen for live changes in the current game
-    db.collection("games")
-      .doc(gameId)
-      .onSnapshot((doc) => {
-        setCurrGame(doc.data());
-      });
+    games_doc.onSnapshot((doc) => {
+      setCurrGame(doc.data());
+    });
   }, []);
 
   useEffect(() => {
@@ -46,24 +62,19 @@ const GamePage = ({ user, location }) => {
       currGame.createdby &&
       !currGame.players.indexOf(user.displayName) !== -1
     ) {
-      db.collection("games")
-        .doc(gameId)
-        .update({
-          players: firestore.FieldValue.arrayUnion(user.displayName),
-        });
+      games_doc.update({
+        players: firestore.FieldValue.arrayUnion(user.displayName),
+      });
     }
   });
 
   useEffect(() => {
-    db.collection("games")
-      .doc(gameId)
-      .update({
-        [user.displayName]: words.length,
-      });
+    games_doc.update({
+      [user.displayName]: words.length,
+    });
 
-    if (words.length > 9) {
-      db.collection("games")
-        .doc(gameId)
+    if (words.length >= max_score) {
+      games_doc
         .update({
           winner: user.displayName,
         })
@@ -72,22 +83,29 @@ const GamePage = ({ user, location }) => {
   }, [words]);
 
   const handleClick = (word, i) => {
+    // Check if the word is eligible
     if (word.toLowerCase().search(alphabet) === 0) {
-      setWord(word);
-      if (words.indexOf(word) === -1) {
+      // If word is not in the list
+      if (words.indexOf(word + i) === -1) {
         document.getElementById(`${word}${i}`).style.background = "yellow";
-        setWords([...words, word]);
+        setWords([...words, word + i]);
       } else {
         document.getElementById(`${word}${i}`).style.background = "gainsboro";
-        let new_arr = words.filter((item) => item !== word);
+        let new_arr = words.filter((item) => item !== word + i);
         setWords(new_arr);
       }
     }
   };
 
+  const startgame = () => {
+    games_doc.update({
+      start: true,
+    });
+  };
+
   return (
     <>
-      {gameOver ? (
+      {gameOver || currGame.over ? (
         <>
           <h1>Game Over</h1>
           <h3>Winner is {currGame.winner && currGame.winner}</h3>
@@ -101,39 +119,76 @@ const GamePage = ({ user, location }) => {
                 );
               })}
           </div>
+          <Link to="/">Go back to home page</Link>
         </>
       ) : (
         <>
-          <div>
+          <div
+            style={{
+              height: "100px",
+              position: "fixed",
+              top: 0,
+              background: "white",
+              width: "100vw",
+              paddingLeft: "10px",
+              boxShadow: "0 0 10px grey",
+            }}
+          >
             <div>
               This game is created By {currGame.createdby && currGame.createdby}
               .
             </div>
-            <div>Word is {alphabet && alphabet}</div>
             <div>
+              Word:{" "}
+              <span style={{ fontSize: "1.4rem" }}>{alphabet && alphabet}</span>
+            </div>
+            <div
+              style={{
+                display: "flex",
+                gap: "10px",
+              }}
+            >
               {currGame.createdby &&
                 currGame.players.map((player, i) => {
                   return (
-                    <div key={i}>
-                      {player}: {currGame[player]}
+                    <div
+                      key={i}
+                      style={{
+                        color: user.displayName === player ? "green" : "red",
+                      }}
+                    >
+                      <div>{player}</div>
+                      <div style={{ textAlign: "center", fontSize: "2rem" }}>
+                        {currGame[player]}
+                      </div>
                     </div>
                   );
                 })}
             </div>
           </div>
 
-          <div className="newspaper">
-            {content[0].split(" ").map((word, i) => (
-              <span key={i} style={{ whiteSpace: "initial" }}>
-                <span
-                  id={`${word}${i}`}
-                  onClick={(e) => handleClick(e.target.innerHTML.trim(), i)}
-                >
-                  {word}
-                </span>{" "}
-              </span>
-            ))}
-          </div>
+          {!currGame.start ? (
+            <div style={{ marginTop: "120px" }}>
+              {currGame.createdby === user.displayName ? (
+                <button onClick={startgame}>start game</button>
+              ) : (
+                <h2>Game is not started by {currGame.createdby} yet.</h2>
+              )}
+            </div>
+          ) : (
+            <div className="newspaper">
+              {content[0].split(" ").map((word, i) => (
+                <span key={i} style={{ whiteSpace: "initial" }}>
+                  <span
+                    id={`${word}${i}`}
+                    onClick={(e) => handleClick(e.target.innerHTML.trim(), i)}
+                  >
+                    {word}
+                  </span>{" "}
+                </span>
+              ))}
+            </div>
+          )}
         </>
       )}
     </>

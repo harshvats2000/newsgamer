@@ -3,7 +3,18 @@
   padding: 20px;
   background-color: gainsboro;
   line-height: 2.5rem;
-  margin-top: 30px;
+  margin-top: 100px;
   text-align: justify;
   font-size: 1.3rem;
+}
+
+button {
+  font-size: 1.2rem;
+  border: none;
+  background-color: black;
+  color: white;
+  padding: 8px 10px;
+  margin-right: 10px;
+  border-radius: 5px;
+  cursor: pointer;
 }
