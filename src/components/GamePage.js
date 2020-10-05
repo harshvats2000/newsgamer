@@ -3,7 +3,6 @@ import React, { useEffect, useState } from "react";
 import { Link, withRouter } from "react-router-dom";
 import { content, max_score } from "../constants";
 import firebase from "../firebase";
-import { getRandomAlphabet } from "../functions/getRandomAlphabet";
 
 const db = firebase.firestore();
 
@@ -13,34 +12,6 @@ const GamePage = ({ user, location }) => {
   const [currGame, setCurrGame] = useState({});
   const [words, setWords] = useState([]);
   const [gameOver, setGameOver] = useState(false);
-  const [alphabet, setAlphabet] = useState(null);
-  const [changeAlphabet, setChangeAlphabet] = useState(true);
-
-  useEffect(() => {
-    let randomAlphabet = getRandomAlphabet();
-
-    if (
-      content[0].split(" ").map((word) => word.indexOf(randomAlphabet) === 0)
-        .length >= max_score
-    ) {
-      games_doc.get().then((doc) => {
-        if (!doc.data().alphabet) {
-          console.log(gameId);
-          games_doc
-            .update({
-              alphabet: randomAlphabet,
-            })
-            .then(() => {
-              setAlphabet(randomAlphabet);
-            });
-        } else {
-          setAlphabet(doc.data().alphabet);
-        }
-      });
-    } else {
-      setChangeAlphabet(!changeAlphabet);
-    }
-  }, [changeAlphabet]);
 
   useEffect(() => {
     if (gameOver) {
@@ -82,15 +53,22 @@ const GamePage = ({ user, location }) => {
     }
   }, [words]);
 
-  const handleClick = (word, i) => {
+  const handleClick = (word_received, i) => {
+    let word = word_received.trim();
+    word = word_received.replace("”", "");
+    word = word.replace("“", "");
+    word = word.replace(",", "");
+
     // Check if the word is eligible
-    if (word.toLowerCase().search(alphabet) === 0) {
+    if (word.toLowerCase().search(currGame.letter) === 0) {
       // If word is not in the list
       if (words.indexOf(word + i) === -1) {
-        document.getElementById(`${word}${i}`).style.background = "yellow";
+        document.getElementById(`${word_received}${i}`).style.background =
+          "yellow";
         setWords([...words, word + i]);
       } else {
-        document.getElementById(`${word}${i}`).style.background = "gainsboro";
+        document.getElementById(`${word_received}${i}`).style.background =
+          "gainsboro";
         let new_arr = words.filter((item) => item !== word + i);
         setWords(new_arr);
       }
@@ -140,7 +118,7 @@ const GamePage = ({ user, location }) => {
             </div>
             <div>
               Word:{" "}
-              <span style={{ fontSize: "1.4rem" }}>{alphabet && alphabet}</span>
+              <span style={{ fontSize: "1.4rem" }}>{currGame.letter}</span>
             </div>
             <div
               style={{
@@ -185,11 +163,11 @@ const GamePage = ({ user, location }) => {
             </div>
           ) : (
             <div className="newspaper">
-              {content[0].split(" ").map((word, i) => (
+              {content[currGame.paraindex].split(" ").map((word, i) => (
                 <span key={i} style={{ whiteSpace: "initial" }}>
                   <span
                     id={`${word}${i}`}
-                    onClick={(e) => handleClick(e.target.innerHTML.trim(), i)}
+                    onClick={(e) => handleClick(e.target.innerHTML, i)}
                   >
                     {word}
                   </span>{" "}

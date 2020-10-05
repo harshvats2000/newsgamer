@@ -31,6 +31,10 @@ function App() {
   }, [isAuthenticated]);
 
   useEffect(() => {
+    fetchGames();
+  }, []);
+
+  const fetchGames = () => {
     let games = [];
     db.collection("games")
       .where("over", "==", false)
@@ -41,7 +45,7 @@ function App() {
         });
         setAvailGames(games);
       });
-  }, []);
+  };
 
   return (
     <div className="App">
@@ -56,6 +60,7 @@ function App() {
             setIsAuthenticated={setIsAuthenticated}
             availGames={availGames}
             user={user}
+            updateGames={fetchGames}
             component={Home}
           />
 

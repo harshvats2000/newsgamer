@@ -3,14 +3,42 @@ import { v4 as uuidv4 } from "uuid";
 import firebase from "../firebase";
 import { Link, withRouter } from "react-router-dom";
 import Header from "./Header";
+import { getRandomAlphabet } from "../functions/getRandomAlphabet";
+import { content, max_score } from "../constants";
 
 const db = firebase.firestore();
 
-const Home = ({ history, user, setIsAuthenticated, availGames }) => {
+const paraIndex = Math.floor(Math.random() * content.length);
+
+const Home = ({
+  history,
+  user,
+  setIsAuthenticated,
+  availGames,
+  updateGames,
+}) => {
   const [creatingGame, setCreatingGame] = useState(false);
+
+  const generateLetter = () => {
+    let letter = getRandomAlphabet();
+
+    // Check if paragraph contains enough words with alphabet
+    let arr = content[paraIndex]
+      .split(" ")
+      .filter((word) => word.indexOf(letter) === 0);
+
+    if (arr.length >= max_score) {
+      return letter;
+    } else {
+      generateLetter();
+    }
+  };
 
   const createGame = (e) => {
     setCreatingGame(true);
+
+    let letter = generateLetter();
+
     const id = uuidv4();
     db.collection("games")
       .doc(id)
@@ -18,6 +46,8 @@ const Home = ({ history, user, setIsAuthenticated, availGames }) => {
         players: [user.displayName],
         createdby: user.displayName,
         gameid: id,
+        letter: letter,
+        paraindex: paraIndex,
         over: false,
         start: false,
       })
@@ -29,7 +59,10 @@ const Home = ({ history, user, setIsAuthenticated, availGames }) => {
 
   const deleteGame = (gameid) => {
     if (window.confirm("Are you sure you want to delete this game?")) {
-      db.collection("games").doc(gameid).delete();
+      db.collection("games")
+        .doc(gameid)
+        .delete()
+        .then(() => updateGames());
     }
   };
 
