@@ -33,7 +33,7 @@ const HowToPlay = () => {
 
           <li>
             A letter will appear at the top of game page. It will be same for
-            all players to maintain the difficulty level same for all players.
+            all players so that the difficulty level is same for all players.
           </li>
 
           <li>

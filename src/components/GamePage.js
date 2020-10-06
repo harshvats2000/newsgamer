@@ -146,7 +146,7 @@ const GamePage = ({ user, location }) => {
           </div>
 
           {!currGame.start ? (
-            <div style={{ marginTop: "120px" }}>
+            <div style={{ marginTop: "130px" }}>
               {currGame.createdby === user.displayName ? (
                 <div
                   style={{
@@ -158,7 +158,9 @@ const GamePage = ({ user, location }) => {
                   <button onClick={startgame}>start game</button>
                 </div>
               ) : (
-                <h2>Game is not started by {currGame.createdby} yet.</h2>
+                <h2 style={{ paddingLeft: "10px" }}>
+                  Game is not yet started by {currGame.createdby}.
+                </h2>
               )}
             </div>
           ) : (

@@ -5,19 +5,36 @@ import { Link, withRouter } from "react-router-dom";
 import Header from "./Header";
 import { getRandomAlphabet } from "../functions/getRandomAlphabet";
 import { content, max_score } from "../constants";
+import Loader from "../components/Loader";
 
 const db = firebase.firestore();
 
 const paraIndex = Math.floor(Math.random() * content.length);
 
-const Home = ({
-  history,
-  user,
-  setIsAuthenticated,
-  availGames,
-  updateGames,
-}) => {
+const Home = ({ history, user, setIsAuthenticated }) => {
   const [creatingGame, setCreatingGame] = useState(false);
+  const [availGames, setAvailGames] = useState([]);
+  const [loading, setLoading] = useState(false);
+
+  useEffect(() => {
+    setLoading(true);
+    fetchGames();
+  }, []);
+
+  const fetchGames = () => {
+    let games = [];
+    db.collection("games")
+      .orderBy("creationdate", "asc")
+      .where("over", "==", false)
+      .get()
+      .then((snap) => {
+        snap.forEach((doc) => {
+          games.push(doc.data());
+        });
+        setAvailGames(games);
+        setLoading(false);
+      });
+  };
 
   const generateLetter = () => {
     let letter = getRandomAlphabet();
@@ -30,7 +47,7 @@ const Home = ({
     if (arr.length >= max_score) {
       return letter;
     } else {
-      generateLetter();
+      return generateLetter();
     }
   };
 
@@ -40,6 +57,7 @@ const Home = ({
     let letter = generateLetter();
 
     const id = uuidv4();
+    console.log(letter);
     db.collection("games")
       .doc(id)
       .set({
@@ -48,6 +66,7 @@ const Home = ({
         gameid: id,
         letter: letter,
         paraindex: paraIndex,
+        creationdate: firebase.database.ServerValue.TIMESTAMP,
         over: false,
         start: false,
       })
@@ -62,7 +81,7 @@ const Home = ({
       db.collection("games")
         .doc(gameid)
         .delete()
-        .then(() => updateGames());
+        .then(() => fetchGames());
     }
   };
 
@@ -94,38 +113,42 @@ const Home = ({
 
       <hr />
 
-      <div style={{ marginTop: "20px", fontSize: "1.4rem", padding: "10px" }}>
-        {availGames.map((game, i) => (
-          <div
-            key={i}
-            style={{
-              display: "flex",
-              justifyContent: "space-between",
-              marginBottom: "20px",
-            }}
-          >
-            <div>
-              {i + 1}.{" "}
-              <Link
-                to={`/game/${game.gameid}`}
-                style={{ color: "blue", textDecoration: "underline" }}
-              >
-                Game
-              </Link>{" "}
-              by {game.createdby}.
-            </div>
-            {game.createdby === user.displayName ? (
-              <div style={{ marginRight: "10px" }}>
-                <i
-                  className="fa fa-trash"
-                  style={{ color: "red" }}
-                  onClick={(e) => deleteGame(game.gameid)}
-                />
+      {loading ? (
+        <Loader />
+      ) : (
+        <div style={{ marginTop: "20px", fontSize: "1.4rem", padding: "10px" }}>
+          {availGames.map((game, i) => (
+            <div
+              key={i}
+              style={{
+                display: "flex",
+                justifyContent: "space-between",
+                marginBottom: "20px",
+              }}
+            >
+              <div>
+                {i + 1}.{" "}
+                <Link
+                  to={`/game/${game.gameid}`}
+                  style={{ color: "blue", textDecoration: "underline" }}
+                >
+                  Game
+                </Link>{" "}
+                by {game.createdby}.
               </div>
-            ) : null}
-          </div>
-        ))}
-      </div>
+              {game.createdby === user.displayName ? (
+                <div style={{ marginRight: "10px" }}>
+                  <i
+                    className="fa fa-trash"
+                    style={{ color: "red" }}
+                    onClick={(e) => deleteGame(game.gameid)}
+                  />
+                </div>
+              ) : null}
+            </div>
+          ))}
+        </div>
+      )}
     </>
   );
 };

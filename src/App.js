@@ -7,6 +7,7 @@ import PrivateRoute from "./routes/PrivateRoute";
 import Home from "./components/Home";
 import firebase from "./firebase";
 import HowToPlay from "./components/HowToPlay";
+import Loader from "./components/Loader";
 
 const db = firebase.firestore();
 
@@ -14,7 +15,6 @@ function App() {
   const [user, setUser] = useState(null);
   const [isAuthenticated, setIsAuthenticated] = useState(false);
   const [loading, setLoading] = useState(true);
-  const [availGames, setAvailGames] = useState([]);
 
   useEffect(() => {
     firebase.auth().onAuthStateChanged((user) => {
@@ -30,27 +30,10 @@ function App() {
     });
   }, [isAuthenticated]);
 
-  useEffect(() => {
-    fetchGames();
-  }, []);
-
-  const fetchGames = () => {
-    let games = [];
-    db.collection("games")
-      .where("over", "==", false)
-      .get()
-      .then((snap) => {
-        snap.forEach((doc) => {
-          games.push(doc.data());
-        });
-        setAvailGames(games);
-      });
-  };
-
   return (
     <div className="App">
       {loading ? (
-        "loading..."
+        <Loader />
       ) : (
         <Switch>
           <PrivateRoute
@@ -58,9 +41,7 @@ function App() {
             path="/"
             isAuthenticated={isAuthenticated}
             setIsAuthenticated={setIsAuthenticated}
-            availGames={availGames}
             user={user}
-            updateGames={fetchGames}
             component={Home}
           />
 
