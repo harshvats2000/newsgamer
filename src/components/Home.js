@@ -5,6 +5,7 @@ import { Link, withRouter } from "react-router-dom";
 import Header from "./Header";
 import { getRandomAlphabet } from "../functions/getRandomAlphabet";
 import { content, max_score } from "../constants";
+import classes from "../styles/home.module.css";
 import Loader from "../components/Loader";
 
 const db = firebase.firestore();
@@ -19,10 +20,16 @@ const Home = ({ history, user, setIsAuthenticated }) => {
   useEffect(() => {
     setLoading(true);
     fetchGames();
+
+    // Set interval to update games in every 5s
+    setInterval(fetchGames, 5000);
   }, []);
 
   const fetchGames = () => {
     let games = [];
+    const refresh_icon = document.getElementById("refresh-icon");
+    refresh_icon.classList.add("fa-spin");
+
     db.collection("games")
       .orderBy("creationdate", "asc")
       .where("over", "==", false)
@@ -33,6 +40,7 @@ const Home = ({ history, user, setIsAuthenticated }) => {
         });
         setAvailGames(games);
         setLoading(false);
+        document.getElementById("refresh-icon").classList.remove("fa-spin");
       });
   };
 
@@ -113,10 +121,28 @@ const Home = ({ history, user, setIsAuthenticated }) => {
 
       <hr />
 
+      <div className={classes.refresh}>
+        <div style={{ fontSize: "1rem" }}>
+          The games are updated every 5 seconds.
+        </div>
+        <i
+          className="fa fa-refresh"
+          id="refresh-icon"
+          onClick={(e) => fetchGames()}
+        />
+      </div>
+
+      <hr />
+
       {loading ? (
         <Loader />
       ) : (
         <div style={{ marginTop: "20px", fontSize: "1.4rem", padding: "10px" }}>
+          {availGames.length === 0 ? (
+            <div>
+              No games are being played right now. Refresh to check again
+            </div>
+          ) : null}
           {availGames.map((game, i) => (
             <div
               key={i}
