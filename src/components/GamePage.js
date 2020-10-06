@@ -3,6 +3,7 @@ import React, { useEffect, useState } from "react";
 import { Link, withRouter } from "react-router-dom";
 import { content, max_score } from "../constants";
 import firebase from "../firebase";
+import Timer from "react-compound-timer";
 
 const db = firebase.firestore();
 
@@ -19,6 +20,8 @@ const GamePage = ({ user, location }) => {
         over: true,
       });
     }
+
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [gameOver]);
 
   useEffect(() => {
@@ -26,6 +29,8 @@ const GamePage = ({ user, location }) => {
     games_doc.onSnapshot((doc) => {
       setCurrGame(doc.data());
     });
+
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   useEffect(() => {
@@ -51,6 +56,8 @@ const GamePage = ({ user, location }) => {
         })
         .then(() => setGameOver(true));
     }
+
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [words]);
 
   const handleClick = (word_received, i) => {
@@ -113,12 +120,39 @@ const GamePage = ({ user, location }) => {
             }}
           >
             <div>
-              This game is created By {currGame.createdby && currGame.createdby}
-              .
+              Host:{" "}
+              <span style={{ fontWeight: "bold", fontSize: "1.2rem" }}>
+                {currGame.createdby}
+              </span>
             </div>
-            <div>
-              Word:{" "}
-              <span style={{ fontSize: "1.4rem" }}>{currGame.letter}</span>
+            <div
+              style={{
+                display: "flex",
+                justifyContent: "space-between",
+                alignItems: "center",
+              }}
+            >
+              <div>
+                Click words starting with letter:{" "}
+                <span style={{ fontSize: "1.4rem", fontWeight: "bold" }}>
+                  {currGame.letter}
+                </span>
+              </div>
+              <div
+                style={{
+                  fontSize: "1.5rem",
+                  fontWeight: "bold",
+                  transform: "translate(-10px,2px)",
+                  background: "black",
+                  color: "white",
+                  padding: "5px",
+                  borderRadius: "5px",
+                }}
+              >
+                <Timer startImmediately={currGame.start}>
+                  <Timer.Minutes />: <Timer.Seconds />
+                </Timer>
+              </div>
             </div>
             <div
               style={{
@@ -148,19 +182,41 @@ const GamePage = ({ user, location }) => {
           {!currGame.start ? (
             <div style={{ marginTop: "130px" }}>
               {currGame.createdby === user.displayName ? (
-                <div
-                  style={{
-                    height: "100px",
-                    display: "grid",
-                    placeItems: "center",
-                  }}
-                >
-                  <button onClick={startgame}>start game</button>
-                </div>
+                <>
+                  <div
+                    style={{
+                      height: "100px",
+                      display: "grid",
+                      placeItems: "center",
+                    }}
+                  >
+                    <button onClick={startgame}>start game</button>
+                  </div>
+                  <div>
+                    <p className="para" style={{ textAlign: "center" }}>
+                      Clicking the button above will reveal the paragraph to
+                      everyone and the game will start.
+                    </p>
+                    <p
+                      className="para"
+                      style={{ textAlign: "center", color: "red" }}
+                    >
+                      *Leaving this page will make your score 0.
+                    </p>
+                  </div>
+                </>
               ) : (
-                <h2 style={{ paddingLeft: "10px" }}>
-                  Game is not yet started by {currGame.createdby}.
-                </h2>
+                <>
+                  <h2 style={{ paddingLeft: "10px" }}>
+                    Game is not yet started by {currGame.createdby}.
+                  </h2>
+                  <p
+                    className="para"
+                    style={{ textAlign: "center", color: "red" }}
+                  >
+                    *Leaving this page will make your score 0.
+                  </p>
+                </>
               )}
             </div>
           ) : (

@@ -27,21 +27,23 @@ const Home = ({ history, user, setIsAuthenticated }) => {
 
   const fetchGames = () => {
     let games = [];
-    const refresh_icon = document.getElementById("refresh-icon");
-    refresh_icon.classList.add("fa-spin");
+    let refresh_icon = document.getElementById("refresh-icon");
+    if (refresh_icon) {
+      refresh_icon.classList.add("fa-spin");
 
-    db.collection("games")
-      .orderBy("creationdate", "asc")
-      .where("over", "==", false)
-      .get()
-      .then((snap) => {
-        snap.forEach((doc) => {
-          games.push(doc.data());
+      db.collection("games")
+        .orderBy("creationdate", "asc")
+        .where("over", "==", false)
+        .get()
+        .then((snap) => {
+          snap.forEach((doc) => {
+            games.push(doc.data());
+          });
+          setAvailGames(games);
+          setLoading(false);
+          document.getElementById("refresh-icon").classList.remove("fa-spin");
         });
-        setAvailGames(games);
-        setLoading(false);
-        document.getElementById("refresh-icon").classList.remove("fa-spin");
-      });
+    }
   };
 
   const generateLetter = () => {

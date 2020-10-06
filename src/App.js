@@ -9,8 +9,6 @@ import firebase from "./firebase";
 import HowToPlay from "./components/HowToPlay";
 import Loader from "./components/Loader";
 
-const db = firebase.firestore();
-
 function App() {
   const [user, setUser] = useState(null);
   const [isAuthenticated, setIsAuthenticated] = useState(false);

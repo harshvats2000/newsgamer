@@ -4,7 +4,6 @@ import { Redirect, withRouter } from "react-router-dom";
 import Header from "./Header";
 import classes from "../styles/login.module.css";
 
-const db = firebase.firestore();
 const auth = firebase.auth();
 
 const Login = ({ setUser, setIsAuthenticated, isAuthenticated }) => {
@@ -27,7 +26,7 @@ const Login = ({ setUser, setIsAuthenticated, isAuthenticated }) => {
       <div className={classes.footer}>
         Created with{" "}
         <svg
-          class="heart"
+          className="heart"
           viewBox="0 0 32 29.6"
           style={{ width: "20px", height: "20px", verticalAlign: "bottom" }}
         >
