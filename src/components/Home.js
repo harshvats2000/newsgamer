@@ -22,7 +22,7 @@ const Home = ({ history, user, setIsAuthenticated }) => {
     fetchGames();
 
     // Set interval to update games in every 5s
-    setInterval(fetchGames, 5000);
+    // setInterval(fetchGames, 5000);
   }, []);
 
   const fetchGames = () => {
@@ -111,15 +111,21 @@ const Home = ({ history, user, setIsAuthenticated }) => {
       <div style={{ padding: "10px" }}>
         <h2>
           Hello,{" "}
-          <span style={{ color: "green" }}>{user && user.displayName}</span>
+          <span style={{ color: "green", textTransform: "capitalize" }}>
+            {user && user.displayName}
+          </span>
         </h2>
-        <button onClick={(e) => createGame(e)}>create new game</button>
+        <button onClick={(e) => createGame(e)}>
+          <i className="fa fa-plus btn-icon" />
+          create new game
+        </button>
         <button style={{ background: "red" }} onClick={logout}>
+          <i className="fa fa-sign-out btn-icon" />
           Logout
         </button>
       </div>
 
-      {creatingGame ? "Creating new game..." : null}
+      {creatingGame ? <Loader /> : null}
 
       <hr />
 
@@ -134,12 +140,17 @@ const Home = ({ history, user, setIsAuthenticated }) => {
         />
       </div>
 
-      <hr />
-
       {loading ? (
         <Loader />
       ) : (
-        <div style={{ marginTop: "20px", fontSize: "1.4rem", padding: "10px" }}>
+        <div
+          style={{
+            marginTop: "5px",
+            padding: "20px 10px 10px",
+            fontSize: "1.4rem",
+            background: "gainsboro",
+          }}
+        >
           {availGames.length === 0 ? (
             <div>
               No games are being played right now. Refresh to check again
@@ -155,7 +166,7 @@ const Home = ({ history, user, setIsAuthenticated }) => {
               }}
             >
               <div>
-                {i + 1}.{" "}
+                {i + 1}. Join{" "}
                 <Link
                   to={`/game/${game.gameid}`}
                   style={{ color: "blue", textDecoration: "underline" }}

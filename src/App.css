@@ -20,6 +20,7 @@ button {
   padding: 8px 10px;
   margin-right: 10px;
   border-radius: 5px;
+  text-transform: capitalize;
   cursor: pointer;
 }
 
@@ -31,4 +32,9 @@ a {
 .para {
   line-height: 1.4rem;
   padding: 10px;
+}
+
+.btn-icon {
+  margin-right: 8px;
+  vertical-align: middle;
 }
