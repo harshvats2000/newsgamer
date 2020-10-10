@@ -36,7 +36,17 @@ const Login = ({ setUser, setIsAuthenticated, isAuthenticated }) => {
 	c6.1-9.3,16-12.1,16-21.2C32,3.8,28.2,0,23.6,0z"
           />
         </svg>{" "}
-        by <a href="https://github.com/harshvats2000">Harsh Vats</a>
+        by{" "}
+        <a
+          href="https://github.com/harshvats2000"
+          style={{
+            color: "blue",
+            fontWeight: "900",
+            textDecoration: "underline",
+          }}
+        >
+          Harsh Vats
+        </a>
       </div>
     </div>
   );

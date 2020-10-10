@@ -17,7 +17,12 @@ const Header = () => {
           </Link>
         </div>
         <div>
-          <Link to="/how-to-play">How to play?</Link>
+          <Link to="/how-to-play">
+            <i
+              className="fa fa-question-circle"
+              style={{ paddingRight: "8px", fontSize: "2.4rem" }}
+            />
+          </Link>
         </div>
       </div>
     </>

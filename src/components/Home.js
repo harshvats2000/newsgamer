@@ -67,7 +67,6 @@ const Home = ({ history, user, setIsAuthenticated }) => {
     let letter = generateLetter();
 
     const id = uuidv4();
-    console.log(letter);
     db.collection("games")
       .doc(id)
       .set({
@@ -90,8 +89,12 @@ const Home = ({ history, user, setIsAuthenticated }) => {
     if (window.confirm("Are you sure you want to delete this game?")) {
       db.collection("games")
         .doc(gameid)
-        .delete()
-        .then(() => fetchGames());
+        .get()
+        .then((doc) => {
+          if (doc.data()) {
+            doc.ref.delete().then(() => fetchGames());
+          }
+        });
     }
   };
 
@@ -130,8 +133,10 @@ const Home = ({ history, user, setIsAuthenticated }) => {
       <hr />
 
       <div className={classes.refresh}>
-        <div style={{ fontSize: "1rem" }}>
-          The games are updated every 5 seconds.
+        <div style={{ fontSize: "0.8rem" }}>
+          The games are updated every{" "}
+          <span style={{ fontWeight: 900, verticalAlign: "middle" }}>5</span>{" "}
+          seconds.
         </div>
         <i
           className="fa fa-refresh"
@@ -147,14 +152,12 @@ const Home = ({ history, user, setIsAuthenticated }) => {
           style={{
             marginTop: "5px",
             padding: "20px 10px 10px",
-            fontSize: "1.4rem",
+            fontSize: "1.2rem",
             background: "gainsboro",
           }}
         >
           {availGames.length === 0 ? (
-            <div>
-              No games are being played right now. Refresh to check again
-            </div>
+            <p className="para">No games are being played right now.</p>
           ) : null}
           {availGames.map((game, i) => (
             <div

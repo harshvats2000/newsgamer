@@ -1,0 +1,29 @@
+.header {
+  height: 120px;
+  position: fixed;
+  top: 0;
+  background: white;
+  width: 100vw;
+  padding: 10px;
+  box-shadow: 0 0 10px grey;
+}
+
+.letterAndTimer {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.timer {
+  font-weight: bold;
+  background: black;
+  color: white;
+  padding: 5px 10px;
+  border-radius: 5px;
+  text-align: center;
+}
+
+.players {
+  display: flex;
+  gap: 10px;
+}
