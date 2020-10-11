@@ -7,13 +7,13 @@ import { getRandomAlphabet } from "../functions/getRandomAlphabet";
 import { content, max_score } from "../constants";
 import classes from "../styles/home.module.css";
 import Loader from "../components/Loader";
+import { animated, useSpring } from "react-spring";
 
 const db = firebase.firestore();
 
 const paraIndex = Math.floor(Math.random() * content.length);
 
 const Home = ({ history, user, setIsAuthenticated }) => {
-  const [creatingGame, setCreatingGame] = useState(false);
   const [availGames, setAvailGames] = useState([]);
   const [loading, setLoading] = useState(false);
 
@@ -62,8 +62,6 @@ const Home = ({ history, user, setIsAuthenticated }) => {
   };
 
   const createGame = (e) => {
-    setCreatingGame(true);
-
     let letter = generateLetter();
 
     const id = uuidv4();
@@ -80,7 +78,6 @@ const Home = ({ history, user, setIsAuthenticated }) => {
         start: false,
       })
       .then(() => {
-        setCreatingGame(false);
         history.push(`/game/${id}`);
       });
   };
@@ -107,10 +104,8 @@ const Home = ({ history, user, setIsAuthenticated }) => {
     }
   };
 
-  return (
-    <>
-      <Header />
-
+  const nameAndActions = () => {
+    return (
       <div style={{ padding: "10px" }}>
         <h2>
           Hello,{" "}
@@ -127,11 +122,11 @@ const Home = ({ history, user, setIsAuthenticated }) => {
           Logout
         </button>
       </div>
+    );
+  };
 
-      {creatingGame ? <Loader /> : null}
-
-      <hr />
-
+  const refreshLine = () => {
+    return (
       <div className={classes.refresh}>
         <div style={{ fontSize: "0.8rem" }}>
           The games are updated every{" "}
@@ -144,53 +139,77 @@ const Home = ({ history, user, setIsAuthenticated }) => {
           onClick={(e) => fetchGames()}
         />
       </div>
+    );
+  };
 
-      {loading ? (
-        <Loader />
-      ) : (
-        <div
-          style={{
-            marginTop: "5px",
-            padding: "20px 10px 10px",
-            fontSize: "1.2rem",
-            background: "gainsboro",
-          }}
-        >
-          {availGames.length === 0 ? (
-            <p className="para">No games are being played right now.</p>
-          ) : null}
-          {availGames.map((game, i) => (
-            <div
-              key={i}
-              style={{
-                display: "flex",
-                justifyContent: "space-between",
-                marginBottom: "20px",
-              }}
-            >
-              <div>
-                {i + 1}. Join{" "}
-                <Link
-                  to={`/game/${game.gameid}`}
-                  style={{ color: "blue", textDecoration: "underline" }}
-                >
-                  Game
-                </Link>{" "}
-                by {game.createdby}.
-              </div>
-              {game.createdby === user.displayName ? (
-                <div style={{ marginRight: "10px" }}>
-                  <i
-                    className="fa fa-trash"
-                    style={{ color: "red" }}
-                    onClick={(e) => deleteGame(game.gameid)}
-                  />
-                </div>
-              ) : null}
-            </div>
-          ))}
+  const availGameList = (game, i) => {
+    return (
+      <div
+        key={i}
+        style={{
+          display: "flex",
+          justifyContent: "space-between",
+          marginBottom: "20px",
+        }}
+      >
+        <div>
+          {i + 1}. Join{" "}
+          <Link
+            to={`/game/${game.gameid}`}
+            style={{ color: "blue", textDecoration: "underline" }}
+          >
+            Game
+          </Link>{" "}
+          by {game.createdby}.
         </div>
-      )}
+        {game.createdby === user.displayName ? (
+          <div style={{ marginRight: "10px" }}>
+            <i
+              className="fa fa-trash"
+              style={{ color: "red" }}
+              onClick={(e) => deleteGame(game.gameid)}
+            />
+          </div>
+        ) : null}
+      </div>
+    );
+  };
+
+  const fade = useSpring({
+    config: { mass: 20 },
+    from: { opacity: 0 },
+    to: { opacity: 1 },
+  });
+
+  return (
+    <>
+      <Header />
+
+      <animated.div style={fade}>
+        {nameAndActions()}
+
+        <hr />
+
+        {refreshLine()}
+
+        {loading ? (
+          <Loader />
+        ) : (
+          <div
+            style={{
+              marginTop: "5px",
+              padding: "20px 10px 10px",
+              fontSize: "1.2rem",
+              background: "gainsboro",
+            }}
+          >
+            {availGames.length === 0 ? (
+              <p className="para">No games are being played right now.</p>
+            ) : null}
+            {availGames.map((game, i) => availGameList(game, i))}
+          </div>
+        )}
+      </animated.div>
     </>
   );
 };

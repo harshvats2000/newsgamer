@@ -6,6 +6,7 @@ import firebase from "../firebase";
 import Timer from "react-compound-timer";
 import classes from "../styles/gamepage.module.css";
 import Loader from "../components/Loader";
+import { useSpring, animated } from "react-spring";
 
 const db = firebase.firestore();
 
@@ -102,8 +103,6 @@ const GamePage = ({ user, location }) => {
       }
     });
   };
-
-  console.log(currGame);
 
   const headerScreen = () => {
     return (
@@ -205,9 +204,9 @@ const GamePage = ({ user, location }) => {
     );
   };
 
-  const gameOverScreen = () => {
+  const gameOverScreen = (fade) => {
     return (
-      <>
+      <animated.div style={fade}>
         <div style={{ height: "100vh", display: "grid", placeItems: "center" }}>
           <div>
             <h1>Game Over</h1>
@@ -232,7 +231,7 @@ const GamePage = ({ user, location }) => {
             </Link>
           </div>
         </div>
-      </>
+      </animated.div>
     );
   };
 
@@ -252,8 +251,14 @@ const GamePage = ({ user, location }) => {
     );
   };
 
+  const fade = useSpring({
+    config: { mass: 20 },
+    from: { opacity: 0 },
+    to: { opacity: 1 },
+  });
+
   return (
-    <>
+    <animated.div style={fade}>
       {fetching ? (
         <div style={{ display: "grid", placeItems: "center" }}>
           <Loader />
@@ -261,7 +266,7 @@ const GamePage = ({ user, location }) => {
       ) : Object.keys(currGame).length === 0 ? (
         gameDoesNotExistScreen()
       ) : currGame.over ? (
-        gameOverScreen()
+        gameOverScreen(fade)
       ) : (
         <>
           <Timer>
@@ -283,7 +288,7 @@ const GamePage = ({ user, location }) => {
           </Timer>
         </>
       )}
-    </>
+    </animated.div>
   );
 };
 

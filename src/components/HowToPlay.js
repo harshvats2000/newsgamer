@@ -1,6 +1,7 @@
 import React from "react";
 import { Link } from "react-router-dom";
 import Header from "./Header";
+import { useSpring, animated } from "react-spring";
 
 const rules = [
   "To play this game, you must be logged in with a Google account.",
@@ -14,10 +15,15 @@ const rules = [
 ];
 
 const HowToPlay = () => {
+  const fade = useSpring({
+    config: { mass: 10 },
+    from: { opacity: 0 },
+    to: { opacity: 1 },
+  });
   return (
-    <>
+    <div>
       <Header />
-      <div>
+      <animated.div style={fade}>
         <div>
           <p className="para" style={{ fontWeight: "700" }}>
             NewsGamer is a multiplayer online game.
@@ -54,8 +60,8 @@ const HowToPlay = () => {
             Are you ready?
           </Link>
         </div>
-      </div>
-    </>
+      </animated.div>
+    </div>
   );
 };
 
