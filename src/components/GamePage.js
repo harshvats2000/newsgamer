@@ -155,7 +155,7 @@ const GamePage = ({ user, location }) => {
         navigator
           .share({
             title: "come play with me.",
-            text: "Check out web.dev.",
+            text: "Come play NewsGamer with me.",
             url: "https://newsgamer.vercel.app/game/"+gameId,
           })
           .then(() => console.log("Successful share"))
