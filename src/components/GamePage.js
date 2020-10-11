@@ -150,24 +150,44 @@ const GamePage = ({ user, location }) => {
   };
 
   const hostInitialScreen = ({ start }) => {
+    const invitePlayers = () => {
+      if (navigator.share) {
+        navigator
+          .share({
+            title: "web.dev",
+            text: "Check out web.dev.",
+            url: "https://web.dev/",
+          })
+          .then(() => console.log("Successful share"))
+          .catch((error) => console.log("Error sharing", error));
+      }
+    };
     return (
       <>
         <div
           style={{
-            height: "100px",
-            display: "grid",
-            placeItems: "center",
+            textAlign: "center",
+            padding: "20px 0 10px",
           }}
         >
           <button onClick={() => startgame({ start })}>start game</button>
+          <div style={{ marginTop: "10px" }}>
+            <button className="btn-dark" onClick={invitePlayers}>
+              <i className="fa fa-user-plus btn-icon" aria-hidden="true"></i>
+              Invite Players
+            </button>
+          </div>
         </div>
         <div>
           <p className="para" style={{ textAlign: "center" }}>
-            Clicking the button above will reveal the paragraph to everyone and
-            the game will start.
+            Starting the game will reveal the paragraph to everyone in the game.
           </p>
-          <p className="para" style={{ textAlign: "center", color: "red" }}>
-            *Leaving this page will make your score 0.
+          <p
+            className="para"
+            style={{ textAlign: "center", color: "white", background: "red" }}
+          >
+            *Leaving this page will make your score{" "}
+            <span style={{ fontSize: "1.4rem" }}>0</span>.
           </p>
         </div>
       </>

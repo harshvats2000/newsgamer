@@ -11,5 +11,6 @@ let config = {
   measurementId: "G-F1CTM60RR7",
 };
 firebase.initializeApp(config);
+firebase.analytics();
 
 export default firebase;
