@@ -8,7 +8,6 @@ import { content, max_score } from '../constants';
 import classes from '../styles/home.module.css';
 import Loader from './Loader';
 import { animated, useSpring } from 'react-spring';
-import { sendMail } from '../functions/sendMail';
 
 const db = firebase.firestore();
 
@@ -21,8 +20,6 @@ const Home = ({ history, user, setIsAuthenticated }) => {
   useEffect(() => {
     setLoading(true);
     fetchGames();
-
-    sendMail('vatsvatsharsh2000@gmail.com', 'harsh');
 
     // Set interval to update games in every 5s
     // setInterval(fetchGames, 5000);
