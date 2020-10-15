@@ -9,7 +9,7 @@ app.use(express.json({ extended: false }));
 
 app.use(cors());
 
-// app.use('/api/sendmail', require('./routes/api/sendMail'));
+app.use('/api/sendmail', require('./routes/api/sendMail'));
 
 // Serve static assets in production
 if (process.env.NODE_ENV === 'production') {
