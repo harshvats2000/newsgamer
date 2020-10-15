@@ -1,5 +1,6 @@
 const express = require('express');
 const cors = require('cors');
+const path = require('path');
 
 const app = express();
 
@@ -8,7 +9,7 @@ app.use(express.json({ extended: false }));
 
 app.use(cors());
 
-app.use('/api/sendmail', require('./routes/api/sendMail'));
+// app.use('/api/sendmail', require('./routes/api/sendMail'));
 
 // Serve static assets in production
 if (process.env.NODE_ENV === 'production') {
@@ -18,6 +19,8 @@ if (process.env.NODE_ENV === 'production') {
   app.get('*', (req, res) => {
     res.sendFile(path.resolve(__dirname, '..', 'frontend', 'build', 'index.html'));
   });
+} else {
+  console.log('oops');
 }
 
 const PORT = process.env.PORT || 5000;
