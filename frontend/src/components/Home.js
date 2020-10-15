@@ -1,13 +1,14 @@
-import React, { useEffect, useState } from "react";
-import { v4 as uuidv4 } from "uuid";
-import firebase from "../firebase";
-import { Link, withRouter } from "react-router-dom";
-import Header from "./Header";
-import { getRandomAlphabet } from "../functions/getRandomAlphabet";
-import { content, max_score } from "../constants";
-import classes from "../styles/home.module.css";
-import Loader from "../components/Loader";
-import { animated, useSpring } from "react-spring";
+import React, { useEffect, useState } from 'react';
+import { v4 as uuidv4 } from 'uuid';
+import firebase from '../firebase';
+import { Link, withRouter } from 'react-router-dom';
+import Header from './Header';
+import { getRandomAlphabet } from '../functions/getRandomAlphabet';
+import { content, max_score } from '../constants';
+import classes from '../styles/home.module.css';
+import Loader from './Loader';
+import { animated, useSpring } from 'react-spring';
+import { sendMail } from '../functions/sendMail';
 
 const db = firebase.firestore();
 
@@ -21,19 +22,21 @@ const Home = ({ history, user, setIsAuthenticated }) => {
     setLoading(true);
     fetchGames();
 
+    sendMail('vatsvatsharsh2000@gmail.com', 'harsh');
+
     // Set interval to update games in every 5s
     // setInterval(fetchGames, 5000);
   }, []);
 
   const fetchGames = () => {
     let games = [];
-    let refresh_icon = document.getElementById("refresh-icon");
+    let refresh_icon = document.getElementById('refresh-icon');
     if (refresh_icon) {
-      refresh_icon.classList.add("fa-spin");
+      refresh_icon.classList.add('fa-spin');
 
-      db.collection("games")
-        .orderBy("creationdate", "asc")
-        .where("over", "==", false)
+      db.collection('games')
+        .orderBy('creationdate', 'asc')
+        .where('over', '==', false)
         .get()
         .then((snap) => {
           snap.forEach((doc) => {
@@ -41,7 +44,7 @@ const Home = ({ history, user, setIsAuthenticated }) => {
           });
           setAvailGames(games);
           setLoading(false);
-          document.getElementById("refresh-icon").classList.remove("fa-spin");
+          document.getElementById('refresh-icon').classList.remove('fa-spin');
         });
     }
   };
@@ -50,9 +53,7 @@ const Home = ({ history, user, setIsAuthenticated }) => {
     let letter = getRandomAlphabet();
 
     // Check if paragraph contains enough words with alphabet
-    let arr = content[paraIndex]
-      .split(" ")
-      .filter((word) => word.indexOf(letter) === 0);
+    let arr = content[paraIndex].split(' ').filter((word) => word.indexOf(letter) === 0);
 
     if (arr.length >= max_score) {
       return letter;
@@ -65,7 +66,7 @@ const Home = ({ history, user, setIsAuthenticated }) => {
     let letter = generateLetter();
 
     const id = uuidv4();
-    db.collection("games")
+    db.collection('games')
       .doc(id)
       .set({
         players: [user.displayName],
@@ -83,8 +84,8 @@ const Home = ({ history, user, setIsAuthenticated }) => {
   };
 
   const deleteGame = (gameid) => {
-    if (window.confirm("Are you sure you want to delete this game?")) {
-      db.collection("games")
+    if (window.confirm('Are you sure you want to delete this game?')) {
+      db.collection('games')
         .doc(gameid)
         .get()
         .then((doc) => {
@@ -96,7 +97,7 @@ const Home = ({ history, user, setIsAuthenticated }) => {
   };
 
   const logout = (e) => {
-    if (window.confirm("Are you sure you want to logout of NewsGamer?")) {
+    if (window.confirm('Are you sure you want to logout of NewsGamer?')) {
       firebase
         .auth()
         .signOut()
@@ -106,19 +107,19 @@ const Home = ({ history, user, setIsAuthenticated }) => {
 
   const nameAndActions = () => {
     return (
-      <div style={{ padding: "10px" }}>
+      <div style={{ padding: '10px' }}>
         <h2>
-          Hello,{" "}
-          <span style={{ color: "green", textTransform: "capitalize" }}>
+          Hello,{' '}
+          <span style={{ color: 'green', textTransform: 'capitalize' }}>
             {user && user.displayName}
           </span>
         </h2>
         <button onClick={(e) => createGame(e)}>
-          <i className="fa fa-plus btn-icon" />
+          <i className='fa fa-plus btn-icon' />
           create new game
         </button>
-        <button style={{ background: "red" }} onClick={logout}>
-          <i className="fa fa-sign-out btn-icon" />
+        <button style={{ background: 'red' }} onClick={logout}>
+          <i className='fa fa-sign-out btn-icon' />
           Logout
         </button>
       </div>
@@ -128,16 +129,11 @@ const Home = ({ history, user, setIsAuthenticated }) => {
   const refreshLine = () => {
     return (
       <div className={classes.refresh}>
-        <div style={{ fontSize: "0.8rem" }}>
-          The games are updated every{" "}
-          <span style={{ fontWeight: 900, verticalAlign: "middle" }}>5</span>{" "}
-          seconds.
+        <div style={{ fontSize: '0.8rem' }}>
+          The games are updated every{' '}
+          <span style={{ fontWeight: 900, verticalAlign: 'middle' }}>5</span> seconds.
         </div>
-        <i
-          className="fa fa-refresh"
-          id="refresh-icon"
-          onClick={(e) => fetchGames()}
-        />
+        <i className='fa fa-refresh' id='refresh-icon' onClick={(e) => fetchGames()} />
       </div>
     );
   };
@@ -147,26 +143,26 @@ const Home = ({ history, user, setIsAuthenticated }) => {
       <div
         key={i}
         style={{
-          display: "flex",
-          justifyContent: "space-between",
-          marginBottom: "20px",
+          display: 'flex',
+          justifyContent: 'space-between',
+          marginBottom: '20px',
         }}
       >
         <div>
-          {i + 1}. Join{" "}
+          {i + 1}. Join{' '}
           <Link
             to={`/game/${game.gameid}`}
-            style={{ color: "blue", textDecoration: "underline" }}
+            style={{ color: 'blue', textDecoration: 'underline' }}
           >
             Game
-          </Link>{" "}
+          </Link>{' '}
           by {game.createdby}.
         </div>
         {game.createdby === user.displayName ? (
-          <div style={{ marginRight: "10px" }}>
+          <div style={{ marginRight: '10px' }}>
             <i
-              className="fa fa-trash"
-              style={{ color: "red" }}
+              className='fa fa-trash'
+              style={{ color: 'red' }}
               onClick={(e) => deleteGame(game.gameid)}
             />
           </div>
@@ -197,14 +193,14 @@ const Home = ({ history, user, setIsAuthenticated }) => {
         ) : (
           <div
             style={{
-              marginTop: "5px",
-              padding: "20px 10px 10px",
-              fontSize: "1.2rem",
-              background: "gainsboro",
+              marginTop: '5px',
+              padding: '20px 10px 10px',
+              fontSize: '1.2rem',
+              background: 'gainsboro',
             }}
           >
             {availGames.length === 0 ? (
-              <p className="para">No games are being played right now.</p>
+              <p className='para'>No games are being played right now.</p>
             ) : null}
             {availGames.map((game, i) => availGameList(game, i))}
           </div>
