@@ -1,1 +1,1 @@
-web: node backend/index.js
+web: node server.js
