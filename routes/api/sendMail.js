@@ -2,9 +2,9 @@ const express = require('express');
 var nodemailer = require('nodemailer');
 const router = express.Router();
 
-//@route   POST api/sendmail
+//@route   GET api/sendmail
 //@desc    Send welcome email to user
-router.post('/:email/:name', async (req, res) => {
+router.get('/:email/:name', async (req, res) => {
   const name = req.params.name;
   const email = req.params.email;
 
