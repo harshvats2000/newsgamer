@@ -6,7 +6,8 @@ import firebase from '../firebase';
 import Timer from 'react-compound-timer';
 import classes from '../styles/gamepage.module.css';
 import Loader from './Loader';
-import { useSpring, animated } from 'react-spring';
+import { useSpring, animated, useTransition } from 'react-spring';
+import { invitePlayers } from '../functions/invitePlayers';
 
 const db = firebase.firestore();
 
@@ -139,18 +140,6 @@ const GamePage = ({ user, location }) => {
   };
 
   const hostInitialScreen = ({ start }) => {
-    const invitePlayers = () => {
-      if (navigator.share) {
-        navigator
-          .share({
-            title: 'come play with me.',
-            text: 'Come play NewsGamer with me.',
-            url: 'https://newsgamer.vercel.app/game/' + gameId,
-          })
-          .then(() => console.log('Successful share'))
-          .catch((error) => console.log('Error sharing', error));
-      }
-    };
     return (
       <>
         <div
@@ -161,7 +150,7 @@ const GamePage = ({ user, location }) => {
         >
           <button onClick={() => startgame({ start })}>start game</button>
           <div style={{ marginTop: '10px' }}>
-            <button className='btn-dark' onClick={invitePlayers}>
+            <button className='btn-dark' onClick={invitePlayers(gameId)}>
               <i className='fa fa-user-plus btn-icon' aria-hidden='true'></i>
               Invite Players
             </button>
@@ -210,32 +199,30 @@ const GamePage = ({ user, location }) => {
     );
   };
 
-  const gameOverScreen = (fade) => {
+  const gameOverScreen = () => {
     return (
-      <animated.div style={fade}>
+      <>
         <div style={{ height: '100vh', display: 'grid', placeItems: 'center' }}>
           <div>
             <h1>Game Over</h1>
             <h3>
-              Winner is{' '}
-              <span style={{ fontWeight: '900' }}>{currGame.winner && currGame.winner}</span>
+              Winner is <span style={{ fontWeight: '900' }}>{currGame.winner}</span>
             </h3>
             <div>
-              {currGame.createdby &&
-                currGame.players.map((player, i) => {
-                  return (
-                    <div>
-                      {player}: {currGame[player]}
-                    </div>
-                  );
-                })}
+              {currGame.players.map((player, i) => {
+                return (
+                  <div>
+                    {player}: {currGame[player]}
+                  </div>
+                );
+              })}
             </div>
             <Link to='/' style={{ paddingTop: '10px' }}>
               <button>Go back to home page</button>
             </Link>
           </div>
         </div>
-      </animated.div>
+      </>
     );
   };
 
@@ -255,14 +242,15 @@ const GamePage = ({ user, location }) => {
     );
   };
 
-  const fade = useSpring({
-    config: { mass: 20 },
+  const [show, set] = useState(false);
+  const transitions = useTransition(show, null, {
     from: { opacity: 0 },
-    to: { opacity: 1 },
+    enter: { opacity: 1 },
+    leave: { opacity: 0 },
   });
 
-  return (
-    <animated.div style={fade}>
+  return transitions.map(({ item, key, props }) => (
+    <animated.div style={props} key={key}>
       {fetching ? (
         <div style={{ display: 'grid', placeItems: 'center' }}>
           <Loader />
@@ -270,7 +258,7 @@ const GamePage = ({ user, location }) => {
       ) : Object.keys(currGame).length === 0 ? (
         gameDoesNotExistScreen()
       ) : currGame.over ? (
-        gameOverScreen(fade)
+        gameOverScreen()
       ) : (
         <>
           <Timer>
@@ -293,7 +281,7 @@ const GamePage = ({ user, location }) => {
         </>
       )}
     </animated.div>
-  );
+  ));
 };
 
 export default withRouter(GamePage);

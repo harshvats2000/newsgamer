@@ -7,7 +7,7 @@ import { getRandomAlphabet } from '../functions/getRandomAlphabet';
 import { content, max_score } from '../constants';
 import classes from '../styles/home.module.css';
 import Loader from './Loader';
-import { animated, useSpring } from 'react-spring';
+import { animated, useTransition } from 'react-spring';
 
 const db = firebase.firestore();
 
@@ -168,43 +168,45 @@ const Home = ({ history, user, setIsAuthenticated }) => {
     );
   };
 
-  const fade = useSpring({
-    config: { mass: 20 },
+  const [show, set] = useState(false);
+  const transitions = useTransition(show, null, {
     from: { opacity: 0 },
-    to: { opacity: 1 },
+    enter: { opacity: 1 },
+    leave: { opacity: 0 },
   });
 
-  return (
-    <>
+  return transitions.map(({ item, key, props }) => (
+    <div key={key}>
       <Header />
+      <animated.div key={key} style={props}>
+        <div>
+          {nameAndActions()}
 
-      <animated.div style={fade}>
-        {nameAndActions()}
+          <hr />
 
-        <hr />
+          {refreshLine()}
 
-        {refreshLine()}
-
-        {loading ? (
-          <Loader />
-        ) : (
-          <div
-            style={{
-              marginTop: '5px',
-              padding: '20px 10px 10px',
-              fontSize: '1.2rem',
-              background: 'gainsboro',
-            }}
-          >
-            {availGames.length === 0 ? (
-              <p className='para'>No games are being played right now.</p>
-            ) : null}
-            {availGames.map((game, i) => availGameList(game, i))}
-          </div>
-        )}
+          {loading ? (
+            <Loader />
+          ) : (
+            <div
+              style={{
+                marginTop: '5px',
+                padding: '20px 10px 10px',
+                fontSize: '1.2rem',
+                background: 'gainsboro',
+              }}
+            >
+              {availGames.length === 0 ? (
+                <p className='para'>No games are being played right now.</p>
+              ) : null}
+              {availGames.map((game, i) => availGameList(game, i))}
+            </div>
+          )}
+        </div>
       </animated.div>
-    </>
-  );
+    </div>
+  ));
 };
 
 export default withRouter(Home);

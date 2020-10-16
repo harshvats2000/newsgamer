@@ -23,7 +23,7 @@ router.get('/:email/:name', async (req, res) => {
     text: 'That was easy!',
     html: `
     <div style="background: aliceblue; padding: 15px">
-        <h1>Hello, <span style="color: green">${name}</span>, 👋.</h1>
+        <h1>Hello, <span style="color: green">${name}</span> 👋.</h1>
         <div style="font-size: 18px;">
             <p>This is just a warm welcome to you by <span style="background: black; color: white; padding: 1px 5px;">Harsh Vats</span>, who is the person behind <span style="background: black; color: white; padding: 1px 5px;">News</span>Gamer.</p>
             <p>I hope you would definitely enjoy the game.</p>
