@@ -7,7 +7,7 @@ export const baseurl = () => {
   }
 
   if (process.env.NODE_ENV === 'production') {
-    url = 'https://newsgamer.herokuapp.com/5000';
+    url = 'https://newsgamer.herokuapp.com';
   }
 
   return url;
