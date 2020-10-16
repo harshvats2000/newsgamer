@@ -6,7 +6,7 @@ import firebase from '../firebase';
 import Timer from 'react-compound-timer';
 import classes from '../styles/gamepage.module.css';
 import Loader from './Loader';
-import { useSpring, animated, useTransition } from 'react-spring';
+import { animated, useTransition } from 'react-spring';
 import { invitePlayers } from '../functions/invitePlayers';
 
 const db = firebase.firestore();
@@ -150,7 +150,7 @@ const GamePage = ({ user, location }) => {
         >
           <button onClick={() => startgame({ start })}>start game</button>
           <div style={{ marginTop: '10px' }}>
-            <button className='btn-dark' onClick={invitePlayers(gameId)}>
+            <button className='btn-dark' onClick={() => invitePlayers(gameId)}>
               <i className='fa fa-user-plus btn-icon' aria-hidden='true'></i>
               Invite Players
             </button>
