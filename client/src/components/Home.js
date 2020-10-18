@@ -21,7 +21,7 @@ const Home = ({ history, user, setIsAuthenticated }) => {
     fetchGames();
 
     // Set interval to update games in every 5s
-    // setInterval(fetchGames, 5000);
+    setInterval(fetchGames, 5000);
   }, []);
 
   const fetchGames = () => {
@@ -104,14 +104,14 @@ const Home = ({ history, user, setIsAuthenticated }) => {
 
   const nameAndActions = () => {
     return (
-      <div style={{ padding: '10px' }}>
+      <div style={{ padding: '10px', textAlign: 'center' }}>
         <h2>
           Hello,{' '}
           <span style={{ color: 'green', textTransform: 'capitalize' }}>
             {user && user.displayName}
           </span>
         </h2>
-        <button onClick={(e) => createGame(e)}>
+        <button onClick={(e) => createGame(e)} style={{ marginRight: '10px' }}>
           <i className='fa fa-plus btn-icon' />
           create new game
         </button>

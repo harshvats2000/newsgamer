@@ -182,25 +182,39 @@ const GamePage = ({ user, location }) => {
   };
 
   const gameOverScreen = () => {
+    const initial_array = currGame.players.map((player) => ({
+      name: player,
+      score: currGame[player].length,
+    }));
+
+    const sorted_array = initial_array.sort((a, b) => b.score - a.score);
+    console.log(sorted_array);
     return (
       <>
         <div style={{ height: '100vh', display: 'grid', placeItems: 'center' }}>
           <div>
-            <h1>Game Over</h1>
-            <h3>
-              Winner is <span style={{ fontWeight: '900' }}>{currGame.winner}</span>
+            <h1 style={{ textAlign: 'center' }}>Game Over</h1>
+            <h3 style={{ textAlign: 'center' }}>
+              {currGame.winner === user.displayName ? 'You Won 🏆.' : 'You Lose!'}
             </h3>
+            <hr />
             <div>
-              {currGame.players.map((player, i) => {
+              {sorted_array.map((player, i) => {
                 return (
-                  <div>
-                    {player}: {currGame[player].length}
+                  <div
+                    style={{
+                      color: player.name === user.displayName ? 'green' : 'red',
+                      fontWeight: '600',
+                      marginBottom: '8px',
+                    }}
+                  >
+                    {i + 1}. {player.name}: {player.score}
                   </div>
                 );
               })}
             </div>
-            <Link to='/' style={{ paddingTop: '10px' }}>
-              <button>Go back to home page</button>
+            <Link to='/'>
+              <button style={{ marginTop: '20px' }}>Go back to home page</button>
             </Link>
           </div>
         </div>
