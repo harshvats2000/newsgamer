@@ -5,6 +5,7 @@ import Header from './Header';
 import classes from '../styles/login.module.css';
 import { animated, useSpring } from 'react-spring';
 import { sendMail } from '../functions/sendMail';
+import { max_score } from '../constants';
 
 const auth = firebase.auth();
 
@@ -44,8 +45,9 @@ const Login = ({ setUser, setIsAuthenticated, isAuthenticated }) => {
         <div className={classes.body}>
           <div style={{ textAlign: 'center', marginTop: '-150px' }}>
             <p className='para'>
-              Find and click <span style={{ fontWeight: 700, fontSize: '1.2rem' }}>10</span>{' '}
-              words to win.
+              Find and click{' '}
+              <span style={{ fontWeight: 700, fontSize: '1.2rem' }}>{max_score}</span> words to
+              win.
             </p>
             <animated.div style={slide}>
               <button onClick={login}>Login with Google</button>

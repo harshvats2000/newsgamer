@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import { Link } from 'react-router-dom';
 import Header from './Header';
 import { animated, useTransition } from 'react-spring';
+import { max_score } from '../constants';
 
 const rules = [
   'To play this game, you must be logged in with a Google account.',
@@ -11,7 +12,7 @@ const rules = [
   'A letter will appear at the top of game page. It will be same for all players so that the difficulty level is same for all players.',
   'Once the game is started, the paragraph will appear and players have to search words starting with the given letter.',
   'Clicking the appropriate word will increase your score by 1.',
-  'Player who find 10 appropriate words will be the winner.',
+  `Player who find ${max_score} appropriate words will be the winner.`,
 ];
 
 const HowToPlay = () => {

@@ -15,7 +15,6 @@ const GamePage = ({ user, location }) => {
   const gameId = location.pathname.split('/')[2];
   const games_doc = db.collection('games').doc(gameId);
   const [currGame, setCurrGame] = useState({});
-  const [words, setWords] = useState([]);
   const [fetching, setFeching] = useState(true);
 
   useEffect(() => {
@@ -32,62 +31,52 @@ const GamePage = ({ user, location }) => {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
-  // If any new player comes, add him to game
   useEffect(() => {
-    if (currGame.createdby && !currGame.players.indexOf(user.displayName) !== -1) {
-      games_doc.get().then((doc) => {
-        if (doc.data()) {
-          doc.ref.update({
-            players: firestore.FieldValue.arrayUnion(user.displayName),
-          });
-        }
+    if (currGame[user.displayName]) {
+      // Highlight initial words of array
+      currGame[user.displayName].map((id) => {
+        let el = document.getElementById(id);
+        if (el) el.style.backgroundColor = 'yellow';
+      });
+    }
+  });
+
+  useEffect(() => {
+    // Making sure game exists
+    if (currGame.createdby) {
+      // If any new player comes, add him to game
+      if (currGame.players.indexOf(user.displayName) === -1) {
+        games_doc.get().then((doc) => {
+          if (doc.data()) {
+            doc.ref.update({
+              players: firestore.FieldValue.arrayUnion(user.displayName),
+              [user.displayName]: [],
+            });
+          }
+        });
+      }
+
+      // Update winner on score greater than max_score
+      currGame.players.map((player) => {
+        if (currGame[player].length >= max_score)
+          games_doc.update({ over: true, winner: player });
       });
     }
   }, [currGame]);
 
-  useEffect(() => {
-    games_doc.get().then((doc) => {
-      if (doc.data()) {
-        doc.ref.update({
-          [user.displayName]: words.length,
-        });
-      }
-    });
-
-    if (words.length >= max_score) {
-      games_doc.get().then((doc) => {
-        console.log(doc.data());
-        if (doc.data()) {
-          doc.ref
-            .update({
-              winner: user.displayName,
-            })
-            .then(() => {
-              doc.data() && doc.ref.update({ over: true });
-            });
-        }
-      });
-    }
-
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [words]);
-
-  const handleClick = (word_received, i) => {
-    let word = word_received.trim();
-    word = word_received.replace('”', '');
-    word = word.replace('“', '');
-    word = word.replace(',', '');
-
-    // Check if the word is eligible
-    if (word.toLowerCase().search(currGame.letter) === 0) {
-      // If word is not in the list
-      if (words.indexOf(word + i) === -1) {
-        document.getElementById(`${word_received}${i}`).style.background = 'yellow';
-        setWords([...words, word + i]);
+  const handleClick = (id) => {
+    let words = currGame[user.displayName];
+    // If the word is eligible
+    if (id.toLowerCase().search(currGame.letter) === 0) {
+      // If it's a new word
+      if (words.indexOf(id) === -1) {
+        // document.getElementById(`${word}${i}`).style.background = 'yellow'; // Highlight the word
+        words.push(id);
+        games_doc.update({ [user.displayName]: words }); // Update words in database
       } else {
-        document.getElementById(`${word_received}${i}`).style.background = 'gainsboro';
-        let new_arr = words.filter((item) => item !== word + i);
-        setWords(new_arr);
+        document.getElementById(id).style.background = 'gainsboro'; // Remove highlighting
+        words = words.filter((item) => item !== id);
+        games_doc.update({ [user.displayName]: words }); // Update words in database
       }
     }
   };
@@ -120,23 +109,23 @@ const GamePage = ({ user, location }) => {
       </div>
     );
   };
+
   const listPlayers = () => {
-    return (
-      currGame.createdby &&
-      currGame.players.map((player, i) => {
-        return (
-          <div
-            key={i}
-            style={{
-              color: user.displayName === player ? 'green' : 'red',
-            }}
-          >
-            <div>{player.split(' ')[0]}</div>
-            <div style={{ textAlign: 'center', fontSize: '2rem' }}>{currGame[player]}</div>
+    return currGame.players.map((player, i) => {
+      return (
+        <div
+          key={i}
+          style={{
+            color: user.displayName === player ? 'green' : 'red',
+          }}
+        >
+          <div>{player.split(' ')[0]}</div>
+          <div style={{ textAlign: 'center', fontSize: '2rem' }}>
+            {currGame[player] && currGame[player].length}
           </div>
-        );
-      })
-    );
+        </div>
+      );
+    });
   };
 
   const hostInitialScreen = ({ start }) => {
@@ -160,13 +149,6 @@ const GamePage = ({ user, location }) => {
           <p className='para' style={{ textAlign: 'center' }}>
             Starting the game will reveal the paragraph to everyone in the game.
           </p>
-          <p
-            className='para'
-            style={{ textAlign: 'center', color: 'white', background: 'red' }}
-          >
-            *Leaving this page will make your score{' '}
-            <span style={{ fontSize: '1.4rem' }}>0</span>.
-          </p>
         </div>
       </>
     );
@@ -178,9 +160,6 @@ const GamePage = ({ user, location }) => {
         <h2 style={{ paddingLeft: '10px' }}>
           Game is not yet started by {currGame.createdby}.
         </h2>
-        <p className='para' style={{ textAlign: 'center', color: 'red' }}>
-          *Leaving this page will make your score 0.
-        </p>
       </>
     );
   };
@@ -188,13 +167,16 @@ const GamePage = ({ user, location }) => {
   const newsPaper = () => {
     return (
       <div className='newspaper'>
-        {content[currGame.paraindex].split(' ').map((word, i) => (
-          <span key={i} style={{ whiteSpace: 'initial' }}>
-            <span id={`${word}${i}`} onClick={(e) => handleClick(e.target.innerHTML, i)}>
-              {word}
-            </span>{' '}
-          </span>
-        ))}
+        {content[currGame.paraindex].split(' ').map((word, i) => {
+          let id = word.trim().replace('”', '').replace('“', '').replace(',', '') + i;
+          return (
+            <span key={i} style={{ whiteSpace: 'initial' }}>
+              <span id={id} onClick={(e) => handleClick(id)}>
+                {word}
+              </span>{' '}
+            </span>
+          );
+        })}
       </div>
     );
   };
@@ -212,7 +194,7 @@ const GamePage = ({ user, location }) => {
               {currGame.players.map((player, i) => {
                 return (
                   <div>
-                    {player}: {currGame[player]}
+                    {player}: {currGame[player].length}
                   </div>
                 );
               })}
@@ -269,7 +251,7 @@ const GamePage = ({ user, location }) => {
                 {!currGame.start ? (
                   <div style={{ marginTop: '130px' }}>
                     {currGame.createdby === user.displayName
-                      ? hostInitialScreen([start])
+                      ? hostInitialScreen({ start })
                       : otherPlayersInitialScreen()}
                   </div>
                 ) : (

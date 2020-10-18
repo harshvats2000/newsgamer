@@ -11,11 +11,10 @@ import { animated, useTransition } from 'react-spring';
 
 const db = firebase.firestore();
 
-const paraIndex = Math.floor(Math.random() * content.length);
-
 const Home = ({ history, user, setIsAuthenticated }) => {
   const [availGames, setAvailGames] = useState([]);
   const [loading, setLoading] = useState(false);
+  const paraIndex = Math.floor(Math.random() * content.length);
 
   useEffect(() => {
     setLoading(true);
@@ -71,6 +70,7 @@ const Home = ({ history, user, setIsAuthenticated }) => {
         gameid: id,
         letter: letter,
         paraindex: paraIndex,
+        [user.displayName]: [],
         creationdate: firebase.database.ServerValue.TIMESTAMP,
         over: false,
         start: false,
