@@ -4,6 +4,11 @@
   justify-content: space-between;
   box-shadow: 0 0 5px gray;
   padding: 10px 5px;
+  height: 65px;
+  position: fixed;
+  top: 0;
+  width: 100vw;
+  background: white;
 }
 
 .newsgamer {

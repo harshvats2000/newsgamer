@@ -21,7 +21,7 @@ const Home = ({ history, user, setIsAuthenticated }) => {
     fetchGames();
 
     // Set interval to update games in every 5s
-    setInterval(fetchGames, 5000);
+    // setInterval(fetchGames, 5000);
   }, []);
 
   const fetchGames = () => {
@@ -137,24 +137,12 @@ const Home = ({ history, user, setIsAuthenticated }) => {
 
   const availGameList = (game, i) => {
     return (
-      <div
-        key={i}
-        style={{
-          display: 'flex',
-          justifyContent: 'space-between',
-          marginBottom: '20px',
-        }}
-      >
-        <div>
-          {i + 1}. Join{' '}
-          <Link
-            to={`/game/${game.gameid}`}
-            style={{ color: 'blue', textDecoration: 'underline' }}
-          >
-            Game
-          </Link>{' '}
-          by {game.createdby}.
-        </div>
+      <div key={i} className={classes.card}>
+        <Link to={`/game/${game.gameid}`} style={{ flex: 1 }}>
+          <div>
+            Game by <span style={{ fontWeight: '600' }}>{game.createdby}</span>.
+          </div>
+        </Link>
         {game.createdby === user.displayName ? (
           <div style={{ marginRight: '10px' }}>
             <i
@@ -179,10 +167,8 @@ const Home = ({ history, user, setIsAuthenticated }) => {
     <div key={key}>
       <Header />
       <animated.div key={key} style={props}>
-        <div>
+        <div style={{ marginTop: '65px' }}>
           {nameAndActions()}
-
-          <hr />
 
           {refreshLine()}
 
@@ -194,11 +180,12 @@ const Home = ({ history, user, setIsAuthenticated }) => {
                 marginTop: '5px',
                 padding: '20px 10px 10px',
                 fontSize: '1.2rem',
-                background: 'gainsboro',
               }}
             >
               {availGames.length === 0 ? (
-                <p className='para'>No games are being played right now.</p>
+                <p className='para' style={{ boxShadow: '0 0 10px gainsboro' }}>
+                  No games are being played right now.
+                </p>
               ) : null}
               {availGames.map((game, i) => availGameList(game, i))}
             </div>

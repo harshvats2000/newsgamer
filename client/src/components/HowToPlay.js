@@ -27,48 +27,50 @@ const HowToPlay = () => {
     <div>
       <Header />
 
-      {transitions.map(({ item, key, props }) => (
-        <animated.div key={key} style={props}>
-          <div>
-            <p className='para' style={{ fontWeight: '700' }}>
-              NewsGamer is a multiplayer online game.
-            </p>
-          </div>
-          <ol
-            style={{
-              lineHeight: '1.5rem',
-              paddingRight: '10px',
-              fontSize: '.8rem',
-            }}
-          >
-            {rules.map((rule, i) => (
-              <li key={i} style={{ paddingBottom: '10px' }}>
-                {rule}
-              </li>
-            ))}
-          </ol>
-
-          <div
-            style={{
-              padding: '10px',
-              textAlign: 'center',
-              fontSize: '1.8rem',
-            }}
-          >
-            <Link
-              to='/'
+      <div style={{ marginTop: '65px' }}>
+        {transitions.map(({ item, key, props }) => (
+          <animated.div key={key} style={props}>
+            <div>
+              <p className='para' style={{ fontWeight: '700' }}>
+                NewsGamer is a multiplayer online game.
+              </p>
+            </div>
+            <ol
               style={{
-                color: 'white',
-                background: 'green',
-                padding: '10px',
-                borderRadius: '5px',
+                lineHeight: '1.5rem',
+                paddingRight: '10px',
+                fontSize: '.8rem',
               }}
             >
-              Are you ready?
-            </Link>
-          </div>
-        </animated.div>
-      ))}
+              {rules.map((rule, i) => (
+                <li key={i} style={{ paddingBottom: '10px' }}>
+                  {rule}
+                </li>
+              ))}
+            </ol>
+
+            <div
+              style={{
+                padding: '10px',
+                textAlign: 'center',
+                fontSize: '1.8rem',
+              }}
+            >
+              <Link
+                to='/'
+                style={{
+                  color: 'white',
+                  background: 'green',
+                  padding: '10px',
+                  borderRadius: '5px',
+                }}
+              >
+                Are you ready?
+              </Link>
+            </div>
+          </animated.div>
+        ))}
+      </div>
     </div>
   );
 };

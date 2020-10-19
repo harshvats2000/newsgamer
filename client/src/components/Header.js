@@ -10,8 +10,8 @@ const Header = () => {
     to: { transform: 'translateY(0)' },
   });
   return (
-    <div>
-      <div className={classes.header}>
+    <>
+      <header className={classes.header}>
         <div className={classes.newsgamer}>
           <Link to='/'>
             <span style={{ color: 'white', background: 'black', padding: '0 4px' }}>News</span>
@@ -26,8 +26,8 @@ const Header = () => {
             />
           </Link>
         </animated.div>
-      </div>
-    </div>
+      </header>
+    </>
   );
 };
 

@@ -146,7 +146,7 @@ const GamePage = ({ user, location }) => {
           </div>
         </div>
         <div>
-          <p className='para' style={{ textAlign: 'center' }}>
+          <p className='para' style={{ textAlign: 'center', boxShadow: '0 0 10px gainsboro' }}>
             Starting the game will reveal the paragraph to everyone in the game.
           </p>
         </div>
@@ -188,7 +188,6 @@ const GamePage = ({ user, location }) => {
     }));
 
     const sorted_array = initial_array.sort((a, b) => b.score - a.score);
-    console.log(sorted_array);
     return (
       <>
         <div style={{ height: '100vh', display: 'grid', placeItems: 'center' }}>

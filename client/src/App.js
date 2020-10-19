@@ -1,13 +1,14 @@
-import React, { useState, useEffect } from "react";
-import "./App.css";
-import { Route, Switch } from "react-router-dom";
-import GamePage from "./components/GamePage";
-import Login from "./components/Login";
-import PrivateRoute from "./routes/PrivateRoute";
-import Home from "./components/Home";
-import firebase from "./firebase";
-import HowToPlay from "./components/HowToPlay";
-import Loader from "./components/Loader";
+import React, { useState, useEffect } from 'react';
+import './App.css';
+import { Route, Switch } from 'react-router-dom';
+import GamePage from './components/GamePage';
+import Login from './components/Login';
+import PrivateRoute from './routes/PrivateRoute';
+import Home from './components/Home';
+import firebase from './firebase';
+import HowToPlay from './components/HowToPlay';
+import Loader from './components/Loader';
+import Profile from './components/Profile';
 
 function App() {
   const [user, setUser] = useState(null);
@@ -29,21 +30,21 @@ function App() {
   }, [isAuthenticated]);
 
   return (
-    <div className="App">
+    <div className='App'>
       {loading ? (
         <Loader />
       ) : (
         <Switch>
           <PrivateRoute
             exact
-            path="/"
+            path='/'
             isAuthenticated={isAuthenticated}
             setIsAuthenticated={setIsAuthenticated}
             user={user}
             component={Home}
           />
 
-          <Route path="/login">
+          <Route path='/login'>
             <Login
               setUser={setUser}
               setIsAuthenticated={setIsAuthenticated}
@@ -58,7 +59,14 @@ function App() {
             component={GamePage}
           />
 
-          <Route path="/how-to-play">
+          <PrivateRoute
+            path='/profile/me'
+            isAuthenticated={isAuthenticated}
+            user={user}
+            component={Profile}
+          />
+
+          <Route path='/how-to-play'>
             <HowToPlay />
           </Route>
         </Switch>
