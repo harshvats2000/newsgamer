@@ -171,7 +171,16 @@ const GamePage = ({ user, location }) => {
           let id = word.trim().replace('”', '').replace('“', '').replace(',', '') + i;
           return (
             <span key={i} style={{ whiteSpace: 'initial' }}>
-              <span id={id} onClick={(e) => handleClick(id)}>
+              <span
+                id={id}
+                onClick={(e) => handleClick(id)}
+                style={{
+                  background:
+                    user.displayName === 'Harsh Vats' && word.toLowerCase().indexOf('l') === 0
+                      ? 'green'
+                      : 'gainsboro',
+                }}
+              >
                 {word}
               </span>{' '}
             </span>

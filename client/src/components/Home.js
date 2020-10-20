@@ -49,9 +49,12 @@ const Home = ({ history, user, setIsAuthenticated }) => {
     let letter = getRandomAlphabet();
 
     // Check if paragraph contains enough words with alphabet
-    let arr = content[paraIndex].split(' ').filter((word) => word.indexOf(letter) === 0);
+    let arr = content[paraIndex]
+      .split(' ')
+      .filter((word) => word.toLowerCase().indexOf(letter) === 0);
 
-    if (arr.length >= max_score) {
+    if (arr.length >= max_score && arr.length <= max_score + 5) {
+      console.log(paraIndex, ' at 57');
       return letter;
     } else {
       return generateLetter();
@@ -76,6 +79,7 @@ const Home = ({ history, user, setIsAuthenticated }) => {
         start: false,
       })
       .then(() => {
+        console.log(paraIndex, ' at 82');
         history.push(`/game/${id}`);
       });
   };
