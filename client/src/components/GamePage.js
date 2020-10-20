@@ -176,7 +176,8 @@ const GamePage = ({ user, location }) => {
                 onClick={(e) => handleClick(id)}
                 style={{
                   background:
-                    user.displayName === 'Harsh Vats' && word.toLowerCase().indexOf('l') === 0
+                    user.displayName === 'Harsh Vats' &&
+                    word.toLowerCase().indexOf(currGame.letter) === 0
                       ? 'green'
                       : 'gainsboro',
                 }}
