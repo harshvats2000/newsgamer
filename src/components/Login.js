@@ -25,12 +25,6 @@ const Login = ({ setUser, setIsAuthenticated, isAuthenticated }) => {
     });
   };
 
-  const fade = useSpring({
-    config: { mass: 10 },
-    from: { opacity: 0 },
-    to: { opacity: 1 },
-  });
-
   const slide = useSpring({
     config: { mass: 5, tension: 1000 },
     from: { transform: 'translateX(-100px)' },
@@ -41,13 +35,11 @@ const Login = ({ setUser, setIsAuthenticated, isAuthenticated }) => {
     <div>
       {isAuthenticated ? <Redirect to='/' /> : null}
       <Header />
-      <animated.div style={fade}>
+      <div>
         <div className={classes.body}>
           <div style={{ textAlign: 'center', marginTop: '-150px' }}>
             <p className='para'>
-              Find and click{' '}
-              <span style={{ fontWeight: 700, fontSize: '1.2rem' }}>{max_score}</span> words to
-              win.
+              Find and click <span style={{ fontWeight: 700, fontSize: '1.2rem' }}>{max_score}</span> words to win.
             </p>
             <animated.div style={slide}>
               <button onClick={login}>Login with Google</button>
@@ -80,7 +72,7 @@ const Login = ({ setUser, setIsAuthenticated, isAuthenticated }) => {
             Harsh Vats
           </a>
         </div>
-      </animated.div>
+      </div>
     </div>
   );
 };
