@@ -3,7 +3,7 @@ export const invitePlayers = (gameId) => {
     navigator.share({
       title: 'Come play NewsGamer with me.',
       text: 'Come play NewsGamer with me.',
-      url: 'https://newsgamer.herokuapp.com/game/' + gameId,
+      url: 'https://newsgamer.vercel.app/game/' + gameId,
     });
   }
 };

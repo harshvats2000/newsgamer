@@ -2,7 +2,6 @@ import React, { useEffect, useState } from 'react';
 import { Link, withRouter } from 'react-router-dom';
 import { content, max_score } from '../constants';
 import firebase from '../firebase';
-import Timer from 'react-compound-timer';
 import classes from '../styles/gamepage.module.css';
 import Loader from './Loader';
 import { animated, useTransition } from 'react-spring';
@@ -57,7 +56,15 @@ const GamePage = ({ user, location }) => {
 
       // Update winner on score greater than max_score
       currGame.players.map((player) => {
-        if (currGame[player].length >= max_score) games_doc.update({ over: true, winner: player });
+        var today = new Date();
+        var dd = String(today.getDate()).padStart(2, '0');
+        var mm = String(today.getMonth() + 1).padStart(2, '0'); //January is 0!
+        var yyyy = today.getFullYear();
+
+        var overdate = dd + '/' + mm + '/' + yyyy;
+        var overtime = today.getHours() + ':' + today.getMinutes();
+        if (currGame[player].length >= max_score)
+          games_doc.update({ over: true, winner: player, overdate: overdate, overtime: overtime });
       });
     }
   }, [currGame]);
@@ -79,10 +86,10 @@ const GamePage = ({ user, location }) => {
     }
   };
 
-  const startgame = ({ start }) => {
+  const startgame = () => {
     games_doc.get().then((doc) => {
       if (doc.data()) {
-        doc.ref.update({ start: true }).then(start);
+        doc.ref.update({ start: true });
       }
     });
   };
@@ -90,19 +97,14 @@ const GamePage = ({ user, location }) => {
   const headerScreen = () => {
     return (
       <div className={classes.header}>
-        <div style={{ fontSize: '.8rem' }}>
-          Host: <span style={{ fontWeight: 'bold', fontSize: '1rem' }}>{currGame.createdby}</span>
+        <div style={{ color: 'grey' }}>
+          Host: <span style={{ fontWeight: 'bold', color: 'black' }}>{currGame.createdby}</span>
         </div>
-        <div className={classes.letterAndTimer}>
-          <div style={{ fontSize: '.8rem' }}>
-            Click words starting with letter:{' '}
-            <span style={{ fontSize: '1.2rem', fontWeight: 'bold' }}>{currGame.letter}</span>
-          </div>
-          <div className={classes.timer}>
-            <Timer.Minutes />: <Timer.Seconds />
-          </div>
+        <div style={{ color: 'grey' }}>
+          Click words starting with letter:{' '}
+          <span style={{ fontWeight: 'bold', color: 'black' }}>{currGame.letter}</span>
         </div>
-        <div className={classes.players}>{listPlayers()}</div>
+        <ol className={classes.players_ol}>{listPlayers()}</ol>
       </div>
     );
   };
@@ -110,20 +112,21 @@ const GamePage = ({ user, location }) => {
   const listPlayers = () => {
     return currGame.players.map((player, i) => {
       return (
-        <div
+        <li
           key={i}
+          className={classes.players_li}
           style={{
             color: user.displayName === player ? 'green' : 'red',
           }}
         >
           <div>{player.split(' ')[0]}</div>
           <div style={{ textAlign: 'center', fontSize: '2rem' }}>{currGame[player] && currGame[player].length}</div>
-        </div>
+        </li>
       );
     });
   };
 
-  const hostInitialScreen = ({ start }) => {
+  const hostInitialScreen = () => {
     return (
       <>
         <div
@@ -132,7 +135,7 @@ const GamePage = ({ user, location }) => {
             padding: '20px 0 10px',
           }}
         >
-          <button onClick={() => startgame({ start })}>start game</button>
+          <button onClick={() => startgame()}>start game</button>
           <div style={{ marginTop: '10px' }}>
             <button className='btn-dark' onClick={() => invitePlayers(gameId)}>
               <i className='fa fa-user-plus btn-icon' aria-hidden='true'></i>
@@ -258,23 +261,15 @@ const GamePage = ({ user, location }) => {
         gameOverScreen()
       ) : (
         <>
-          <Timer>
-            {({ start }) => (
-              <>
-                {headerScreen()}
+          {headerScreen()}
 
-                {!currGame.start ? (
-                  <div style={{ marginTop: '130px' }}>
-                    {currGame.createdby === user.displayName
-                      ? hostInitialScreen({ start })
-                      : otherPlayersInitialScreen()}
-                  </div>
-                ) : (
-                  newsPaper()
-                )}
-              </>
-            )}
-          </Timer>
+          {!currGame.start ? (
+            <div style={{ marginTop: '130px' }}>
+              {currGame.createdby === user.displayName ? hostInitialScreen() : otherPlayersInitialScreen()}
+            </div>
+          ) : (
+            newsPaper()
+          )}
         </>
       )}
     </animated.div>

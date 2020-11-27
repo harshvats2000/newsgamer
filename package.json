@@ -9,7 +9,6 @@
     "axios": "^0.20.0",
     "firebase": "^7.22.0",
     "react": "^16.13.1",
-    "react-compound-timer": "^1.2.0",
     "react-dom": "^16.13.1",
     "react-router-dom": "^5.2.0",
     "react-scripts": "3.4.3",

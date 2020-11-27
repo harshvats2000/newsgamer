@@ -1,30 +1,23 @@
 .header {
-  height: 120px;
   position: fixed;
   top: 0;
   background: white;
   width: 100vw;
-  padding: 10px;
+  padding: 10px 10px 0 10px;
   box-shadow: 0 0 10px grey;
 }
 
-.letterAndTimer {
+.players_ol {
   display: flex;
-  justify-content: space-between;
-  align-items: center;
+  margin: 0;
+  padding: 0;
+  list-style-type: none;
 }
 
-.timer {
-  font-weight: bold;
-  background: black;
-  color: white;
-  padding: 5px 10px;
-  border-radius: 5px;
-  text-align: center;
-  font-family: sans-serif;
+.players_li {
+  padding: 10px 10px 0 10px;
 }
 
-.players {
-  display: flex;
-  gap: 10px;
+.players_li:nth-of-type(2n) {
+  background: #ededed;
 }

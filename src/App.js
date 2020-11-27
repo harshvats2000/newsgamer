@@ -45,23 +45,15 @@ function App() {
           />
 
           <Route path='/login'>
-            <Login
-              setUser={setUser}
-              setIsAuthenticated={setIsAuthenticated}
-              isAuthenticated={isAuthenticated}
-            />
+            <Login setUser={setUser} setIsAuthenticated={setIsAuthenticated} isAuthenticated={isAuthenticated} />
           </Route>
 
-          <PrivateRoute
-            path={`/game/:id`}
-            isAuthenticated={isAuthenticated}
-            user={user}
-            component={GamePage}
-          />
+          <PrivateRoute path={`/game/:id`} isAuthenticated={isAuthenticated} user={user} component={GamePage} />
 
           <PrivateRoute
             path='/profile/me'
             isAuthenticated={isAuthenticated}
+            setIsAuthenticated={setIsAuthenticated}
             user={user}
             component={Profile}
           />

@@ -5,7 +5,7 @@ import classes from '../styles/profile.module.css';
 
 const db = firebase.firestore();
 
-const Profile = ({ user }) => {
+const Profile = ({ user, setIsAuthenticated }) => {
   const [playedGames, setPlayedGames] = useState([]);
 
   useEffect(() => {
@@ -22,6 +22,15 @@ const Profile = ({ user }) => {
       });
   }, []);
 
+  const logout = (e) => {
+    if (window.confirm('Are you sure you want to logout of NewsGamer?')) {
+      firebase
+        .auth()
+        .signOut()
+        .then(() => setIsAuthenticated(false));
+    }
+  };
+
   const gameCard = (game, i) => {
     const initial_array = game.players.map((player) => ({
       name: player,
@@ -31,6 +40,10 @@ const Profile = ({ user }) => {
     const sorted_array = initial_array.sort((a, b) => b.score - a.score);
     return (
       <div key={i} className={classes.card}>
+        <div style={{ whiteSpace: 'break-spaces', textAlign: 'right', color: 'grey' }}>
+          {game.overtime + '  |  ' + game.overdate}
+        </div>
+        <hr />
         <div style={{ textAlign: 'left' }}>
           {sorted_array.map((player, i) => (
             <div
@@ -40,27 +53,24 @@ const Profile = ({ user }) => {
                 color: player.name === user.displayName ? 'green' : 'red',
               }}
             >
-              {`${i + 1}. ${player.name}`}{' '}
-              <span style={{ color: 'black' }}>({player.score})</span>
+              {`${i + 1}. ${player.name}`} <span style={{ color: 'black' }}>({player.score})</span>
             </div>
           ))}
         </div>
       </div>
     );
   };
-  console.log(playedGames.filter((game) => game.winner === user.displayName).length);
-  const winPercent =
-    (playedGames.filter((game) => game.winner === user.displayName).length /
-      playedGames.length) *
-    100;
+  const winPercent = (playedGames.filter((game) => game.winner === user.displayName).length / playedGames.length) * 100;
   return (
     <>
       <Header />
 
       <div className={classes.body}>
-        <h3 style={{ textAlign: 'center' }}>
-          Winning % = {!isNaN(winPercent) && winPercent.toFixed(2)}
-        </h3>
+        <button style={{ background: 'red', margin: 'auto', display: 'block' }} onClick={logout}>
+          <i className='fa fa-sign-out btn-icon' />
+          Logout
+        </button>
+        <h3 style={{ textAlign: 'center' }}>Winning % = {!isNaN(winPercent) && winPercent.toFixed(2)}</h3>
         <div>{playedGames.map((game, i) => gameCard(game, i))}</div>
       </div>
     </>

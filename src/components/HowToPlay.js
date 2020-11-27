@@ -39,7 +39,6 @@ const HowToPlay = () => {
               style={{
                 lineHeight: '1.5rem',
                 paddingRight: '10px',
-                fontSize: '.8rem',
               }}
             >
               {rules.map((rule, i) => (

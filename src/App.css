@@ -21,7 +21,7 @@ button {
   border-radius: 5px;
   text-transform: capitalize;
   cursor: pointer;
-  font-family: 'Cinzel Decorative', cursive;
+  font-weight: bold;
 }
 
 a {

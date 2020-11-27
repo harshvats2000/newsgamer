@@ -95,28 +95,21 @@ const Home = ({ history, user, setIsAuthenticated }) => {
     }
   };
 
-  const logout = (e) => {
-    if (window.confirm('Are you sure you want to logout of NewsGamer?')) {
-      firebase
-        .auth()
-        .signOut()
-        .then(() => setIsAuthenticated(false));
-    }
-  };
-
   const nameAndActions = () => {
     return (
       <div style={{ padding: '10px', textAlign: 'center' }}>
         <h2>
           Hello, <span style={{ color: 'green', textTransform: 'capitalize' }}>{user && user.displayName}</span>
         </h2>
-        <button onClick={(e) => createGame(e)} style={{ marginRight: '10px' }}>
+        <Link to='/profile/me' style={{ marginRight: '10px' }}>
+          <button style={{ background: 'green' }}>
+            <i className='fa fa-user btn-icon' />
+            Profile
+          </button>
+        </Link>
+        <button onClick={(e) => createGame(e)}>
           <i className='fa fa-plus btn-icon' />
           create new game
-        </button>
-        <button style={{ background: 'red' }} onClick={logout}>
-          <i className='fa fa-sign-out btn-icon' />
-          Logout
         </button>
       </div>
     );
