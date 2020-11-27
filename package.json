@@ -8,7 +8,6 @@
     "@testing-library/user-event": "^7.1.2",
     "axios": "^0.20.0",
     "firebase": "^7.22.0",
-    "firebase-admin": "^9.2.0",
     "react": "^16.13.1",
     "react-compound-timer": "^1.2.0",
     "react-dom": "^16.13.1",
@@ -16,7 +15,6 @@
     "react-scripts": "3.4.3",
     "react-spinners": "^0.9.0",
     "react-spring": "^8.0.27",
-    "use-sound": "^1.0.2",
     "uuid": "^8.3.0"
   },
   "scripts": {
@@ -39,6 +37,5 @@
       "last 1 firefox version",
       "last 1 safari version"
     ]
-  },
-  "proxy": "http://localhost:5000"
+  }
 }

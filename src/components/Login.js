@@ -13,8 +13,8 @@ const Login = ({ setUser, setIsAuthenticated, isAuthenticated }) => {
   const login = () => {
     var provider = new firebase.auth.GoogleAuthProvider();
     auth.signInWithPopup(provider).then((res) => {
-      const email = res.additionalUserInfo.profile.email;
-      const name = res.additionalUserInfo.profile.name;
+      // const email = res.additionalUserInfo.profile.email;
+      // const name = res.additionalUserInfo.profile.name;
 
       // Send a welcome email
       if (res.additionalUserInfo.isNewUser) {

@@ -1,4 +1,3 @@
-import { firestore } from 'firebase';
 import React, { useEffect, useState } from 'react';
 import { Link, withRouter } from 'react-router-dom';
 import { content, max_score } from '../constants';
@@ -49,7 +48,7 @@ const GamePage = ({ user, location }) => {
         games_doc.get().then((doc) => {
           if (doc.data()) {
             doc.ref.update({
-              players: firestore.FieldValue.arrayUnion(user.displayName),
+              players: firebase.firestore.FieldValue.arrayUnion(user.displayName),
               [user.displayName]: [],
             });
           }
@@ -58,8 +57,7 @@ const GamePage = ({ user, location }) => {
 
       // Update winner on score greater than max_score
       currGame.players.map((player) => {
-        if (currGame[player].length >= max_score)
-          games_doc.update({ over: true, winner: player });
+        if (currGame[player].length >= max_score) games_doc.update({ over: true, winner: player });
       });
     }
   }, [currGame]);
@@ -93,8 +91,7 @@ const GamePage = ({ user, location }) => {
     return (
       <div className={classes.header}>
         <div style={{ fontSize: '.8rem' }}>
-          Host:{' '}
-          <span style={{ fontWeight: 'bold', fontSize: '1rem' }}>{currGame.createdby}</span>
+          Host: <span style={{ fontWeight: 'bold', fontSize: '1rem' }}>{currGame.createdby}</span>
         </div>
         <div className={classes.letterAndTimer}>
           <div style={{ fontSize: '.8rem' }}>
@@ -120,9 +117,7 @@ const GamePage = ({ user, location }) => {
           }}
         >
           <div>{player.split(' ')[0]}</div>
-          <div style={{ textAlign: 'center', fontSize: '2rem' }}>
-            {currGame[player] && currGame[player].length}
-          </div>
+          <div style={{ textAlign: 'center', fontSize: '2rem' }}>{currGame[player] && currGame[player].length}</div>
         </div>
       );
     });
@@ -157,9 +152,7 @@ const GamePage = ({ user, location }) => {
   const otherPlayersInitialScreen = () => {
     return (
       <>
-        <h2 style={{ paddingLeft: '10px' }}>
-          Game is not yet started by {currGame.createdby}.
-        </h2>
+        <h2 style={{ paddingLeft: '10px' }}>Game is not yet started by {currGame.createdby}.</h2>
       </>
     );
   };
@@ -176,8 +169,7 @@ const GamePage = ({ user, location }) => {
                 onClick={(e) => handleClick(id)}
                 style={{
                   background:
-                    user.displayName === 'Harsh Vats' &&
-                    word.toLowerCase().indexOf(currGame.letter) === 0
+                    user.displayName === 'Harsh Vats' && word.toLowerCase().indexOf(currGame.letter) === 0
                       ? 'green'
                       : 'gainsboro',
                 }}

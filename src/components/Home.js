@@ -49,9 +49,7 @@ const Home = ({ history, user, setIsAuthenticated }) => {
     let letter = getRandomAlphabet();
 
     // Check if paragraph contains enough words with alphabet
-    let arr = content[paraIndex]
-      .split(' ')
-      .filter((word) => word.toLowerCase().indexOf(letter) === 0);
+    let arr = content[paraIndex].split(' ').filter((word) => word.toLowerCase().indexOf(letter) === 0);
 
     if (arr.length >= max_score && arr.length <= max_score + 5) {
       console.log(paraIndex, ' at 57');
@@ -110,10 +108,7 @@ const Home = ({ history, user, setIsAuthenticated }) => {
     return (
       <div style={{ padding: '10px', textAlign: 'center' }}>
         <h2>
-          Hello,{' '}
-          <span style={{ color: 'green', textTransform: 'capitalize' }}>
-            {user && user.displayName}
-          </span>
+          Hello, <span style={{ color: 'green', textTransform: 'capitalize' }}>{user && user.displayName}</span>
         </h2>
         <button onClick={(e) => createGame(e)} style={{ marginRight: '10px' }}>
           <i className='fa fa-plus btn-icon' />
@@ -131,8 +126,7 @@ const Home = ({ history, user, setIsAuthenticated }) => {
     return (
       <div className={classes.refresh}>
         <div style={{ fontSize: '0.8rem' }}>
-          The games are updated every{' '}
-          <span style={{ fontWeight: 900, verticalAlign: 'middle' }}>5</span> seconds.
+          The games are updated every <span style={{ fontWeight: 900, verticalAlign: 'middle' }}>5</span> seconds.
         </div>
         <i className='fa fa-refresh' id='refresh-icon' onClick={(e) => fetchGames()} />
       </div>
@@ -149,11 +143,7 @@ const Home = ({ history, user, setIsAuthenticated }) => {
         </Link>
         {game.createdby === user.displayName ? (
           <div style={{ marginRight: '10px' }}>
-            <i
-              className='fa fa-trash'
-              style={{ color: 'red' }}
-              onClick={(e) => deleteGame(game.gameid)}
-            />
+            <i className='fa fa-trash' style={{ color: 'red' }} onClick={(e) => deleteGame(game.gameid)} />
           </div>
         ) : null}
       </div>
