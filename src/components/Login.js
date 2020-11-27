@@ -4,7 +4,7 @@ import { Redirect, withRouter } from 'react-router-dom';
 import Header from './Header';
 import classes from '../styles/login.module.css';
 import { animated, useSpring } from 'react-spring';
-import { sendMail } from '../functions/sendMail';
+// import { sendMail } from '../functions/sendMail';
 import { max_score } from '../constants';
 
 const auth = firebase.auth();
@@ -18,7 +18,7 @@ const Login = ({ setUser, setIsAuthenticated, isAuthenticated }) => {
 
       // Send a welcome email
       if (res.additionalUserInfo.isNewUser) {
-        sendMail(email, name);
+        // sendMail(email, name);
       }
       setUser(res.user);
       setIsAuthenticated(true);
