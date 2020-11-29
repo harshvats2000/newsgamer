@@ -135,9 +135,11 @@ const GamePage = ({ user, location }) => {
             padding: '20px 0 10px',
           }}
         >
-          <button onClick={() => startgame()}>start game</button>
+          <button className='btn btn-black' onClick={() => startgame()}>
+            start game
+          </button>
           <div style={{ marginTop: '10px' }}>
-            <button className='btn-dark' onClick={() => invitePlayers(gameId)}>
+            <button className='btn btn-black' onClick={() => invitePlayers(gameId)}>
               <i className='fa fa-user-plus btn-icon' aria-hidden='true'></i>
               Invite Players
             </button>
@@ -218,7 +220,9 @@ const GamePage = ({ user, location }) => {
               })}
             </div>
             <Link to='/'>
-              <button style={{ marginTop: '20px' }}>Go back to home page</button>
+              <button className='btn btn-black' style={{ marginTop: '20px' }}>
+                Go back to home page
+              </button>
             </Link>
           </div>
         </div>
@@ -232,7 +236,7 @@ const GamePage = ({ user, location }) => {
         <p className='para'>This game is either over or deleted by the host.</p>
         <div style={{ textAlign: 'center' }}>
           <Link to='/'>
-            <button>
+            <button className='btn btn-black'>
               <i className='fa fa-arrow-left btn-icon' />
               Go Back To Home
             </button>
