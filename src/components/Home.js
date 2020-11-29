@@ -21,7 +21,7 @@ const Home = ({ history, user, setIsAuthenticated }) => {
     fetchGames();
 
     // Set interval to update games in every 5s
-    // setInterval(fetchGames, 5000);
+    setInterval(fetchGames, 5000);
   }, []);
 
   const fetchGames = () => {
