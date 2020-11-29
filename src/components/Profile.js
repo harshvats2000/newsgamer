@@ -16,7 +16,7 @@ const Profile = ({ user, setIsAuthenticated }) => {
       .get()
       .then((snap) => {
         snap.forEach((doc) => {
-          games.push(doc.data());
+          doc.data().over && games.push(doc.data());
         });
         setPlayedGames(games);
       });
@@ -39,7 +39,11 @@ const Profile = ({ user, setIsAuthenticated }) => {
 
     const sorted_array = initial_array.sort((a, b) => b.score - a.score);
     return (
-      <div key={i} className={classes.card}>
+      <div
+        key={i}
+        className={classes.card}
+        style={{ boxShadow: game.winner === user.displayName ? 'inset 0 0 10px green' : 'inset 0 0 10px red' }}
+      >
         <div style={{ whiteSpace: 'break-spaces', textAlign: 'right', color: 'grey' }}>
           {game.overtime + '  |  ' + game.overdate}
         </div>
@@ -61,11 +65,17 @@ const Profile = ({ user, setIsAuthenticated }) => {
     );
   };
   const winPercent = (playedGames.filter((game) => game.winner === user.displayName).length / playedGames.length) * 100;
+
   return (
     <>
       <Header />
 
       <div className={classes.body}>
+        <div style={{ textAlign: 'center' }}>
+          <img src={user.photoURL} alt='' />
+          <p>{user.displayName}</p>
+          <p>{user.email}</p>
+        </div>
         <button style={{ background: 'red', margin: 'auto', display: 'block' }} onClick={logout}>
           <i className='fa fa-sign-out btn-icon' />
           Logout

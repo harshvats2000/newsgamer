@@ -62,7 +62,7 @@ const Login = ({ setUser, setIsAuthenticated, isAuthenticated }) => {
           </svg>{' '}
           by{' '}
           <a
-            href='https://github.com/harshvats2000'
+            href='https://www.harshvats.dev'
             style={{
               color: 'blue',
               fontWeight: '900',
