@@ -42,7 +42,9 @@ const Login = ({ setUser, setIsAuthenticated, isAuthenticated }) => {
               Find and click <span style={{ fontWeight: 700, fontSize: '1.2rem' }}>{max_score}</span> words to win.
             </p>
             <animated.div style={slide}>
-              <button onClick={login}>Login with Google</button>
+              <button className='btn btn-black' onClick={login}>
+                Login with Google
+              </button>
             </animated.div>
           </div>
         </div>
