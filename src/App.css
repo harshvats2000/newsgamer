@@ -12,16 +12,32 @@
   font-size: 1.3rem;
 }
 
-button {
+button:focus {
+  outline: none;
+}
+
+.btn {
   font-size: 1rem;
   border: none;
-  background-color: black;
-  color: white;
   padding: 8px 10px;
   border-radius: 5px;
   text-transform: capitalize;
   cursor: pointer;
   font-weight: bold;
+  background: transparent;
+}
+
+.btn-green {
+  background: green;
+  color: white;
+}
+.btn-black {
+  background: black;
+  color: white;
+}
+.btn-red {
+  background: red;
+  color: white;
 }
 
 a {

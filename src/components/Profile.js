@@ -50,15 +50,14 @@ const Profile = ({ user, setIsAuthenticated }) => {
         <hr />
         <div style={{ textAlign: 'left' }}>
           {sorted_array.map((player, i) => (
-            <div
+            <p
               key={i}
               style={{
-                marginBottom: '5px',
                 color: player.name === user.displayName ? 'green' : 'red',
               }}
             >
               {`${i + 1}. ${player.name}`} <span style={{ color: 'black' }}>({player.score})</span>
-            </div>
+            </p>
           ))}
         </div>
       </div>
@@ -75,11 +74,12 @@ const Profile = ({ user, setIsAuthenticated }) => {
           <img src={user.photoURL} alt='' />
           <p>{user.displayName}</p>
           <p>{user.email}</p>
+          <button className='btn btn-red' onClick={logout}>
+            <i className='fa fa-sign-out btn-icon' />
+            Logout
+          </button>
         </div>
-        <button style={{ background: 'red', margin: 'auto', display: 'block' }} onClick={logout}>
-          <i className='fa fa-sign-out btn-icon' />
-          Logout
-        </button>
+
         <h3 style={{ textAlign: 'center' }}>Winning % = {!isNaN(winPercent) && winPercent.toFixed(2)}</h3>
         <div>{playedGames.map((game, i) => gameCard(game, i))}</div>
       </div>

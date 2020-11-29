@@ -95,17 +95,17 @@ const Home = ({ history, user, setIsAuthenticated }) => {
 
   const nameAndActions = () => {
     return (
-      <div style={{ padding: '10px', textAlign: 'center' }}>
+      <div style={{ padding: '10px 10px 20px', textAlign: 'center' }}>
         <h2>
           Hello, <span style={{ color: 'green', textTransform: 'capitalize' }}>{user && user.displayName}</span>
         </h2>
         <Link to='/profile/me' style={{ marginRight: '10px' }}>
-          <button style={{ background: 'green' }}>
+          <button className='btn btn-green'>
             <i className='fa fa-user btn-icon' />
             Profile
           </button>
         </Link>
-        <button onClick={(e) => createGame(e)}>
+        <button className='btn btn-black' onClick={(e) => createGame(e)}>
           <i className='fa fa-plus btn-icon' />
           create new game
         </button>
@@ -119,7 +119,9 @@ const Home = ({ history, user, setIsAuthenticated }) => {
         <div style={{ fontSize: '0.8rem' }}>
           The games are updated every <span style={{ fontWeight: 900, verticalAlign: 'middle' }}>5</span> seconds.
         </div>
-        <i className='fa fa-refresh' id='refresh-icon' onClick={(e) => fetchGames()} />
+        <button className='btn'>
+          <i className='fa fa-refresh' id='refresh-icon' onClick={(e) => fetchGames()} />
+        </button>
       </div>
     );
   };
@@ -152,7 +154,7 @@ const Home = ({ history, user, setIsAuthenticated }) => {
     <div key={key}>
       <Header />
       <animated.div key={key} style={props}>
-        <div style={{ marginTop: '65px' }}>
+        <div style={{ maxWidth: 800, margin: 'auto', marginTop: '65px' }}>
           {nameAndActions()}
 
           {refreshLine()}
