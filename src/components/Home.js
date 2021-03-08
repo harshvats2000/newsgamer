@@ -11,7 +11,7 @@ import { animated, useTransition } from 'react-spring';
 
 const db = firebase.firestore();
 
-const Home = ({ history, user, setIsAuthenticated }) => {
+const Home = ({ history, user }) => {
   const [availGames, setAvailGames] = useState([]);
   const [loading, setLoading] = useState(false);
   const paraIndex = Math.floor(Math.random() * content.length);
@@ -58,7 +58,7 @@ const Home = ({ history, user, setIsAuthenticated }) => {
     }
   };
 
-  const createGame = (e) => {
+  const createGame = () => {
     let letter = generateLetter();
 
     const id = uuidv4();

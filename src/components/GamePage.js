@@ -63,8 +63,7 @@ const GamePage = ({ user, location }) => {
 
         var overdate = dd + '/' + mm + '/' + yyyy;
         var overtime = today.getHours() + ':' + today.getMinutes();
-        if (currGame[player].length >= max_score)
-          games_doc.update({ over: true, winner: player, overdate: overdate, overtime: overtime });
+        if (currGame[player].length >= max_score) games_doc.update({ over: true, winner: player, overdate: overdate, overtime: overtime });
       });
     }
   }, [currGame]);
@@ -101,8 +100,7 @@ const GamePage = ({ user, location }) => {
           Host: <span style={{ fontWeight: 'bold', color: 'black' }}>{currGame.createdby}</span>
         </div>
         <div style={{ color: 'grey' }}>
-          Click words starting with letter:{' '}
-          <span style={{ fontWeight: 'bold', color: 'black' }}>{currGame.letter}</span>
+          Click words starting with letter: <span style={{ fontWeight: 'bold', color: 'black' }}>{currGame.letter}</span>
         </div>
         <ol className={classes.players_ol}>{listPlayers()}</ol>
       </div>
@@ -169,16 +167,7 @@ const GamePage = ({ user, location }) => {
           let id = word.trim().replace('”', '').replace('“', '').replace(',', '') + i;
           return (
             <span key={i} style={{ whiteSpace: 'initial' }}>
-              <span
-                id={id}
-                onClick={(e) => handleClick(id)}
-                style={{
-                  background:
-                    user.displayName === 'Harsh Vats' && word.toLowerCase().indexOf(currGame.letter) === 0
-                      ? 'green'
-                      : 'gainsboro',
-                }}
-              >
+              <span id={id} onClick={(e) => handleClick(id)}>
                 {word}
               </span>{' '}
             </span>
@@ -200,9 +189,7 @@ const GamePage = ({ user, location }) => {
         <div style={{ height: '100vh', display: 'grid', placeItems: 'center' }}>
           <div>
             <h1 style={{ textAlign: 'center' }}>Game Over</h1>
-            <h3 style={{ textAlign: 'center' }}>
-              {currGame.winner === user.displayName ? 'You Won 🏆.' : 'You Lose!'}
-            </h3>
+            <h3 style={{ textAlign: 'center' }}>{currGame.winner === user.displayName ? 'You Won 🏆.' : 'You Lose!'}</h3>
             <hr />
             <div>
               {sorted_array.map((player, i) => {
@@ -268,9 +255,7 @@ const GamePage = ({ user, location }) => {
           {headerScreen()}
 
           {!currGame.start ? (
-            <div style={{ marginTop: '130px' }}>
-              {currGame.createdby === user.displayName ? hostInitialScreen() : otherPlayersInitialScreen()}
-            </div>
+            <div style={{ marginTop: '130px' }}>{currGame.createdby === user.displayName ? hostInitialScreen() : otherPlayersInitialScreen()}</div>
           ) : (
             newsPaper()
           )}

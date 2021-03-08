@@ -35,14 +35,7 @@ function App() {
         <Loader />
       ) : (
         <Switch>
-          <PrivateRoute
-            exact
-            path='/'
-            isAuthenticated={isAuthenticated}
-            setIsAuthenticated={setIsAuthenticated}
-            user={user}
-            component={Home}
-          />
+          <PrivateRoute exact path='/' isAuthenticated={isAuthenticated} user={user} component={Home} />
 
           <Route path='/login'>
             <Login setUser={setUser} setIsAuthenticated={setIsAuthenticated} isAuthenticated={isAuthenticated} />
