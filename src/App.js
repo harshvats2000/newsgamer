@@ -1,57 +1,53 @@
-import React, { useState, useEffect } from 'react';
-import './App.css';
-import { Route, Switch } from 'react-router-dom';
-import GamePage from './components/GamePage';
-import Login from './components/Login';
-import PrivateRoute from './routes/PrivateRoute';
-import Home from './components/Home';
-import firebase from './firebase';
-import HowToPlay from './components/HowToPlay';
-import Loader from './components/Loader';
-import Profile from './components/Profile';
+import React, { useState, useEffect } from "react";
+import { Provider, useSelector, useDispatch } from "react-redux";
+import "./App.css";
+import { Route, Switch } from "react-router-dom";
+import GamePage from "./components/GamePage";
+import Login from "./components/Login";
+import PrivateRoute from "./routes/PrivateRoute";
+import Home from "./components/Home";
+import firebase from "./firebase";
+import HowToPlay from "./components/HowToPlay";
+import Loader from "./components/Loader";
+import Profile from "./components/Profile";
+import { LOGIN_SUCCESS, LOGIN_FAIL } from "./actions";
 
 function App() {
-  const [user, setUser] = useState(null);
-  const [isAuthenticated, setIsAuthenticated] = useState(false);
-  const [loading, setLoading] = useState(true);
+  const authenticating = useSelector((state) => state.auth.authenticating);
+  const dispatch = useDispatch();
 
   useEffect(() => {
     firebase.auth().onAuthStateChanged((user) => {
       if (user) {
-        setUser(user);
-        setIsAuthenticated(true);
-        setLoading(false);
+        dispatch({
+          type: LOGIN_SUCCESS,
+          payload: user,
+        });
       } else {
-        setUser(null);
-        setIsAuthenticated(false);
-        setLoading(false);
+        dispatch({
+          type: LOGIN_FAIL,
+        });
       }
     });
-  }, [isAuthenticated]);
+  });
 
   return (
-    <div className='App'>
-      {loading ? (
+    <div className="App">
+      {authenticating ? (
         <Loader />
       ) : (
         <Switch>
-          <PrivateRoute exact path='/' isAuthenticated={isAuthenticated} user={user} component={Home} />
+          <PrivateRoute exact path="/" component={Home} />
 
-          <Route path='/login'>
-            <Login setUser={setUser} setIsAuthenticated={setIsAuthenticated} isAuthenticated={isAuthenticated} />
+          <Route path="/login">
+            <Login />
           </Route>
 
-          <PrivateRoute path={`/game/:id`} isAuthenticated={isAuthenticated} user={user} component={GamePage} />
+          <PrivateRoute path={`/game/:id`} component={GamePage} />
 
-          <PrivateRoute
-            path='/profile/me'
-            isAuthenticated={isAuthenticated}
-            setIsAuthenticated={setIsAuthenticated}
-            user={user}
-            component={Profile}
-          />
+          <PrivateRoute path="/profile/me" component={Profile} />
 
-          <Route path='/how-to-play'>
+          <Route path="/how-to-play">
             <HowToPlay />
           </Route>
         </Switch>

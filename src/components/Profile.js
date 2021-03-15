@@ -1,18 +1,22 @@
-import React, { useEffect, useState } from 'react';
-import Header from './Header';
-import firebase from '../firebase';
-import classes from '../styles/profile.module.css';
+import React, { useEffect, useState } from "react";
+import Header from "./Header";
+import firebase from "../firebase";
+import classes from "../styles/profile.module.css";
+import { useSelector, useDispatch } from "react-redux";
+import { logout } from "../actions/auth";
 
 const db = firebase.firestore();
 
-const Profile = ({ user, setIsAuthenticated }) => {
+const Profile = () => {
+  const dispatch = useDispatch();
+  const user = useSelector((state) => state.auth.user);
   const [playedGames, setPlayedGames] = useState([]);
 
   useEffect(() => {
     let games = [];
-    db.collection('games')
-      .orderBy('creationdate', 'desc')
-      .where('players', 'array-contains', user.displayName)
+    db.collection("games")
+      .orderBy("creationdate", "desc")
+      .where("players", "array-contains", user.displayName)
       .get()
       .then((snap) => {
         snap.forEach((doc) => {
@@ -22,15 +26,6 @@ const Profile = ({ user, setIsAuthenticated }) => {
       });
   }, []);
 
-  const logout = (e) => {
-    if (window.confirm('Are you sure you want to logout of NewsGamer?')) {
-      firebase
-        .auth()
-        .signOut()
-        .then(() => setIsAuthenticated(false));
-    }
-  };
-
   const gameCard = (game, i) => {
     const initial_array = game.players.map((player) => ({
       name: player,
@@ -39,24 +34,18 @@ const Profile = ({ user, setIsAuthenticated }) => {
 
     const sorted_array = initial_array.sort((a, b) => b.score - a.score);
     return (
-      <div
-        key={i}
-        className={classes.card}
-        style={{ boxShadow: game.winner === user.displayName ? 'inset 0 0 10px green' : 'inset 0 0 10px red' }}
-      >
-        <div style={{ whiteSpace: 'break-spaces', textAlign: 'right', color: 'grey' }}>
-          {game.overtime + '  |  ' + game.overdate}
-        </div>
+      <div key={i} className={classes.card} style={{ boxShadow: game.winner === user.displayName ? "inset 0 0 10px green" : "inset 0 0 10px red" }}>
+        <div style={{ whiteSpace: "break-spaces", textAlign: "right", color: "grey" }}>{game.overtime + "  |  " + game.overdate}</div>
         <hr />
-        <div style={{ textAlign: 'left' }}>
+        <div style={{ textAlign: "left" }}>
           {sorted_array.map((player, i) => (
             <p
               key={i}
               style={{
-                color: player.name === user.displayName ? 'green' : 'red',
+                color: player.name === user.displayName ? "green" : "red",
               }}
             >
-              {`${i + 1}. ${player.name}`} <span style={{ color: 'black' }}>({player.score})</span>
+              {`${i + 1}. ${player.name}`} <span style={{ color: "black" }}>({player.score})</span>
             </p>
           ))}
         </div>
@@ -70,17 +59,17 @@ const Profile = ({ user, setIsAuthenticated }) => {
       <Header />
 
       <div className={classes.body}>
-        <div style={{ textAlign: 'center' }}>
-          <img src={user.photoURL} alt='' />
+        <div style={{ textAlign: "center" }}>
+          <img src={user.photoURL} alt="" />
           <p>{user.displayName}</p>
           <p>{user.email}</p>
-          <button className='btn btn-red' onClick={logout}>
-            <i className='fa fa-sign-out btn-icon' />
+          <button className="btn btn-red" onClick={() => dispatch(logout())}>
+            <i className="fa fa-sign-out btn-icon" />
             Logout
           </button>
         </div>
 
-        <h3 style={{ textAlign: 'center' }}>Winning % = {!isNaN(winPercent) && winPercent.toFixed(2)}</h3>
+        <h3 style={{ textAlign: "center" }}>Winning % = {!isNaN(winPercent) && winPercent.toFixed(2)}</h3>
         <div>{playedGames.map((game, i) => gameCard(game, i))}</div>
       </div>
     </>
