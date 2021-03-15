@@ -1,105 +1,36 @@
-import React, { useEffect, useState } from "react";
-import { v4 as uuidv4 } from "uuid";
+import React, { useEffect } from "react";
 import firebase from "../firebase";
-import { Link, withRouter } from "react-router-dom";
+import { Link, useHistory } from "react-router-dom";
 import Header from "./Header";
-import { getRandomAlphabet } from "../functions/getRandomAlphabet";
-import { content, max_score } from "../constants";
 import classes from "../styles/home.module.css";
 import Loader from "./Loader";
-import { animated, useTransition } from "react-spring";
-import { useSelector } from "react-redux";
+import { useSelector, useDispatch } from "react-redux";
+import { fetchGames, createGame, deleteGame } from "../actions/games";
+import { FETCHING_GAMES } from "../actions";
 
-const db = firebase.firestore();
-
-const Home = ({ history }) => {
+const Home = () => {
+  const dispatch = useDispatch();
+  const history = useHistory();
   const { user } = useSelector((state) => state.auth);
-  const [availGames, setAvailGames] = useState([]);
-  const [loading, setLoading] = useState(false);
-  const paraIndex = Math.floor(Math.random() * content.length);
+  const { availGames, fetchingGames: loading } = useSelector((state) => state.games);
 
   useEffect(() => {
-    setLoading(true);
-    fetchGames();
+    dispatch({
+      type: FETCHING_GAMES,
+      payload: true,
+    });
+
+    dispatch(fetchGames());
 
     // Set interval to update games in every 5s
-    setInterval(fetchGames, 5000);
+    setInterval(() => dispatch(fetchGames()), 10000);
   }, []);
-
-  const fetchGames = () => {
-    let games = [];
-    let refresh_icon = document.getElementById("refresh-icon");
-    if (refresh_icon) {
-      refresh_icon.classList.add("fa-spin");
-
-      db.collection("games")
-        .orderBy("creationdate", "asc")
-        .where("over", "==", false)
-        .get()
-        .then((snap) => {
-          snap.forEach((doc) => {
-            games.push(doc.data());
-          });
-          setAvailGames(games);
-          setLoading(false);
-          document.getElementById("refresh-icon").classList.remove("fa-spin");
-        });
-    }
-  };
-
-  const generateLetter = () => {
-    let letter = getRandomAlphabet();
-
-    // Check if paragraph contains enough words with alphabet
-    let arr = content[paraIndex].split(" ").filter((word) => word.toLowerCase().indexOf(letter) === 0);
-
-    if (arr.length >= max_score && arr.length <= max_score + 5) {
-      return letter;
-    } else {
-      return generateLetter();
-    }
-  };
-
-  const createGame = () => {
-    let letter = generateLetter();
-
-    const id = uuidv4();
-    db.collection("games")
-      .doc(id)
-      .set({
-        players: [user.displayName],
-        createdby: user.displayName,
-        gameid: id,
-        letter: letter,
-        paraindex: paraIndex,
-        [user.displayName]: [],
-        creationdate: firebase.database.ServerValue.TIMESTAMP,
-        over: false,
-        start: false,
-      })
-      .then(() => {
-        history.push(`/game/${id}`);
-      });
-  };
-
-  const deleteGame = (gameid) => {
-    if (window.confirm("Are you sure you want to delete this game?")) {
-      db.collection("games")
-        .doc(gameid)
-        .get()
-        .then((doc) => {
-          if (doc.data()) {
-            doc.ref.delete().then(() => fetchGames());
-          }
-        });
-    }
-  };
 
   const nameAndActions = () => {
     return (
       <div style={{ padding: "10px 10px 20px", textAlign: "center" }}>
         <h2>
-          Hello, <span style={{ color: "green", textTransform: "capitalize" }}>{user && user.displayName}</span>
+          Hello, <span style={{ color: "green", textTransform: "capitalize" }}>{user?.displayName}</span>
         </h2>
         <Link to="/profile/me" style={{ marginRight: "10px" }}>
           <button className="btn btn-green">
@@ -107,7 +38,7 @@ const Home = ({ history }) => {
             Profile
           </button>
         </Link>
-        <button className="btn btn-black" onClick={(e) => createGame(e)}>
+        <button className="btn btn-black" onClick={() => dispatch(createGame(user.displayName, history))}>
           <i className="fa fa-plus btn-icon" />
           create new game
         </button>
@@ -138,24 +69,17 @@ const Home = ({ history }) => {
         </Link>
         {game.createdby === user.displayName ? (
           <div style={{ marginRight: "10px" }}>
-            <i className="fa fa-trash" style={{ color: "red" }} onClick={(e) => deleteGame(game.gameid)} />
+            <i className="fa fa-trash" style={{ color: "red" }} onClick={() => dispatch(deleteGame(game.gameid))} />
           </div>
         ) : null}
       </div>
     );
   };
 
-  const [show, set] = useState(false);
-  const transitions = useTransition(show, null, {
-    from: { opacity: 0 },
-    enter: { opacity: 1 },
-    leave: { opacity: 0 },
-  });
-
-  return transitions.map(({ item, key, props }) => (
-    <div key={key}>
+  return (
+    <div>
       <Header />
-      <animated.div key={key} style={props}>
+      <div>
         <div style={{ maxWidth: 800, margin: "auto", marginTop: "65px" }}>
           {nameAndActions()}
 
@@ -180,9 +104,9 @@ const Home = ({ history }) => {
             </div>
           )}
         </div>
-      </animated.div>
+      </div>
     </div>
-  ));
+  );
 };
 
-export default withRouter(Home);
+export default Home;
