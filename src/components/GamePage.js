@@ -6,35 +6,33 @@ import classes from "../styles/gamepage.module.css";
 import Loader from "./Loader";
 import { animated, useTransition } from "react-spring";
 import { invitePlayers } from "../functions/invitePlayers";
-import { useSelector } from "react-redux";
+import { useSelector, useDispatch } from "react-redux";
+import { SET_CURR_GAME } from "../actions";
+import { addNewPlayerToCurrGame, addWinner } from "../actions/currGame";
 
 const db = firebase.firestore();
 
 const GamePage = ({ location }) => {
-  const { user } = useSelector((state) => state.auth);
+  const dispatch = useDispatch();
   const gameId = location.pathname.split("/")[2];
   const games_doc = db.collection("games").doc(gameId);
-  const [currGame, setCurrGame] = useState({});
-  const [fetching, setFeching] = useState(true);
+  const { currGame, fetchingGame: fetching } = useSelector((state) => state.currGame);
+  const {
+    user: { displayName },
+  } = useSelector((state) => state.auth);
 
   useEffect(() => {
     // Listen for live changes in the current game
     games_doc.onSnapshot((doc) => {
-      if (doc.data()) {
-        setCurrGame(doc.data());
-      } else {
-        setCurrGame({});
-      }
-      if (fetching) setFeching(false);
+      if (doc.data()) dispatch({ type: SET_CURR_GAME, payload: doc.data() });
+      else dispatch({ type: SET_CURR_GAME, payload: null });
     });
-
-    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   useEffect(() => {
-    if (currGame[user.displayName]) {
+    if (currGame?.[displayName]) {
       // Highlight initial words of array
-      currGame[user.displayName].map((id) => {
+      currGame[displayName].map((id) => {
         let el = document.getElementById(id);
         if (el) el.style.backgroundColor = "yellow";
       });
@@ -43,46 +41,28 @@ const GamePage = ({ location }) => {
 
   useEffect(() => {
     // Making sure game exists
-    if (currGame.createdby) {
+    if (currGame?.createdby) {
       // If any new player comes, add him to game
-      if (currGame.players.indexOf(user.displayName) === -1) {
-        games_doc.get().then((doc) => {
-          if (doc.data()) {
-            doc.ref.update({
-              players: firebase.firestore.FieldValue.arrayUnion(user.displayName),
-              [user.displayName]: [],
-            });
-          }
-        });
-      }
+      dispatch(addNewPlayerToCurrGame(games_doc));
 
-      // Update winner on score greater than max_score
-      currGame.players.map((player) => {
-        var today = new Date();
-        var dd = String(today.getDate()).padStart(2, "0");
-        var mm = String(today.getMonth() + 1).padStart(2, "0"); //January is 0!
-        var yyyy = today.getFullYear();
-
-        var overdate = dd + "/" + mm + "/" + yyyy;
-        var overtime = today.getHours() + ":" + today.getMinutes();
-        if (currGame[player].length >= max_score) games_doc.update({ over: true, winner: player, overdate: overdate, overtime: overtime });
-      });
+      // Add winner on score greater than max_score
+      dispatch(addWinner(games_doc));
     }
   }, [currGame]);
 
   const handleClick = (id) => {
-    let words = currGame[user.displayName];
+    let words = currGame[displayName];
     // If the word is eligible
     if (id.toLowerCase().search(currGame.letter) === 0) {
       // If it's a new word
       if (words.indexOf(id) === -1) {
         // document.getElementById(`${word}${i}`).style.background = 'yellow'; // Highlight the word
         words.push(id);
-        games_doc.update({ [user.displayName]: words }); // Update words in database
+        games_doc.update({ [displayName]: words }); // Update words in database
       } else {
         document.getElementById(id).style.background = "gainsboro"; // Remove highlighting
         words = words.filter((item) => item !== id);
-        games_doc.update({ [user.displayName]: words }); // Update words in database
+        games_doc.update({ [displayName]: words }); // Update words in database
       }
     }
   };
@@ -99,10 +79,10 @@ const GamePage = ({ location }) => {
     return (
       <div className={classes.header}>
         <div style={{ color: "grey" }}>
-          Host: <span style={{ fontWeight: "bold", color: "black" }}>{currGame.createdby}</span>
+          Host: <span style={{ fontWeight: "bold", color: "black" }}>{currGame?.createdby}</span>
         </div>
         <div style={{ color: "grey" }}>
-          Click words starting with letter: <span style={{ fontWeight: "bold", color: "black" }}>{currGame.letter}</span>
+          Click words starting with letter: <span style={{ fontWeight: "bold", color: "black" }}>{currGame?.letter}</span>
         </div>
         <ol className={classes.players_ol}>{listPlayers()}</ol>
       </div>
@@ -116,11 +96,11 @@ const GamePage = ({ location }) => {
           key={i}
           className={classes.players_li}
           style={{
-            color: user.displayName === player ? "green" : "red",
+            color: displayName === player ? "green" : "red",
           }}
         >
           <div>{player.split(" ")[0]}</div>
-          <div style={{ textAlign: "center", fontSize: "2rem" }}>{currGame[player] && currGame[player].length}</div>
+          <div style={{ textAlign: "center", fontSize: "2rem" }}>{currGame?.[player] && currGame?.[player].length}</div>
         </li>
       );
     });
@@ -157,7 +137,7 @@ const GamePage = ({ location }) => {
   const otherPlayersInitialScreen = () => {
     return (
       <>
-        <h2 style={{ paddingLeft: "10px" }}>Game is not yet started by {currGame.createdby}.</h2>
+        <h2 style={{ paddingLeft: "10px" }}>Game is not yet started by {currGame?.createdby}.</h2>
       </>
     );
   };
@@ -165,7 +145,7 @@ const GamePage = ({ location }) => {
   const newsPaper = () => {
     return (
       <div className="newspaper">
-        {content[currGame.paraindex].split(" ").map((word, i) => {
+        {content[currGame?.paraindex].split(" ").map((word, i) => {
           let id = word.trim().replace("”", "").replace("“", "").replace(",", "") + i;
           return (
             <span key={i} style={{ whiteSpace: "initial" }}>
@@ -182,7 +162,7 @@ const GamePage = ({ location }) => {
   const gameOverScreen = () => {
     const initial_array = currGame.players.map((player) => ({
       name: player,
-      score: currGame[player].length,
+      score: currGame?.[player].length,
     }));
 
     const sorted_array = initial_array.sort((a, b) => b.score - a.score);
@@ -191,14 +171,14 @@ const GamePage = ({ location }) => {
         <div style={{ height: "100vh", display: "grid", placeItems: "center" }}>
           <div>
             <h1 style={{ textAlign: "center" }}>Game Over</h1>
-            <h3 style={{ textAlign: "center" }}>{currGame.winner === user.displayName ? "You Won 🏆." : "You Lose!"}</h3>
+            <h3 style={{ textAlign: "center" }}>{currGame.winner === displayName ? "You Won 🏆." : "You Lose!"}</h3>
             <hr />
             <div>
               {sorted_array.map((player, i) => {
                 return (
                   <div
                     style={{
-                      color: player.name === user.displayName ? "green" : "red",
+                      color: player.name === displayName ? "green" : "red",
                       fontWeight: "600",
                       marginBottom: "8px",
                     }}
@@ -248,16 +228,16 @@ const GamePage = ({ location }) => {
         <div style={{ display: "grid", placeItems: "center" }}>
           <Loader />
         </div>
-      ) : Object.keys(currGame).length === 0 ? (
+      ) : !currGame ? (
         gameDoesNotExistScreen()
-      ) : currGame.over ? (
+      ) : currGame?.over ? (
         gameOverScreen()
       ) : (
         <>
           {headerScreen()}
 
-          {!currGame.start ? (
-            <div style={{ marginTop: "130px" }}>{currGame.createdby === user.displayName ? hostInitialScreen() : otherPlayersInitialScreen()}</div>
+          {!currGame?.start ? (
+            <div style={{ marginTop: "130px" }}>{currGame?.createdby === displayName ? hostInitialScreen() : otherPlayersInitialScreen()}</div>
           ) : (
             newsPaper()
           )}

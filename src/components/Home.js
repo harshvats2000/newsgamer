@@ -1,12 +1,12 @@
 import React, { useEffect } from "react";
-import firebase from "../firebase";
 import { Link, useHistory } from "react-router-dom";
 import Header from "./Header";
 import classes from "../styles/home.module.css";
 import Loader from "./Loader";
 import { useSelector, useDispatch } from "react-redux";
-import { fetchGames, createGame, deleteGame } from "../actions/games";
+import { createGame, deleteGame } from "../actions/game";
 import { FETCHING_GAMES } from "../actions";
+import { fetchGames } from "../actions/games";
 
 const Home = () => {
   const dispatch = useDispatch();
@@ -22,7 +22,7 @@ const Home = () => {
 
     dispatch(fetchGames());
 
-    // Set interval to update games in every 5s
+    // Set interval to update games in every 10s
     setInterval(() => dispatch(fetchGames()), 10000);
   }, []);
 
@@ -77,35 +77,34 @@ const Home = () => {
   };
 
   return (
-    <div>
+    <>
       <Header />
-      <div>
-        <div style={{ maxWidth: 800, margin: "auto", marginTop: "65px" }}>
-          {nameAndActions()}
 
-          {refreshLine()}
+      <div style={{ maxWidth: 800, margin: "auto", marginTop: "65px" }}>
+        {nameAndActions()}
 
-          {loading ? (
-            <Loader />
-          ) : (
-            <div
-              style={{
-                marginTop: "5px",
-                padding: "20px 10px 10px",
-                fontSize: "1.2rem",
-              }}
-            >
-              {availGames.length === 0 ? (
-                <p className="para" style={{ boxShadow: "0 0 10px gainsboro" }}>
-                  No games are being played right now.
-                </p>
-              ) : null}
-              {availGames.map((game, i) => availGameList(game, i))}
-            </div>
-          )}
-        </div>
+        {refreshLine()}
+
+        {loading ? (
+          <Loader />
+        ) : (
+          <div
+            style={{
+              marginTop: "5px",
+              padding: "20px 10px 10px",
+              fontSize: "1.2rem",
+            }}
+          >
+            {availGames.length === 0 ? (
+              <p className="para" style={{ boxShadow: "0 0 10px gainsboro" }}>
+                No games are being played right now.
+              </p>
+            ) : null}
+            {availGames.map((game, i) => availGameList(game, i))}
+          </div>
+        )}
       </div>
-    </div>
+    </>
   );
 };
 
