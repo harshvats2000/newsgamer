@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { Link, withRouter } from "react-router-dom";
-import { content, max_score } from "../constants";
+import { content } from "../constants";
 import firebase from "../firebase";
 import classes from "../styles/gamepage.module.css";
 import Loader from "./Loader";
@@ -18,7 +18,7 @@ const GamePage = ({ location }) => {
   const games_doc = db.collection("games").doc(gameId);
   const { currGame, fetchingGame: fetching } = useSelector((state) => state.currGame);
   const {
-    user: { displayName },
+    user: { displayName }
   } = useSelector((state) => state.auth);
 
   useEffect(() => {
@@ -96,7 +96,7 @@ const GamePage = ({ location }) => {
           key={i}
           className={classes.players_li}
           style={{
-            color: displayName === player ? "green" : "red",
+            color: displayName === player ? "green" : "red"
           }}
         >
           <div>{player.split(" ")[0]}</div>
@@ -112,7 +112,7 @@ const GamePage = ({ location }) => {
         <div
           style={{
             textAlign: "center",
-            padding: "20px 0 10px",
+            padding: "20px 0 10px"
           }}
         >
           <button className="btn btn-black" onClick={() => startgame()}>
@@ -162,7 +162,7 @@ const GamePage = ({ location }) => {
   const gameOverScreen = () => {
     const initial_array = currGame.players.map((player) => ({
       name: player,
-      score: currGame?.[player].length,
+      score: currGame?.[player].length
     }));
 
     const sorted_array = initial_array.sort((a, b) => b.score - a.score);
@@ -180,7 +180,7 @@ const GamePage = ({ location }) => {
                     style={{
                       color: player.name === displayName ? "green" : "red",
                       fontWeight: "600",
-                      marginBottom: "8px",
+                      marginBottom: "8px"
                     }}
                   >
                     {i + 1}. {player.name}: {player.score}
@@ -219,7 +219,7 @@ const GamePage = ({ location }) => {
   const transitions = useTransition(show, null, {
     from: { opacity: 0 },
     enter: { opacity: 1 },
-    leave: { opacity: 0 },
+    leave: { opacity: 0 }
   });
 
   return transitions.map(({ item, key, props }) => (
