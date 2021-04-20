@@ -9,6 +9,8 @@ import { invitePlayers } from "../functions/invitePlayers";
 import { useSelector, useDispatch } from "react-redux";
 import { SET_CURR_GAME } from "../actions";
 import { addNewPlayerToCurrGame, addWinner } from "../actions/currGame";
+import { Button } from "../ui/Button";
+import { Para } from "../ui/Para";
 
 const db = firebase.firestore();
 
@@ -115,20 +117,20 @@ const GamePage = ({ location }) => {
             padding: "20px 0 10px"
           }}
         >
-          <button className="btn btn-black" onClick={() => startgame()}>
+          <Button bg="linear-gradient(0deg, #008900, #00dd00)" onClick={() => startgame()}>
             start game
-          </button>
+          </Button>
           <div style={{ marginTop: "10px" }}>
-            <button className="btn btn-black" onClick={() => invitePlayers(gameId)}>
+            <Button bg="linear-gradient(0deg, #008900, #00dd00)" onClick={() => invitePlayers(gameId)}>
               <i className="fa fa-user-plus btn-icon" aria-hidden="true"></i>
               Invite Players
-            </button>
+            </Button>
           </div>
         </div>
         <div>
-          <p className="para" style={{ textAlign: "center", boxShadow: "0 0 10px gainsboro" }}>
-            Starting the game will reveal the paragraph to everyone in the game.
-          </p>
+          <Para color="red" style={{ textAlign: "center" }}>
+            *Starting the game will reveal the paragraph to everyone in the game.
+          </Para>
         </div>
       </>
     );

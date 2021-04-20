@@ -2,6 +2,8 @@ import React from "react";
 import { Link } from "react-router-dom";
 import Header from "./Header";
 import { max_score } from "../constants";
+import Layout from "./Layout";
+import { Para } from "../ui/Para";
 
 const rules = [
   "To play this game, you must be logged in with a Google account.",
@@ -11,7 +13,7 @@ const rules = [
   "A letter will appear at the top of game page. It will be same for all players so that the difficulty level is same for all players.",
   "Once the game is started, the paragraph will appear and players have to search words starting with the given letter.",
   "Clicking the appropriate word will increase your score by 1.",
-  `Player who find ${max_score} appropriate words will be the winner.`,
+  `Player who find ${max_score} appropriate words will be the winner.`
 ];
 
 const HowToPlay = () => {
@@ -19,47 +21,43 @@ const HowToPlay = () => {
     <div>
       <Header />
 
-      <div style={{ marginTop: "65px" }}>
+      <Layout>
         <div>
-          <div>
-            <p className="para" style={{ fontWeight: "700" }}>
-              NewsGamer is a multiplayer online game.
-            </p>
-          </div>
-          <ol
-            style={{
-              lineHeight: "1.5rem",
-              paddingRight: "10px",
-            }}
-          >
-            {rules.map((rule, i) => (
-              <li key={i} style={{ paddingBottom: "10px" }}>
-                {rule}
-              </li>
-            ))}
-          </ol>
-
-          <div
-            style={{
-              padding: "10px",
-              textAlign: "center",
-              fontSize: "1.8rem",
-            }}
-          >
-            <Link
-              to="/"
-              style={{
-                color: "white",
-                background: "green",
-                padding: "10px",
-                borderRadius: "5px",
-              }}
-            >
-              Are you ready?
-            </Link>
-          </div>
+          <Para weight={700}>NewsGamer is a multiplayer online game.</Para>
         </div>
-      </div>
+        <ol
+          style={{
+            lineHeight: "1.5rem",
+            paddingRight: "10px"
+          }}
+        >
+          {rules.map((rule, i) => (
+            <li key={i} style={{ paddingBottom: "10px" }}>
+              {rule}
+            </li>
+          ))}
+        </ol>
+
+        <div
+          style={{
+            padding: "10px",
+            textAlign: "center",
+            fontSize: "1.8rem"
+          }}
+        >
+          <Link
+            to="/"
+            style={{
+              color: "white",
+              background: "green",
+              padding: "10px",
+              borderRadius: "5px"
+            }}
+          >
+            Are you ready?
+          </Link>
+        </div>
+      </Layout>
     </div>
   );
 };

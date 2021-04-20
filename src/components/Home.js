@@ -1,14 +1,45 @@
 import React, { useEffect } from "react";
-import { Link, useHistory } from "react-router-dom";
+import { useHistory, Link } from "react-router-dom";
 import Header from "./Header";
-import classes from "../styles/home.module.css";
 import Loader from "./Loader";
 import { useSelector, useDispatch } from "react-redux";
-import { createGame, deleteGame } from "../actions/game";
+import { createGame } from "../actions/game";
 import { FETCHING_GAMES } from "../actions";
 import { fetchGames } from "../actions/games";
+import styled from "styled-components";
+import { GameCard } from "../ui/GameCard";
+import { Button } from "../ui/Button";
+import Layout from "./Layout";
+import { Para } from "../ui/Para";
 
-const game_updating_interval = 10;
+const game_updating_interval = 60;
+
+const Body = styled.div`
+  max-width: 800px;
+  margin: auto;
+  padding: 10px;
+`;
+const NameAndActions = styled.div`
+  padding: 0px 10px 10px;
+  text-align: center;
+`;
+const DisplayName = styled.h2`
+  color: green;
+  text-transform: capitalize;
+  margin-top: 5px;
+`;
+const Refresh = styled.div`
+  display: flex;
+  justify-content: space-between;
+  padding: 0 20px 0 10px;
+  align-items: center;
+  font-size: 1.5rem;
+  padding: 10px;
+`;
+const AvailGamesWrapper = styled.div`
+  padding: 10px 0;
+  font-size: 1.2rem;
+`;
 
 const Home = () => {
   const dispatch = useDispatch();
@@ -30,82 +61,60 @@ const Home = () => {
 
   const nameAndActions = () => {
     return (
-      <div style={{ padding: "10px 10px 20px", textAlign: "center" }}>
-        <h2>
-          Hello, <span style={{ color: "green", textTransform: "capitalize" }}>{user?.displayName}</span>
-        </h2>
-        {/* <Link to="/profile/me" style={{ marginRight: "10px" }}>
-          <button className="btn btn-green">
+      <NameAndActions>
+        <DisplayName>{user?.displayName}</DisplayName>
+        <Link to="/profile/me" style={{ marginRight: "10px" }}>
+          <Button bg="linear-gradient(0deg, #008900, #00dd00)">
             <i className="fa fa-user btn-icon" />
             Profile
-          </button>
-        </Link> */}
-        <button className="btn btn-green" onClick={() => dispatch(createGame(user.displayName, history))}>
+          </Button>
+        </Link>
+        <Button bg="linear-gradient(0deg, #008900, #00dd00)" onClick={() => dispatch(createGame(user.displayName, history))}>
           <i className="fa fa-plus btn-icon" />
           create new game
-        </button>
-      </div>
+        </Button>
+      </NameAndActions>
     );
   };
 
   const refreshLine = () => {
     return (
-      <div className={classes.refresh}>
-        <div style={{ fontSize: "0.8rem" }}>
+      <Refresh>
+        <Para m={0} size="13px">
           The games are updated every <span style={{ fontWeight: 900, verticalAlign: "middle" }}>{game_updating_interval}</span> seconds.
-        </div>
-        <button className="btn">
+        </Para>
+        <div>
           <i className="fa fa-refresh" id="refresh-icon" onClick={(e) => fetchGames()} />
-        </button>
-      </div>
-    );
-  };
-
-  const availGameList = (game, i) => {
-    return (
-      <div key={i} className={classes.card}>
-        <Link to={`/game/${game.gameid}`} style={{ flex: 1 }}>
-          <div>
-            Game by <span style={{ fontWeight: "600" }}>{game.createdby}</span>.
-          </div>
-        </Link>
-        {game.createdby === user.displayName ? (
-          <div style={{ marginRight: "10px" }}>
-            <i className="fa fa-trash" style={{ color: "red" }} onClick={() => dispatch(deleteGame(game.gameid))} />
-          </div>
-        ) : null}
-      </div>
+        </div>
+      </Refresh>
     );
   };
 
   return (
     <>
       <Header />
+      <Layout>
+        <Body>
+          {nameAndActions()}
 
-      <div style={{ maxWidth: 800, margin: "auto", marginTop: "65px" }}>
-        {nameAndActions()}
+          {refreshLine()}
 
-        {refreshLine()}
+          <hr />
 
-        {loading ? (
-          <Loader />
-        ) : (
-          <div
-            style={{
-              marginTop: "5px",
-              padding: "20px 10px 10px",
-              fontSize: "1.2rem"
-            }}
-          >
-            {availGames.length === 0 ? (
-              <p className="para" style={{ boxShadow: "0 0 10px gainsboro" }}>
-                No games are being played right now.
-              </p>
-            ) : null}
-            {availGames.map((game, i) => availGameList(game, i))}
-          </div>
-        )}
-      </div>
+          {loading ? (
+            <Loader />
+          ) : (
+            <AvailGamesWrapper>
+              {availGames.length === 0 ? (
+                <Para m={0} align="center">
+                  No games are being played right now.
+                </Para>
+              ) : null}
+              {availGames.map((game, i) => GameCard({ game, user, dispatch }))}
+            </AvailGamesWrapper>
+          )}
+        </Body>
+      </Layout>
     </>
   );
 };

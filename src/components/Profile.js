@@ -4,6 +4,7 @@ import firebase from "../firebase";
 import classes from "../styles/profile.module.css";
 import { useSelector, useDispatch } from "react-redux";
 import { logout } from "../actions/auth";
+import { Button } from "../ui/Button";
 
 const db = firebase.firestore();
 
@@ -29,7 +30,7 @@ const Profile = () => {
   const gameCard = (game, i) => {
     const initial_array = game.players.map((player) => ({
       name: player,
-      score: game[player].length,
+      score: game[player].length
     }));
 
     const sorted_array = initial_array.sort((a, b) => b.score - a.score);
@@ -42,7 +43,7 @@ const Profile = () => {
             <p
               key={i}
               style={{
-                color: player.name === user.displayName ? "green" : "red",
+                color: player.name === user.displayName ? "green" : "red"
               }}
             >
               {`${i + 1}. ${player.name}`} <span style={{ color: "black" }}>({player.score})</span>
@@ -63,10 +64,10 @@ const Profile = () => {
           <img src={user.photoURL} alt="" />
           <p>{user.displayName}</p>
           <p>{user.email}</p>
-          <button className="btn btn-red" onClick={() => dispatch(logout())}>
+          <Button bg="red" onClick={() => dispatch(logout())}>
             <i className="fa fa-sign-out btn-icon" />
             Logout
-          </button>
+          </Button>
         </div>
 
         <h3 style={{ textAlign: "center" }}>Winning % = {!isNaN(winPercent) && winPercent.toFixed(2)}</h3>

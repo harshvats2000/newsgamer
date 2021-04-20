@@ -10,7 +10,7 @@ const db = firebase.firestore();
 export const createGame = (userName, history) => (dispatch) => {
   dispatch({
     type: CREATING_GAME,
-    payload: true,
+    payload: true
   });
 
   const paraIndex = Math.floor(Math.random() * content.length);
@@ -27,8 +27,9 @@ export const createGame = (userName, history) => (dispatch) => {
       paraindex: paraIndex,
       [userName]: [],
       creationdate: firebase.database.ServerValue.TIMESTAMP,
+      createdAt: Date.now(),
       over: false,
-      start: false,
+      start: false
     })
     .then(() => history.push(`/game/${id}`));
 };
@@ -49,7 +50,7 @@ const generateLetter = (paraIndex) => {
 export const deleteGame = (gameId) => (dispatch) => {
   dispatch({
     type: DELETING_GAME,
-    payload: true,
+    payload: true
   });
 
   if (window.confirm("Are you sure you want to delete this game?")) {

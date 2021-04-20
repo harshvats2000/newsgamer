@@ -1,10 +1,40 @@
 import React from "react";
 import { Redirect, withRouter } from "react-router-dom";
 import Header from "./Header";
-import classes from "../styles/login.module.css";
 import { max_score } from "../constants";
 import { useDispatch, useSelector } from "react-redux";
 import { login } from "../actions/auth";
+import { Button } from "../ui/Button";
+import styled from "styled-components";
+import { Para } from "../ui/Para";
+
+const Body = styled.div`
+  height: 100vh;
+  background-color: gainsboro;
+  display: grid;
+  place-items: center;
+  & > div {
+    text-align: center;
+  }
+`;
+const MaxScore = styled.span`
+  font-weight: 700;
+  font-size: 1.2rem;
+`;
+const Footer = styled.div`
+  margin-top: -100px;
+  text-align: center;
+  svg {
+    width: 20px;
+    height: 20px;
+    vertical-align: bottom;
+  }
+  a {
+    color: blue;
+    font-weight: 900;
+    text-decoration: underline;
+  }
+`;
 
 const Login = () => {
   const dispatch = useDispatch();
@@ -15,40 +45,28 @@ const Login = () => {
       {isAuthenticated ? <Redirect to="/" /> : null}
       <Header />
       <div>
-        <div className={classes.body}>
-          <div style={{ textAlign: "center", marginTop: "-150px" }}>
-            <p className="para">
-              Find and click <span style={{ fontWeight: 700, fontSize: "1.2rem" }}>{max_score}</span> words to win.
-            </p>
-            <div>
-              <button className="btn btn-black" onClick={() => dispatch(login())}>
-                Login with Google
-              </button>
-            </div>
+        <Body>
+          <div>
+            <Para>
+              Find and click <MaxScore>{max_score}</MaxScore> words to win.
+            </Para>
+            <Button bg="black" onClick={() => dispatch(login())}>
+              Login with Google
+            </Button>
           </div>
-        </div>
+        </Body>
 
-        <div className={classes.footer}>
+        <Footer>
           Created with{" "}
-          <svg className="heart" viewBox="0 0 32 29.6" style={{ width: "20px", height: "20px", verticalAlign: "bottom" }}>
+          <svg className="heart" viewBox="0 0 32 29.6">
             <path
               fill="red"
               d="M23.6,0c-3.4,0-6.3,2.7-7.6,5.6C14.7,2.7,11.8,0,8.4,0C3.8,0,0,3.8,0,8.4c0,9.4,9.5,11.9,16,21.2
 	c6.1-9.3,16-12.1,16-21.2C32,3.8,28.2,0,23.6,0z"
             />
           </svg>{" "}
-          by{" "}
-          <a
-            href="https://www.harshvats.dev"
-            style={{
-              color: "blue",
-              fontWeight: "900",
-              textDecoration: "underline",
-            }}
-          >
-            Harsh Vats
-          </a>
-        </div>
+          by <a href="https://www.harshvats.dev">Harsh Vats</a>
+        </Footer>
       </div>
     </div>
   );

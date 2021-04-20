@@ -16,38 +16,9 @@ button:focus {
   outline: none;
 }
 
-.btn {
-  font-size: 1rem;
-  border: none;
-  padding: 8px 10px;
-  border-radius: 5px;
-  text-transform: capitalize;
-  cursor: pointer;
-  font-weight: bold;
-  background: transparent;
-}
-
-.btn-green {
-  background: green;
-  color: white;
-}
-.btn-black {
-  background: black;
-  color: white;
-}
-.btn-red {
-  background: red;
-  color: white;
-}
-
 a {
   color: black;
   text-decoration: none;
-}
-
-.para {
-  line-height: 2rem;
-  padding: 10px;
 }
 
 .btn-icon {
