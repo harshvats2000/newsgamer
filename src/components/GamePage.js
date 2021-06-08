@@ -117,9 +117,13 @@ const GamePage = ({ location }) => {
             padding: "20px 0 10px"
           }}
         >
-          <Button bg="linear-gradient(0deg, #008900, #00dd00)" onClick={() => startgame()}>
-            start game
-          </Button>
+          {currGame.players.length > 1 ? (
+            <Button bg="linear-gradient(0deg, #008900, #00dd00)" onClick={() => startgame()}>
+              start game
+            </Button>
+          ) : (
+            <p>You will be able to start this game once someone joins.</p>
+          )}
           <div style={{ marginTop: "10px" }}>
             <Button bg="linear-gradient(0deg, #008900, #00dd00)" onClick={() => invitePlayers(gameId)}>
               <i className="fa fa-user-plus btn-icon" aria-hidden="true"></i>
