@@ -37,6 +37,7 @@ const TrashIcon = styled.i`
 export function GameCard({ game, user, dispatch }) {
   const { gameid, createdby } = game;
   const { displayName } = user;
+
   return (
     <Card key={gameid}>
       <Row1>

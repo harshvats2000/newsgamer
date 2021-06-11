@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { Link, withRouter } from "react-router-dom";
+import { withRouter } from "react-router-dom";
 import { content } from "../constants";
 import firebase from "../firebase";
 import classes from "../styles/gamepage.module.css";
@@ -8,9 +8,14 @@ import { animated, useTransition } from "react-spring";
 import { invitePlayers } from "../functions/invitePlayers";
 import { useSelector, useDispatch } from "react-redux";
 import { SET_CURR_GAME } from "../actions";
-import { addNewPlayerToCurrGame, addWinner } from "../actions/currGame";
-import { Button } from "../ui/Button";
-import { Para } from "../ui/Para";
+import { addNewPlayerToCurrGame, gameOver } from "../actions/currGame";
+import { findWinner } from "../utils/findWinner";
+import HostInitialScreen from "./HostInitialScreen";
+import OtherPlayersInitialScreen from "./OtherPlayersInitialScreen";
+import NewsPaper from "./NewsPaper";
+import HeaderScreen from "./HeaderScreen";
+import GameDoesNotExistScreen from "./GameDoesNotExistScreen";
+import GameOverScreen from "./GameOverScreen";
 
 const db = firebase.firestore();
 
@@ -33,7 +38,6 @@ const GamePage = ({ location }) => {
 
   useEffect(() => {
     if (currGame?.[displayName]) {
-      // Highlight initial words of array
       currGame[displayName].map((id) => {
         let el = document.getElementById(id);
         if (el) el.style.backgroundColor = "yellow";
@@ -42,29 +46,25 @@ const GamePage = ({ location }) => {
   });
 
   useEffect(() => {
-    // Making sure game exists
     if (currGame?.createdby) {
-      // If any new player comes, add him to game
       dispatch(addNewPlayerToCurrGame(games_doc));
-
-      // Add winner on score greater than max_score
-      dispatch(addWinner(games_doc));
+      const { isGameOver, winnerName } = findWinner(currGame);
+      if (isGameOver) {
+        dispatch(gameOver(games_doc, winnerName));
+      }
     }
   }, [currGame]);
 
   const handleClick = (id) => {
     let words = currGame[displayName];
-    // If the word is eligible
     if (id.toLowerCase().search(currGame.letter) === 0) {
-      // If it's a new word
       if (words.indexOf(id) === -1) {
-        // document.getElementById(`${word}${i}`).style.background = 'yellow'; // Highlight the word
         words.push(id);
-        games_doc.update({ [displayName]: words }); // Update words in database
+        games_doc.update({ [displayName]: words });
       } else {
-        document.getElementById(id).style.background = "gainsboro"; // Remove highlighting
+        document.getElementById(id).style.background = "gainsboro";
         words = words.filter((item) => item !== id);
-        games_doc.update({ [displayName]: words }); // Update words in database
+        games_doc.update({ [displayName]: words });
       }
     }
   };
@@ -75,150 +75,6 @@ const GamePage = ({ location }) => {
         doc.ref.update({ start: true });
       }
     });
-  };
-
-  const headerScreen = () => {
-    return (
-      <div className={classes.header}>
-        <div style={{ color: "grey" }}>
-          Host: <span style={{ fontWeight: "bold", color: "black" }}>{currGame?.createdby}</span>
-        </div>
-        <div style={{ color: "grey" }}>
-          Click words starting with letter: <span style={{ fontWeight: "bold", color: "black" }}>{currGame?.letter}</span>
-        </div>
-        <ol className={classes.players_ol}>{listPlayers()}</ol>
-      </div>
-    );
-  };
-
-  const listPlayers = () => {
-    return currGame.players.map((player, i) => {
-      return (
-        <li
-          key={i}
-          className={classes.players_li}
-          style={{
-            color: displayName === player ? "green" : "red"
-          }}
-        >
-          <div>{player.split(" ")[0]}</div>
-          <div style={{ textAlign: "center", fontSize: "2rem" }}>{currGame?.[player] && currGame?.[player].length}</div>
-        </li>
-      );
-    });
-  };
-
-  const hostInitialScreen = () => {
-    return (
-      <>
-        <div
-          style={{
-            textAlign: "center",
-            padding: "20px 0 10px"
-          }}
-        >
-          {currGame.players.length > 1 ? (
-            <Button bg="linear-gradient(0deg, #008900, #00dd00)" onClick={() => startgame()}>
-              start game
-            </Button>
-          ) : (
-            <p>You will be able to start this game once someone joins.</p>
-          )}
-          <div style={{ marginTop: "10px" }}>
-            <Button bg="linear-gradient(0deg, #008900, #00dd00)" onClick={() => invitePlayers(gameId)}>
-              <i className="fa fa-user-plus btn-icon" aria-hidden="true"></i>
-              Invite Players
-            </Button>
-          </div>
-        </div>
-        <div>
-          <Para color="red" style={{ textAlign: "center" }}>
-            *Starting the game will reveal the paragraph to everyone in the game.
-          </Para>
-        </div>
-      </>
-    );
-  };
-
-  const otherPlayersInitialScreen = () => {
-    return (
-      <>
-        <h2 style={{ paddingLeft: "10px" }}>Game is not yet started by {currGame?.createdby}.</h2>
-      </>
-    );
-  };
-
-  const newsPaper = () => {
-    return (
-      <div className="newspaper">
-        {content[currGame?.paraindex].split(" ").map((word, i) => {
-          let id = word.trim().replace("”", "").replace("“", "").replace(",", "") + i;
-          return (
-            <span key={i} style={{ whiteSpace: "initial" }}>
-              <span id={id} onClick={(e) => handleClick(id)}>
-                {word}
-              </span>{" "}
-            </span>
-          );
-        })}
-      </div>
-    );
-  };
-
-  const gameOverScreen = () => {
-    const initial_array = currGame.players.map((player) => ({
-      name: player,
-      score: currGame?.[player].length
-    }));
-
-    const sorted_array = initial_array.sort((a, b) => b.score - a.score);
-    return (
-      <>
-        <div style={{ height: "100vh", display: "grid", placeItems: "center" }}>
-          <div>
-            <h1 style={{ textAlign: "center" }}>Game Over</h1>
-            <h3 style={{ textAlign: "center" }}>{currGame.winner === displayName ? "You Won 🏆." : "You Lose!"}</h3>
-            <hr />
-            <div>
-              {sorted_array.map((player, i) => {
-                return (
-                  <div
-                    style={{
-                      color: player.name === displayName ? "green" : "red",
-                      fontWeight: "600",
-                      marginBottom: "8px"
-                    }}
-                  >
-                    {i + 1}. {player.name}: {player.score}
-                  </div>
-                );
-              })}
-            </div>
-            <Link to="/">
-              <button className="btn btn-black" style={{ marginTop: "20px" }}>
-                Go back to home page
-              </button>
-            </Link>
-          </div>
-        </div>
-      </>
-    );
-  };
-
-  const gameDoesNotExistScreen = () => {
-    return (
-      <div style={{ paddingTop: "50px" }}>
-        <p className="para">This game is either over or deleted by the host.</p>
-        <div style={{ textAlign: "center" }}>
-          <Link to="/">
-            <button className="btn btn-black">
-              <i className="fa fa-arrow-left btn-icon" />
-              Go Back To Home
-            </button>
-          </Link>
-        </div>
-      </div>
-    );
   };
 
   const [show, set] = useState(false);
@@ -235,17 +91,23 @@ const GamePage = ({ location }) => {
           <Loader />
         </div>
       ) : !currGame ? (
-        gameDoesNotExistScreen()
+        <GameDoesNotExistScreen />
       ) : currGame?.over ? (
-        gameOverScreen()
+        <GameOverScreen {...{ currGame, displayName }} />
       ) : (
         <>
-          {headerScreen()}
+          <HeaderScreen {...{ classes, currGame, displayName }} />
 
           {!currGame?.start ? (
-            <div style={{ marginTop: "130px" }}>{currGame?.createdby === displayName ? hostInitialScreen() : otherPlayersInitialScreen()}</div>
+            <div style={{ marginTop: "130px" }}>
+              {currGame?.createdby === displayName ? (
+                <HostInitialScreen {...{ currGame, startgame, invitePlayers, gameId }} />
+              ) : (
+                <OtherPlayersInitialScreen {...{ currGame }} />
+              )}
+            </div>
           ) : (
-            newsPaper()
+            <NewsPaper {...{ content, currGame, handleClick }} />
           )}
         </>
       )}
