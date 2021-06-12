@@ -1,8 +1,7 @@
 import React from "react";
-import { Button } from "../ui/Button";
-import { Para } from "../ui/Para";
+import { Button, Para } from "ui";
 
-const HostInitialScreen = ({ currGame, startgame, invitePlayers, gameId }) => {
+export const HostInitialScreen = ({ currGame, startgame, invitePlayers, gameId }) => {
   return (
     <>
       <div
@@ -33,5 +32,3 @@ const HostInitialScreen = ({ currGame, startgame, invitePlayers, gameId }) => {
     </>
   );
 };
-
-export default HostInitialScreen;

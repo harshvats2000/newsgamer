@@ -1,12 +1,11 @@
 import React from "react";
 import { Redirect, withRouter } from "react-router-dom";
-import Header from "./Header";
+import { Header } from "components";
 import { max_score } from "../constants";
 import { useDispatch, useSelector } from "react-redux";
-import { login } from "../actions/auth";
-import { Button } from "../ui/Button";
+import { login } from "actions";
+import { Button, Para } from "ui";
 import styled from "styled-components";
-import { Para } from "../ui/Para";
 
 const Body = styled.div`
   height: 100vh;
@@ -36,7 +35,7 @@ const Footer = styled.div`
   }
 `;
 
-const Login = () => {
+export const LoginComp = () => {
   const dispatch = useDispatch();
   const { isAuthenticated } = useSelector((state) => state.auth);
 
@@ -72,4 +71,4 @@ const Login = () => {
   );
 };
 
-export default withRouter(Login);
+export const Login = withRouter(LoginComp);

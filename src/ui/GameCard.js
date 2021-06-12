@@ -1,8 +1,8 @@
 import React from "react";
 import { Link } from "react-router-dom";
-import { deleteGame } from "../actions/game";
+import { deleteGame } from "actions";
 import styled from "styled-components";
-import timeSince from "../utils/timeSince";
+import { timeSince } from "utils";
 
 const Card = styled.div`
   box-shadow: 0px 23px 25px gainsboro;

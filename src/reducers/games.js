@@ -1,8 +1,8 @@
-import { FETCHING_GAMES, FETCHING_GAMES_SUCCESS, FETCHING_GAMES_FAIL } from "../actions";
+import { FETCHING_GAMES, FETCHING_GAMES_SUCCESS, FETCHING_GAMES_FAIL } from "actions";
 
 const initialState = {
   availGames: [],
-  fetchingGames: true,
+  fetchingGames: true
 };
 
 export default function (state = initialState, { type, payload }) {
@@ -10,20 +10,20 @@ export default function (state = initialState, { type, payload }) {
     case FETCHING_GAMES:
       return {
         ...state,
-        fetchingGames: payload,
+        fetchingGames: payload
       };
 
     case FETCHING_GAMES_SUCCESS:
       return {
         ...state,
         availGames: payload,
-        fetchingGames: false,
+        fetchingGames: false
       };
 
     case FETCHING_GAMES_FAIL:
       return {
         ...state,
-        fetchingGames: false,
+        fetchingGames: false
       };
 
     default:

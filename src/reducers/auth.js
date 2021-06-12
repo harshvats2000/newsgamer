@@ -1,9 +1,9 @@
-import { LOGIN_SUCCESS, LOGOUT_FAIL, LOGIN_FAIL, LOGOUT_SUCCESS, FETCHING_USER } from "../actions";
+import { LOGIN_SUCCESS, LOGOUT_FAIL, LOGIN_FAIL, LOGOUT_SUCCESS, FETCHING_USER } from "actions";
 
 const initialState = {
   isAuthenticated: false,
   authenticating: true,
-  user: null,
+  user: null
 };
 
 export default function (state = initialState, { type, payload }) {
@@ -11,14 +11,14 @@ export default function (state = initialState, { type, payload }) {
     case FETCHING_USER:
       return {
         ...state,
-        authenticating: payload,
+        authenticating: payload
       };
     case LOGIN_SUCCESS:
       return {
         ...state,
         authenticating: false,
         isAuthenticated: true,
-        user: payload,
+        user: payload
       };
 
     case LOGIN_FAIL:
@@ -26,7 +26,7 @@ export default function (state = initialState, { type, payload }) {
         ...state,
         authenticating: false,
         isAuthenticated: false,
-        user: null,
+        user: null
       };
 
     case LOGOUT_SUCCESS:
@@ -34,13 +34,13 @@ export default function (state = initialState, { type, payload }) {
         ...state,
         authenticating: false,
         user: null,
-        isAuthenticated: false,
+        isAuthenticated: false
       };
 
     case LOGOUT_FAIL:
       return {
         ...state,
-        authenticating: false,
+        authenticating: false
       };
     default:
       return state;

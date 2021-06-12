@@ -27,7 +27,7 @@ const NewsGamer = styled.div`
   }
 `;
 
-const Header = () => {
+export const Header = () => {
   const drop = useSpring({
     config: { mass: 2, tension: 500 },
     from: { transform: "translateY(-100px)" },
@@ -51,5 +51,3 @@ const Header = () => {
     </>
   );
 };
-
-export default Header;

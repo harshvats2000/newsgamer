@@ -1,4 +1,4 @@
-function timeSince(date) {
+export function timeSince(date) {
   var seconds = Math.floor((new Date() - date) / 1000);
 
   var interval = seconds / 31536000;
@@ -24,5 +24,3 @@ function timeSince(date) {
   }
   return Math.floor(seconds) + " seconds";
 }
-
-export default timeSince;

@@ -1,9 +1,8 @@
 import React from "react";
 import { Link } from "react-router-dom";
-import Header from "./Header";
+import { Header, Layout } from "components";
 import { max_score } from "../constants";
-import Layout from "./Layout";
-import { Para } from "../ui/Para";
+import { Para } from "ui";
 
 const rules = [
   "To play this game, you must be logged in with a Google account.",
@@ -16,7 +15,7 @@ const rules = [
   `Player who find ${max_score} appropriate words will be the winner.`
 ];
 
-const HowToPlay = () => {
+export const HowToPlay = () => {
   return (
     <div>
       <Header />
@@ -61,5 +60,3 @@ const HowToPlay = () => {
     </div>
   );
 };
-
-export default HowToPlay;

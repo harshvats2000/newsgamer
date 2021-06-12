@@ -3,23 +3,16 @@ import { withRouter } from "react-router-dom";
 import { content } from "../constants";
 import firebase from "../firebase";
 import classes from "../styles/gamepage.module.css";
-import Loader from "./Loader";
 import { animated, useTransition } from "react-spring";
 import { invitePlayers } from "../functions/invitePlayers";
 import { useSelector, useDispatch } from "react-redux";
-import { SET_CURR_GAME } from "../actions";
-import { addNewPlayerToCurrGame, gameOver } from "../actions/currGame";
-import { findWinner } from "../utils/findWinner";
-import HostInitialScreen from "./HostInitialScreen";
-import OtherPlayersInitialScreen from "./OtherPlayersInitialScreen";
-import NewsPaper from "./NewsPaper";
-import HeaderScreen from "./HeaderScreen";
-import GameDoesNotExistScreen from "./GameDoesNotExistScreen";
-import GameOverScreen from "./GameOverScreen";
+import { SET_CURR_GAME, addNewPlayerToCurrGame, gameOver } from "actions";
+import { findWinner } from "utils";
+import { HostInitialScreen, OtherPlayersInitialScreen, Loader, NewsPaper, HeaderScreen, GameDoesNotExistScreen, GameOverScreen } from "components";
 
 const db = firebase.firestore();
 
-const GamePage = ({ location }) => {
+const GamePageComp = ({ location }) => {
   const dispatch = useDispatch();
   const gameId = location.pathname.split("/")[2];
   const games_doc = db.collection("games").doc(gameId);
@@ -115,4 +108,4 @@ const GamePage = ({ location }) => {
   ));
 };
 
-export default withRouter(GamePage);
+export const GamePage = withRouter(GamePageComp);

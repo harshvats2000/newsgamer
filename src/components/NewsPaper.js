@@ -1,6 +1,6 @@
 import React from "react";
 
-const NewsPaper = ({ content, currGame, handleClick }) => {
+export const NewsPaper = ({ content, currGame, handleClick }) => {
   return (
     <div className="newspaper">
       {content[currGame?.paraindex].split(" ").map((word, i) => {
@@ -16,5 +16,3 @@ const NewsPaper = ({ content, currGame, handleClick }) => {
     </div>
   );
 };
-
-export default NewsPaper;

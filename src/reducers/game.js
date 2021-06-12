@@ -1,8 +1,8 @@
-import { CREATING_GAME, CREATING_GAME_SUCCESS, CREATING_GAME_FAIL } from "../actions";
+import { CREATING_GAME, CREATING_GAME_SUCCESS, CREATING_GAME_FAIL } from "actions";
 
 const initialState = {
   game: null,
-  creatingGame: false,
+  creatingGame: false
 };
 
 export default function (state = initialState, { type, payload }) {
@@ -10,20 +10,20 @@ export default function (state = initialState, { type, payload }) {
     case CREATING_GAME:
       return {
         ...state,
-        creatingGame: payload,
+        creatingGame: payload
       };
 
     case CREATING_GAME_SUCCESS:
       return {
         ...state,
         game: payload,
-        creatingGame: false,
+        creatingGame: false
       };
 
     case CREATING_GAME_FAIL:
       return {
         ...state,
-        creatingGame: false,
+        creatingGame: false
       };
 
     default:

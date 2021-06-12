@@ -1,16 +1,10 @@
 import React, { useEffect } from "react";
 import { useHistory, Link } from "react-router-dom";
-import Header from "./Header";
-import Loader from "./Loader";
+import { Header, Loader, Layout } from "components";
 import { useSelector, useDispatch } from "react-redux";
-import { createGame } from "../actions/game";
-import { FETCHING_GAMES } from "../actions";
-import { fetchGames } from "../actions/games";
+import { createGame, FETCHING_GAMES, fetchGames } from "actions";
 import styled from "styled-components";
-import { GameCard } from "../ui/GameCard";
-import { Button } from "../ui/Button";
-import Layout from "./Layout";
-import { Para } from "../ui/Para";
+import { GameCard, Button, Para } from "ui";
 
 const game_updating_interval = 60;
 
@@ -41,7 +35,7 @@ const AvailGamesWrapper = styled.div`
   font-size: 1.2rem;
 `;
 
-const Home = () => {
+export const Home = () => {
   const dispatch = useDispatch();
   const history = useHistory();
   const { user } = useSelector((state) => state.auth);
@@ -118,5 +112,3 @@ const Home = () => {
     </>
   );
 };
-
-export default Home;

@@ -2,15 +2,10 @@ import React, { useEffect } from "react";
 import { useSelector, useDispatch } from "react-redux";
 import "./App.css";
 import { Route, Switch } from "react-router-dom";
-import GamePage from "./components/GamePage";
-import Login from "./components/Login";
+import { GamePage, Login, Home, HowToPlay, Loader, Profile } from "components";
 import PrivateRoute from "./routes/PrivateRoute";
-import Home from "./components/Home";
 import firebase from "./firebase";
-import HowToPlay from "./components/HowToPlay";
-import Loader from "./components/Loader";
-import Profile from "./components/Profile";
-import { LOGIN_SUCCESS, LOGIN_FAIL } from "./actions";
+import { LOGIN_SUCCESS, LOGIN_FAIL } from "actions";
 
 function App() {
   const authenticating = useSelector((state) => state.auth.authenticating);
@@ -21,11 +16,11 @@ function App() {
       if (user) {
         dispatch({
           type: LOGIN_SUCCESS,
-          payload: user,
+          payload: user
         });
       } else {
         dispatch({
-          type: LOGIN_FAIL,
+          type: LOGIN_FAIL
         });
       }
     });

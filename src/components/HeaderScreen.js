@@ -1,6 +1,6 @@
 import React from "react";
 
-const HeaderScreen = ({ classes, currGame, displayName }) => {
+export const HeaderScreen = ({ classes, currGame, displayName }) => {
   return (
     <div className={classes.header}>
       <div style={{ color: "grey" }}>
@@ -28,5 +28,3 @@ const HeaderScreen = ({ classes, currGame, displayName }) => {
     </div>
   );
 };
-
-export default HeaderScreen;

@@ -1,14 +1,14 @@
 import React, { useEffect, useState } from "react";
-import Header from "./Header";
+import { Header } from "components";
 import firebase from "../firebase";
 import classes from "../styles/profile.module.css";
 import { useSelector, useDispatch } from "react-redux";
-import { logout } from "../actions/auth";
-import { Button } from "../ui/Button";
+import { logout } from "actions";
+import { Button } from "ui";
 
 const db = firebase.firestore();
 
-const Profile = () => {
+export const Profile = () => {
   const dispatch = useDispatch();
   const user = useSelector((state) => state.auth.user);
   const [playedGames, setPlayedGames] = useState([]);
@@ -76,5 +76,3 @@ const Profile = () => {
     </>
   );
 };
-
-export default Profile;

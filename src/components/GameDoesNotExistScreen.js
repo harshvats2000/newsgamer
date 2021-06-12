@@ -1,7 +1,7 @@
 import React from "react";
 import { Link } from "react-router-dom";
 
-const GameDoesNotExistScreen = () => {
+export const GameDoesNotExistScreen = () => {
   return (
     <div style={{ paddingTop: "50px" }}>
       <p className="para">This game is either over or deleted by the host.</p>
@@ -16,5 +16,3 @@ const GameDoesNotExistScreen = () => {
     </div>
   );
 };
-
-export default GameDoesNotExistScreen;

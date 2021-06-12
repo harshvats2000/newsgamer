@@ -1,7 +1,7 @@
 import React from "react";
 import { Link } from "react-router-dom";
 
-const GameOverScreen = ({ currGame, displayName }) => {
+export const GameOverScreen = ({ currGame, displayName }) => {
   const initial_array = currGame.players.map((player) => ({
     name: player,
     score: currGame?.[player].length
@@ -41,5 +41,3 @@ const GameOverScreen = ({ currGame, displayName }) => {
     </>
   );
 };
-
-export default GameOverScreen;
