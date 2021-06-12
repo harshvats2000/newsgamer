@@ -1,4 +1,4 @@
-import { FETCHING_CURR_GAME, SET_CURR_GAME } from "actions";
+import { FETCHING_CURRENT_GAME, FETCHING_CURRENT_GAME_SUCCESS, RESET_CURRENT_GAME } from "actions";
 
 const initialState = {
   currGame: null,
@@ -7,16 +7,23 @@ const initialState = {
 
 export default function (state = initialState, { type, payload }) {
   switch (type) {
-    case FETCHING_CURR_GAME:
+    case FETCHING_CURRENT_GAME:
       return {
         ...state,
-        fetchingGame: payload
+        fetchingGame: true
       };
 
-    case SET_CURR_GAME:
+    case FETCHING_CURRENT_GAME_SUCCESS:
       return {
         ...state,
-        currGame: payload,
+        fetchingGame: false,
+        currGame: payload
+      };
+
+    case RESET_CURRENT_GAME:
+      return {
+        ...state,
+        currGame: null,
         fetchingGame: false
       };
 

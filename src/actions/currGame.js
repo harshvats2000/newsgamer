@@ -1,4 +1,17 @@
 import firebase from "../firebase";
+import { FETCHING_CURRENT_GAME_SUCCESS, RESET_CURRENT_GAME } from "actions";
+
+export const listenToRealTimeGameChanges = (games_doc) => (dispatch, getState) => {
+  const { currGame } = getState().currGame;
+
+  games_doc.onSnapshot((doc) => {
+    if (JSON.stringify(doc.data()) !== JSON.stringify(currGame)) {
+      dispatch({ type: FETCHING_CURRENT_GAME_SUCCESS, payload: doc.data() });
+    } else if (!doc.data()) {
+      dispatch({ type: RESET_CURRENT_GAME });
+    }
+  });
+};
 
 export const addNewPlayerToCurrGame = (games_doc) => (dispatch, getState) => {
   const { displayName } = getState().auth.user;

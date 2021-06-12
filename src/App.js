@@ -4,8 +4,7 @@ import "./App.css";
 import { Route, Switch } from "react-router-dom";
 import { GamePage, Login, Home, HowToPlay, Loader, Profile } from "components";
 import PrivateRoute from "./routes/PrivateRoute";
-import firebase from "./firebase";
-import { LOGIN_SUCCESS, LOGIN_FAIL, LOGGING_IN } from "actions";
+import { LOGGING_IN, listenToAuthChanges } from "actions";
 
 function App() {
   const authenticating = useSelector((state) => state.auth.authenticating);
@@ -18,18 +17,7 @@ function App() {
   }, [dispatch]);
 
   useEffect(() => {
-    firebase.auth().onAuthStateChanged((user) => {
-      if (user) {
-        dispatch({
-          type: LOGIN_SUCCESS,
-          payload: user
-        });
-      } else {
-        dispatch({
-          type: LOGIN_FAIL
-        });
-      }
-    });
+    dispatch(listenToAuthChanges());
   }, [dispatch]);
 
   return (

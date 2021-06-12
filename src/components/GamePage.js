@@ -4,14 +4,13 @@ import { content } from "../constants";
 import firebase from "../firebase";
 import classes from "../styles/gamepage.module.css";
 import { useSelector, useDispatch } from "react-redux";
-import { SET_CURR_GAME, addNewPlayerToCurrGame, gameOver } from "actions";
+import { addNewPlayerToCurrGame, gameOver, listenToRealTimeGameChanges, FETCHING_CURRENT_GAME, RESET_CURRENT_GAME } from "actions";
 import { findWinner } from "utils";
 import { HostInitialScreen, OtherPlayersInitialScreen, Loader, NewsPaper, HeaderScreen, GameDoesNotExistScreen, GameOverScreen } from "components";
 
 const db = firebase.firestore();
 
 export const GamePage = () => {
-  console.log("hey");
   const location = useLocation();
   const dispatch = useDispatch();
   const gameId = location.pathname.split("/")[2];
@@ -22,14 +21,16 @@ export const GamePage = () => {
   } = useSelector((state) => state.auth);
 
   useEffect(() => {
-    games_doc.onSnapshot((doc) => {
-      if (JSON.stringify(doc.data()) !== JSON.stringify(currGame)) {
-        dispatch({ type: SET_CURR_GAME, payload: doc.data() });
-      } else if (!doc.data()) {
-        dispatch({ type: SET_CURR_GAME, payload: null });
-      }
-    });
-  }, [dispatch, games_doc, currGame]);
+    dispatch({ type: FETCHING_CURRENT_GAME });
+
+    return () => dispatch({ type: RESET_CURRENT_GAME });
+    // eslint-disable-next-line
+  }, []);
+
+  useEffect(() => {
+    dispatch(listenToRealTimeGameChanges(games_doc));
+    // eslint-disable-next-line
+  }, [currGame]);
 
   useEffect(() => {
     if (currGame?.[displayName]) {

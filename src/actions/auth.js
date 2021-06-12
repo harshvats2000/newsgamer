@@ -3,6 +3,21 @@ import { LOGIN_SUCCESS, LOGOUT_SUCCESS, LOGOUT_FAIL, LOGIN_FAIL, LOGGING_IN } fr
 
 const auth = firebase.auth();
 
+export const listenToAuthChanges = () => (dispatch) => {
+  auth.onAuthStateChanged((user) => {
+    if (user) {
+      dispatch({
+        type: LOGIN_SUCCESS,
+        payload: user
+      });
+    } else {
+      dispatch({
+        type: LOGIN_FAIL
+      });
+    }
+  });
+};
+
 export const login = () => (dispatch) => {
   dispatch({
     type: LOGGING_IN
