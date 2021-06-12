@@ -1,4 +1,4 @@
-import { LOGIN_SUCCESS, LOGOUT_FAIL, LOGIN_FAIL, LOGOUT_SUCCESS, FETCHING_USER } from "actions";
+import { LOGIN_SUCCESS, LOGOUT_FAIL, LOGIN_FAIL, LOGOUT_SUCCESS, LOGGING_IN } from "actions";
 
 const initialState = {
   isAuthenticated: false,
@@ -8,10 +8,10 @@ const initialState = {
 
 export default function (state = initialState, { type, payload }) {
   switch (type) {
-    case FETCHING_USER:
+    case LOGGING_IN:
       return {
         ...state,
-        authenticating: payload
+        authenticating: true
       };
     case LOGIN_SUCCESS:
       return {

@@ -1,5 +1,4 @@
 import firebase from "../firebase";
-import { max_score } from "../constants";
 
 export const addNewPlayerToCurrGame = (games_doc) => (dispatch, getState) => {
   const { displayName } = getState().auth.user;

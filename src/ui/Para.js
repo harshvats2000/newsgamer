@@ -14,7 +14,7 @@ const ParaEl = styled.p`
 export const Para = (props) => {
   const { children, color = "black", size = "16px", lh = "1rem", weight = 400, align = "left", m = "10px", ...rest } = props;
   return (
-    <ParaEl {...rest} color={color} size={size} weight={weight} m={m} lh={lh} align={align}>
+    <ParaEl {...rest} {...{ color, size, weight, m, lh, align }}>
       {children}
     </ParaEl>
   );

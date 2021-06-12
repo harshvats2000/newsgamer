@@ -2,7 +2,7 @@ import React, { useEffect } from "react";
 import { useHistory, Link } from "react-router-dom";
 import { Header, Loader, Layout } from "components";
 import { useSelector, useDispatch } from "react-redux";
-import { createGame, FETCHING_GAMES, fetchGames } from "actions";
+import { createGame, fetchGames } from "actions";
 import styled from "styled-components";
 import { GameCard, Button, Para } from "ui";
 
@@ -42,16 +42,9 @@ export const Home = () => {
   const { availGames, fetchingGames: loading } = useSelector((state) => state.games);
 
   useEffect(() => {
-    dispatch({
-      type: FETCHING_GAMES,
-      payload: true
-    });
-
     dispatch(fetchGames());
-
-    // Set interval to update games in every 10s
     setInterval(() => dispatch(fetchGames()), game_updating_interval * 1000);
-  }, []);
+  }, [dispatch]);
 
   const nameAndActions = () => {
     return (

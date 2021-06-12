@@ -1,4 +1,4 @@
-import { FETCHING_GAMES_SUCCESS, FETCHING_GAMES, CREATING_GAME, DELETING_GAME } from ".";
+import { FETCHING_GAMES_SUCCESS, FETCHING_GAMES } from ".";
 import firebase from "../firebase";
 
 const db = firebase.firestore();
@@ -6,7 +6,7 @@ const db = firebase.firestore();
 export const fetchGames = () => (dispatch) => {
   dispatch({
     type: FETCHING_GAMES,
-    payload: true,
+    payload: true
   });
 
   let games = [],
@@ -24,7 +24,7 @@ export const fetchGames = () => (dispatch) => {
         });
         dispatch({
           type: FETCHING_GAMES_SUCCESS,
-          payload: games,
+          payload: games
         });
         document.getElementById("refresh-icon").classList.remove("fa-spin");
       });

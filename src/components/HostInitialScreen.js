@@ -1,7 +1,23 @@
 import React from "react";
 import { Button, Para } from "ui";
+import firebase from "../firebase";
+import { invitePlayers } from "functions/invitePlayers";
+import { useSelector } from "react-redux";
+const db = firebase.firestore();
 
-export const HostInitialScreen = ({ currGame, startgame, invitePlayers, gameId }) => {
+export const HostInitialScreen = ({ gameId }) => {
+  const { currGame } = useSelector((state) => state.currGame);
+  const games_doc = db.collection("games").doc(gameId);
+  // console.log(currGame);
+
+  const startgame = () => {
+    games_doc.get().then((doc) => {
+      if (doc.data()) {
+        doc.ref.update({ start: true });
+      }
+    });
+  };
+
   return (
     <>
       <div

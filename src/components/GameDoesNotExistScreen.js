@@ -1,5 +1,6 @@
 import React from "react";
 import { Link } from "react-router-dom";
+import { Button } from "ui";
 
 export const GameDoesNotExistScreen = () => {
   return (
@@ -7,10 +8,10 @@ export const GameDoesNotExistScreen = () => {
       <p className="para">This game is either over or deleted by the host.</p>
       <div style={{ textAlign: "center" }}>
         <Link to="/">
-          <button className="btn btn-black">
+          <Button bg="black">
             <i className="fa fa-arrow-left btn-icon" />
             Go Back To Home
-          </button>
+          </Button>
         </Link>
       </div>
     </div>

@@ -16,7 +16,7 @@ const ButtonEl = styled.button`
 export const Button = (props) => {
   const { children, bg = "black", color = "white", size = "16px", ...rest } = props;
   return (
-    <ButtonEl {...rest} bg={bg} color={color} size={size}>
+    <ButtonEl {...{ bg, color, size }} {...rest}>
       {children}
     </ButtonEl>
   );

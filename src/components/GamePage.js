@@ -1,10 +1,8 @@
-import React, { useEffect, useState } from "react";
-import { withRouter } from "react-router-dom";
+import React, { useEffect } from "react";
+import { useLocation } from "react-router-dom";
 import { content } from "../constants";
 import firebase from "../firebase";
 import classes from "../styles/gamepage.module.css";
-import { animated, useTransition } from "react-spring";
-import { invitePlayers } from "../functions/invitePlayers";
 import { useSelector, useDispatch } from "react-redux";
 import { SET_CURR_GAME, addNewPlayerToCurrGame, gameOver } from "actions";
 import { findWinner } from "utils";
@@ -12,7 +10,9 @@ import { HostInitialScreen, OtherPlayersInitialScreen, Loader, NewsPaper, Header
 
 const db = firebase.firestore();
 
-const GamePageComp = ({ location }) => {
+export const GamePage = () => {
+  console.log("hey");
+  const location = useLocation();
   const dispatch = useDispatch();
   const gameId = location.pathname.split("/")[2];
   const games_doc = db.collection("games").doc(gameId);
@@ -22,16 +22,18 @@ const GamePageComp = ({ location }) => {
   } = useSelector((state) => state.auth);
 
   useEffect(() => {
-    // Listen for live changes in the current game
     games_doc.onSnapshot((doc) => {
-      if (doc.data()) dispatch({ type: SET_CURR_GAME, payload: doc.data() });
-      else dispatch({ type: SET_CURR_GAME, payload: null });
+      if (JSON.stringify(doc.data()) !== JSON.stringify(currGame)) {
+        dispatch({ type: SET_CURR_GAME, payload: doc.data() });
+      } else if (!doc.data()) {
+        dispatch({ type: SET_CURR_GAME, payload: null });
+      }
     });
-  }, []);
+  }, [dispatch, games_doc, currGame]);
 
   useEffect(() => {
     if (currGame?.[displayName]) {
-      currGame[displayName].map((id) => {
+      currGame[displayName].forEach((id) => {
         let el = document.getElementById(id);
         if (el) el.style.backgroundColor = "yellow";
       });
@@ -46,7 +48,7 @@ const GamePageComp = ({ location }) => {
         dispatch(gameOver(games_doc, winnerName));
       }
     }
-  }, [currGame]);
+  }, [currGame, dispatch, games_doc]);
 
   const handleClick = (id) => {
     let words = currGame[displayName];
@@ -62,50 +64,33 @@ const GamePageComp = ({ location }) => {
     }
   };
 
-  const startgame = () => {
-    games_doc.get().then((doc) => {
-      if (doc.data()) {
-        doc.ref.update({ start: true });
-      }
-    });
-  };
+  if (fetching) {
+    return (
+      <div style={{ display: "grid", placeItems: "center" }}>
+        <Loader />
+      </div>
+    );
+  }
 
-  const [show, set] = useState(false);
-  const transitions = useTransition(show, null, {
-    from: { opacity: 0 },
-    enter: { opacity: 1 },
-    leave: { opacity: 0 }
-  });
+  if (!currGame) {
+    return <GameDoesNotExistScreen />;
+  }
 
-  return transitions.map(({ item, key, props }) => (
-    <animated.div style={props} key={key}>
-      {fetching ? (
-        <div style={{ display: "grid", placeItems: "center" }}>
-          <Loader />
+  if (currGame?.over) {
+    return <GameOverScreen {...{ currGame, displayName }} />;
+  }
+
+  return (
+    <>
+      <HeaderScreen {...{ classes, currGame, displayName }} />
+
+      {!currGame?.start ? (
+        <div style={{ marginTop: "130px" }}>
+          {currGame?.createdby === displayName ? <HostInitialScreen {...{ gameId }} /> : <OtherPlayersInitialScreen {...{ currGame }} />}
         </div>
-      ) : !currGame ? (
-        <GameDoesNotExistScreen />
-      ) : currGame?.over ? (
-        <GameOverScreen {...{ currGame, displayName }} />
       ) : (
-        <>
-          <HeaderScreen {...{ classes, currGame, displayName }} />
-
-          {!currGame?.start ? (
-            <div style={{ marginTop: "130px" }}>
-              {currGame?.createdby === displayName ? (
-                <HostInitialScreen {...{ currGame, startgame, invitePlayers, gameId }} />
-              ) : (
-                <OtherPlayersInitialScreen {...{ currGame }} />
-              )}
-            </div>
-          ) : (
-            <NewsPaper {...{ content, currGame, handleClick }} />
-          )}
-        </>
+        <NewsPaper {...{ content, currGame, handleClick }} />
       )}
-    </animated.div>
-  ));
+    </>
+  );
 };
-
-export const GamePage = withRouter(GamePageComp);

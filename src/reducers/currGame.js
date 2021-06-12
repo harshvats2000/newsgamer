@@ -1,4 +1,4 @@
-import { FETCHING_CURR_GAME, SET_CURR_GAME, START_GAME } from "actions";
+import { FETCHING_CURR_GAME, SET_CURR_GAME } from "actions";
 
 const initialState = {
   currGame: null,

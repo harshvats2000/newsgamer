@@ -25,7 +25,7 @@ export const Profile = () => {
         });
         setPlayedGames(games);
       });
-  }, []);
+  }, [user.displayName]);
 
   const gameCard = (game, i) => {
     const initial_array = game.players.map((player) => ({
