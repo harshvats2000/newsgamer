@@ -54,12 +54,12 @@ export const Home = () => {
       <NameAndActions>
         <DisplayName>{user?.displayName}</DisplayName>
         <Link to="/profile/me" style={{ marginRight: "10px" }}>
-          <Button bg="linear-gradient(0deg, #008900, #00dd00)">
+          <Button variant="green">
             <i className="fa fa-user btn-icon" />
             Profile
           </Button>
         </Link>
-        <Button bg="linear-gradient(0deg, #008900, #00dd00)" onClick={() => dispatch(createGame(user.displayName, history))}>
+        <Button variant="green" onClick={() => dispatch(createGame(user.displayName, history))}>
           <i className="fa fa-plus btn-icon" />
           create new game
         </Button>

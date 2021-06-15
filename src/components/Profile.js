@@ -64,7 +64,7 @@ export const Profile = () => {
           <img src={user.photoURL} alt="" />
           <p>{user.displayName}</p>
           <p>{user.email}</p>
-          <Button bg="red" onClick={() => dispatch(logout())}>
+          <Button variant="red" onClick={() => dispatch(logout())}>
             <i className="fa fa-sign-out btn-icon" />
             Logout
           </Button>
