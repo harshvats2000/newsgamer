@@ -1,9 +1,9 @@
 import React from "react";
 
-export const NewsPaper = ({ content, currGame, handleClick }) => {
+export const NewsPaper = ({ content, game, handleClick }) => {
   return (
     <div className="newspaper">
-      {content[currGame?.paraindex].split(" ").map((word, i) => {
+      {content[game?.paraindex].split(" ").map((word, i) => {
         let id = word.trim().replace("”", "").replace("“", "").replace(",", "") + i;
         return (
           <span key={i} style={{ whiteSpace: "initial" }}>

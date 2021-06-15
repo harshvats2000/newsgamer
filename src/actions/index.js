@@ -23,6 +23,5 @@ export const ADD_PLAYER_TO_CURRENT_GAME = "ADD_PLAYER_TO_CURRENT_GAME";
 export const ADD_WINNER = "ADD_WINNER";
 
 export * from "./auth";
-export * from "./currGame";
 export * from "./game";
 export * from "./games";

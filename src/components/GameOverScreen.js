@@ -1,10 +1,10 @@
 import React from "react";
 import { Link } from "react-router-dom";
 
-export const GameOverScreen = ({ currGame, displayName }) => {
-  const initial_array = currGame.players.map((player) => ({
+export const GameOverScreen = ({ game, displayName }) => {
+  const initial_array = game.players.map((player) => ({
     name: player,
-    score: currGame?.[player].length
+    score: game?.[player].length
   }));
 
   const sorted_array = initial_array.sort((a, b) => b.score - a.score);
@@ -14,7 +14,7 @@ export const GameOverScreen = ({ currGame, displayName }) => {
       <div style={{ height: "100vh", display: "grid", placeItems: "center" }}>
         <div>
           <h1 style={{ textAlign: "center" }}>Game Over</h1>
-          <h3 style={{ textAlign: "center" }}>{currGame.winner === displayName ? "You Won 🏆." : "You Lose!"}</h3>
+          <h3 style={{ textAlign: "center" }}>{game.winner === displayName ? "You Won 🏆." : "You Lose!"}</h3>
           <hr />
           <div>
             {sorted_array.map((player, i) => {

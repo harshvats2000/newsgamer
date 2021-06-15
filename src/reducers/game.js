@@ -1,8 +1,16 @@
-import { CREATING_GAME, CREATING_GAME_SUCCESS, CREATING_GAME_FAIL } from "actions";
+import {
+  CREATING_GAME,
+  CREATING_GAME_SUCCESS,
+  CREATING_GAME_FAIL,
+  FETCHING_CURRENT_GAME,
+  FETCHING_CURRENT_GAME_SUCCESS,
+  RESET_CURRENT_GAME
+} from "actions";
 
 const initialState = {
   game: null,
-  creatingGame: false
+  creatingGame: false,
+  fetchingGame: true
 };
 
 export default function (state = initialState, { type, payload }) {
@@ -10,7 +18,7 @@ export default function (state = initialState, { type, payload }) {
     case CREATING_GAME:
       return {
         ...state,
-        creatingGame: payload
+        creatingGame: true
       };
 
     case CREATING_GAME_SUCCESS:
@@ -23,7 +31,28 @@ export default function (state = initialState, { type, payload }) {
     case CREATING_GAME_FAIL:
       return {
         ...state,
-        creatingGame: false
+        creatingGame: false,
+        game: null
+      };
+
+    case FETCHING_CURRENT_GAME:
+      return {
+        ...state,
+        fetchingGame: true
+      };
+
+    case FETCHING_CURRENT_GAME_SUCCESS:
+      return {
+        ...state,
+        fetchingGame: false,
+        game: payload
+      };
+
+    case RESET_CURRENT_GAME:
+      return {
+        ...state,
+        game: null,
+        fetchingGame: false
       };
 
     default:

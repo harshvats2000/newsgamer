@@ -6,9 +6,8 @@ import { useSelector } from "react-redux";
 const db = firebase.firestore();
 
 export const HostInitialScreen = ({ gameId }) => {
-  const { currGame } = useSelector((state) => state.currGame);
+  const { game } = useSelector((state) => state.game);
   const games_doc = db.collection("games").doc(gameId);
-  // console.log(currGame);
 
   const startgame = () => {
     games_doc.get().then((doc) => {
@@ -26,7 +25,7 @@ export const HostInitialScreen = ({ gameId }) => {
           padding: "20px 0 10px"
         }}
       >
-        {currGame.players.length > 1 ? (
+        {game.players.length > 1 ? (
           <Button bg="linear-gradient(0deg, #008900, #00dd00)" onClick={() => startgame()}>
             start game
           </Button>

@@ -1,16 +1,16 @@
 import React from "react";
 
-export const HeaderScreen = ({ classes, currGame, displayName }) => {
+export const HeaderScreen = ({ classes, game, displayName }) => {
   return (
     <div className={classes.header}>
       <div style={{ color: "grey" }}>
-        Host: <span style={{ fontWeight: "bold", color: "black" }}>{currGame?.createdby}</span>
+        Host: <span style={{ fontWeight: "bold", color: "black" }}>{game?.createdby}</span>
       </div>
       <div style={{ color: "grey" }}>
-        Click words starting with letter: <span style={{ fontWeight: "bold", color: "black" }}>{currGame?.letter}</span>
+        Click words starting with letter: <span style={{ fontWeight: "bold", color: "black" }}>{game?.letter}</span>
       </div>
       <ol className={classes.players_ol}>
-        {currGame.players.map((player, i) => {
+        {game.players.map((player, i) => {
           return (
             <li
               key={i}
@@ -20,7 +20,7 @@ export const HeaderScreen = ({ classes, currGame, displayName }) => {
               }}
             >
               <div>{player.split(" ")[0]}</div>
-              <div style={{ textAlign: "center", fontSize: "2rem" }}>{currGame?.[player] && currGame?.[player].length}</div>
+              <div style={{ textAlign: "center", fontSize: "2rem" }}>{game?.[player] && game?.[player].length}</div>
             </li>
           );
         })}

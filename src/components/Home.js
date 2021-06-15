@@ -6,7 +6,7 @@ import { createGame, fetchGames } from "actions";
 import styled from "styled-components";
 import { GameCard, Button, Para } from "ui";
 
-const game_updating_interval = 60;
+const game_updating_interval = 30;
 
 const Body = styled.div`
   max-width: 800px;
@@ -43,7 +43,10 @@ export const Home = () => {
 
   useEffect(() => {
     dispatch(fetchGames());
-    setInterval(() => dispatch(fetchGames()), game_updating_interval * 1000);
+    const interval = setInterval(() => dispatch(fetchGames()), game_updating_interval * 1000);
+    return () => {
+      clearInterval(interval);
+    };
   }, [dispatch]);
 
   const nameAndActions = () => {

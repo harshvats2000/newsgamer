@@ -15,7 +15,7 @@ export const GamePage = () => {
   const dispatch = useDispatch();
   const gameId = location.pathname.split("/")[2];
   const games_doc = db.collection("games").doc(gameId);
-  const { currGame, fetchingGame: fetching } = useSelector((state) => state.currGame);
+  const { game, fetchingGame: fetching } = useSelector((state) => state.game);
   const {
     user: { displayName }
   } = useSelector((state) => state.auth);
@@ -28,13 +28,17 @@ export const GamePage = () => {
   }, []);
 
   useEffect(() => {
-    dispatch(listenToRealTimeGameChanges(games_doc));
+    const unsubscribe = dispatch(listenToRealTimeGameChanges(games_doc));
+
+    return () => {
+      unsubscribe();
+    };
     // eslint-disable-next-line
-  }, [currGame]);
+  }, []);
 
   useEffect(() => {
-    if (currGame?.[displayName]) {
-      currGame[displayName].forEach((id) => {
+    if (game?.[displayName]) {
+      game[displayName].forEach((id) => {
         let el = document.getElementById(id);
         if (el) el.style.backgroundColor = "yellow";
       });
@@ -42,18 +46,18 @@ export const GamePage = () => {
   });
 
   useEffect(() => {
-    if (currGame?.createdby) {
+    if (game?.createdby) {
       dispatch(addNewPlayerToCurrGame(games_doc));
-      const { isGameOver, winnerName } = findWinner(currGame);
+      const { isGameOver, winnerName } = findWinner(game);
       if (isGameOver) {
         dispatch(gameOver(games_doc, winnerName));
       }
     }
-  }, [currGame, dispatch, games_doc]);
+  }, [game, dispatch, games_doc]);
 
   const handleClick = (id) => {
-    let words = currGame[displayName];
-    if (id.toLowerCase().search(currGame.letter) === 0) {
+    let words = game[displayName];
+    if (id.toLowerCase().search(game.letter) === 0) {
       if (words.indexOf(id) === -1) {
         words.push(id);
         games_doc.update({ [displayName]: words });
@@ -73,24 +77,24 @@ export const GamePage = () => {
     );
   }
 
-  if (!currGame) {
+  if (!game) {
     return <GameDoesNotExistScreen />;
   }
 
-  if (currGame?.over) {
-    return <GameOverScreen {...{ currGame, displayName }} />;
+  if (game?.over) {
+    return <GameOverScreen {...{ game, displayName }} />;
   }
 
   return (
     <>
-      <HeaderScreen {...{ classes, currGame, displayName }} />
+      <HeaderScreen {...{ classes, game, displayName }} />
 
-      {!currGame?.start ? (
+      {!game?.start ? (
         <div style={{ marginTop: "130px" }}>
-          {currGame?.createdby === displayName ? <HostInitialScreen {...{ gameId }} /> : <OtherPlayersInitialScreen {...{ currGame }} />}
+          {game?.createdby === displayName ? <HostInitialScreen {...{ gameId }} /> : <OtherPlayersInitialScreen {...{ game }} />}
         </div>
       ) : (
-        <NewsPaper {...{ content, currGame, handleClick }} />
+        <NewsPaper {...{ content, game, handleClick }} />
       )}
     </>
   );
