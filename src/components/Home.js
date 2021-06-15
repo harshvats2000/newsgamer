@@ -39,11 +39,16 @@ export const Home = () => {
   const dispatch = useDispatch();
   const history = useHistory();
   const { user } = useSelector((state) => state.auth);
-  const { availGames, fetchingGames: loading } = useSelector((state) => state.games);
+  const { availGames, fetchingGames: loading } = useSelector(
+    (state) => state.games
+  );
 
   useEffect(() => {
     dispatch(fetchGames());
-    const interval = setInterval(() => dispatch(fetchGames()), game_updating_interval * 1000);
+    const interval = setInterval(
+      () => dispatch(fetchGames()),
+      game_updating_interval * 1000
+    );
     return () => {
       clearInterval(interval);
     };
@@ -59,7 +64,7 @@ export const Home = () => {
             Profile
           </Button>
         </Link>
-        <Button variant="green" onClick={() => dispatch(createGame(user.displayName, history))}>
+        <Button variant="green" onClick={() => dispatch(createGame(history))}>
           <i className="fa fa-plus btn-icon" />
           create new game
         </Button>
@@ -71,10 +76,18 @@ export const Home = () => {
     return (
       <Refresh>
         <Para m={0} size="13px">
-          The games are updated every <span style={{ fontWeight: 900, verticalAlign: "middle" }}>{game_updating_interval}</span> seconds.
+          The games are updated every{" "}
+          <span style={{ fontWeight: 900, verticalAlign: "middle" }}>
+            {game_updating_interval}
+          </span>{" "}
+          seconds.
         </Para>
         <div>
-          <i className="fa fa-refresh" id="refresh-icon" onClick={(e) => fetchGames()} />
+          <i
+            className="fa fa-refresh"
+            id="refresh-icon"
+            onClick={(e) => fetchGames()}
+          />
         </div>
       </Refresh>
     );
@@ -100,7 +113,9 @@ export const Home = () => {
                   No games are being played right now.
                 </Para>
               ) : null}
-              {availGames.map((game, i) => GameCard({ game, user, dispatch }))}
+              {availGames.map((game, i) => (
+                <GameCard key={game.gameid} {...{ game, dispatch }} />
+              ))}
             </AvailGamesWrapper>
           )}
         </Body>

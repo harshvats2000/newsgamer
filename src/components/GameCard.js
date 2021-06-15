@@ -1,31 +1,43 @@
-import React from "react";
+import React, { useState } from "react";
 import { Link } from "react-router-dom";
 import { deleteGame } from "actions";
 import styled from "styled-components";
 import { timeSince } from "utils";
+import { getDisplayNameByUid } from "functions/getDisplayNameByUid";
+import { useSelector } from "react-redux";
 
-export function GameCard({ game, user, dispatch }) {
-  const { gameid, createdby } = game;
-  const { displayName } = user;
+export function GameCard({ game, dispatch }) {
+  const { gameid, createdby, players, createdAt } = game;
+  const {
+    user: { uid },
+  } = useSelector((state) => state.auth);
+  const [hostName, setHostName] = useState(null);
+
+  React.useEffect(() => {
+    getDisplayNameByUid(createdby).then((name) => setHostName(name));
+  }, []);
 
   return (
     <Card key={gameid}>
       <Row1>
         <Link to={`/game/${gameid}`} style={{ flex: 1 }}>
           <Text>
-            Game by <span>{createdby}</span>.
+            Game by <span>{hostName}</span>.
             <br />
           </Text>
         </Link>
-        {createdby === displayName ? (
+        {createdby === uid ? (
           <Actions>
-            <TrashIcon className="fa fa-trash" onClick={() => dispatch(deleteGame(gameid))} />
+            <TrashIcon
+              className="fa fa-trash"
+              onClick={() => dispatch(deleteGame(gameid))}
+            />
           </Actions>
         ) : null}
       </Row1>
       <Row2>
-        <Players>{game.players.length} players</Players>
-        <TimeAgo>{timeSince(game.createdAt)} ago</TimeAgo>
+        <Players>{players.length} players</Players>
+        <TimeAgo>{timeSince(createdAt)} ago</TimeAgo>
       </Row2>
     </Card>
   );

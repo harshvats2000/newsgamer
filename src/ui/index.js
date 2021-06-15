@@ -1,3 +1,3 @@
 export * from "./Button";
-export * from "./GameCard";
+export * from "../components/GameCard";
 export * from "./Para";

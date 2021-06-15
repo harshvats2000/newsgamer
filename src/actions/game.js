@@ -2,15 +2,22 @@ import firebase from "../firebase";
 import { v4 as uuidv4 } from "uuid";
 import { getRandomAlphabet } from "../functions/getRandomAlphabet";
 import { content, max_score } from "../constants";
-import { CREATING_GAME, DELETING_GAME, CREATING_GAME_SUCCESS, CREATING_GAME_FAIL } from ".";
+import {
+  CREATING_GAME,
+  DELETING_GAME,
+  CREATING_GAME_SUCCESS,
+  CREATING_GAME_FAIL,
+} from ".";
 import { fetchGames } from "./games";
 import { FETCHING_CURRENT_GAME_SUCCESS, RESET_CURRENT_GAME } from "actions";
 
 const db = firebase.firestore();
 
-export const createGame = (userName, history) => (dispatch) => {
+export const createGame = (history) => (dispatch, getState) => {
+  const { uid } = getState().auth.user;
+
   dispatch({
-    type: CREATING_GAME
+    type: CREATING_GAME,
   });
 
   const paraIndex = Math.floor(Math.random() * content.length);
@@ -18,16 +25,16 @@ export const createGame = (userName, history) => (dispatch) => {
   const id = uuidv4();
 
   const data = {
-    players: [userName],
-    createdby: userName,
+    players: [uid],
+    createdby: uid,
     gameid: id,
     letter: letter,
     paraindex: paraIndex,
-    [userName]: [],
+    [uid]: [],
     creationdate: firebase.database.ServerValue.TIMESTAMP,
     createdAt: Date.now(),
     over: false,
-    start: false
+    start: false,
   };
 
   db.collection("games")
@@ -47,7 +54,9 @@ const generateLetter = (paraIndex) => {
   let letter = getRandomAlphabet();
 
   // Check if paragraph contains enough words with alphabet
-  let arr = content[paraIndex].split(" ").filter((word) => word.toLowerCase().indexOf(letter) === 0);
+  let arr = content[paraIndex]
+    .split(" ")
+    .filter((word) => word.toLowerCase().indexOf(letter) === 0);
 
   if (arr.length >= max_score && arr.length <= max_score + 5) {
     return letter;
@@ -59,7 +68,7 @@ const generateLetter = (paraIndex) => {
 export const deleteGame = (gameId) => (dispatch) => {
   dispatch({
     type: DELETING_GAME,
-    payload: true
+    payload: true,
   });
 
   if (window.confirm("Are you sure you want to delete this game?")) {
@@ -74,42 +83,43 @@ export const deleteGame = (gameId) => (dispatch) => {
   }
 };
 
-export const listenToRealTimeGameChanges = (games_doc) => (dispatch, getState) => {
-  const { game } = getState().game;
+export const listenToRealTimeGameChanges =
+  (games_doc) => (dispatch, getState) => {
+    const { game } = getState().game;
 
-  return games_doc.onSnapshot((doc) => {
-    if (JSON.stringify(doc.data()) !== JSON.stringify(game)) {
-      dispatch({ type: FETCHING_CURRENT_GAME_SUCCESS, payload: doc.data() });
-    } else if (!doc.data()) {
-      dispatch({ type: RESET_CURRENT_GAME });
-    }
-  });
-};
+    return games_doc.onSnapshot((doc) => {
+      if (JSON.stringify(doc.data()) !== JSON.stringify(game)) {
+        dispatch({ type: FETCHING_CURRENT_GAME_SUCCESS, payload: doc.data() });
+      } else if (!doc.data()) {
+        dispatch({ type: RESET_CURRENT_GAME });
+      }
+    });
+  };
 
 export const addNewPlayerToCurrGame = (games_doc) => (dispatch, getState) => {
-  const { displayName } = getState().auth.user;
+  const { uid } = getState().auth.user;
   const { game } = getState().game;
 
-  if (game.players.indexOf(displayName) === -1) {
+  if (game.players.indexOf(uid) === -1) {
     games_doc.get().then((doc) => {
       if (doc.data()) {
         doc.ref.update({
-          players: firebase.firestore.FieldValue.arrayUnion(displayName),
-          [displayName]: []
+          players: firebase.firestore.FieldValue.arrayUnion(uid),
+          [uid]: [],
         });
       }
     });
   }
 };
 
-export const gameOver = (games_doc, winnerName) => () => {
+export const gameOver = (games_doc, winnerUid) => () => {
   const { overdate, overtime } = getCurrentDateAndTime();
 
   games_doc.update({
     over: true,
-    winner: winnerName,
+    winner: winnerUid,
     overdate,
-    overtime
+    overtime,
   });
 };
 
