@@ -15,7 +15,7 @@ export function GameCard({ game, dispatch }) {
 
   React.useEffect(() => {
     getDisplayNameByUid(createdby).then((name) => setHostName(name));
-  }, []);
+  }, [createdby]);
 
   return (
     <Card key={gameid}>

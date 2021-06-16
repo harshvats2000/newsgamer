@@ -19,7 +19,7 @@ export const HeaderScreen = ({ classes, game }) => {
     getDiplayNamesByUidArray(game?.players).then((names) => {
       setPlayerNames(names);
     });
-  }, []);
+  }, [game, uid]);
 
   return (
     <div className={classes.header}>

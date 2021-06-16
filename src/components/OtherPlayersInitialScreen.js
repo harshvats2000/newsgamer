@@ -6,7 +6,8 @@ export const OtherPlayersInitialScreen = ({ game }) => {
 
   React.useEffect(() => {
     getDisplayNameByUid(game?.createdby).then((name) => setHostName(name));
-  }, []);
+  }, [game]);
+
   return (
     <>
       <h2 style={{ paddingLeft: "10px" }}>

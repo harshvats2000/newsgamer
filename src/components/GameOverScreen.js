@@ -18,7 +18,7 @@ export const GameOverScreen = ({ game, uid }) => {
         names = setPlayerNames(names);
       }
     );
-  }, []);
+  }, [sorted_array]);
 
   return (
     <>

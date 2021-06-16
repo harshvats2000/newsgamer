@@ -13,6 +13,11 @@ export const Profile = () => {
   const user = useSelector((state) => state.auth.user);
   const [playedGames, setPlayedGames] = useState([]);
 
+  const winPercent =
+    (playedGames.filter((game) => game.winner === user.uid).length /
+      playedGames.length) *
+    100;
+
   useEffect(() => {
     let games = [];
     db.collection("games")
@@ -26,34 +31,6 @@ export const Profile = () => {
         setPlayedGames(games);
       });
   }, [user.uid]);
-
-  const gameCard = (game, i) => {
-    const initial_array = game.players.map((player) => ({
-      name: player,
-      score: game[player].length
-    }));
-
-    const sorted_array = initial_array.sort((a, b) => b.score - a.score);
-    return (
-      <div key={i} className={classes.card} style={{ boxShadow: game.winner === user.uid ? "inset 0 0 10px green" : "inset 0 0 10px red" }}>
-        <div style={{ whiteSpace: "break-spaces", textAlign: "right", color: "grey" }}>{game.overtime + "  |  " + game.overdate}</div>
-        <hr />
-        <div style={{ textAlign: "left" }}>
-          {sorted_array.map((player, i) => (
-            <p
-              key={i}
-              style={{
-                color: player.name === user.uid ? "green" : "red"
-              }}
-            >
-              {`${i + 1}. ${player.name}`} <span style={{ color: "black" }}>({player.score})</span>
-            </p>
-          ))}
-        </div>
-      </div>
-    );
-  };
-  const winPercent = (playedGames.filter((game) => game.winner === user.uid).length / playedGames.length) * 100;
 
   return (
     <>
@@ -70,8 +47,10 @@ export const Profile = () => {
           </Button>
         </div>
 
-        <h3 style={{ textAlign: "center" }}>Winning % = {!isNaN(winPercent) && winPercent.toFixed(2)}</h3>
-        <div>{playedGames.map((game, i) => gameCard(game, i))}</div>
+        <h3 style={{ textAlign: "center" }}>
+          Winning % = {!isNaN(winPercent) && winPercent.toFixed(2)}
+        </h3>
+        <div></div>
       </div>
     </>
   );
