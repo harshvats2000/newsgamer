@@ -13,7 +13,7 @@ import { FETCHING_CURRENT_GAME_SUCCESS, RESET_CURRENT_GAME } from "actions";
 
 const db = firebase.firestore();
 
-export const createGame = (history) => (dispatch, getState) => {
+export const createGame = (history) => async (dispatch, getState) => {
   const { uid } = getState().auth.user;
 
   dispatch({
@@ -37,17 +37,13 @@ export const createGame = (history) => (dispatch, getState) => {
     start: false,
   };
 
-  db.collection("games")
-    .doc(id)
-    .set(data)
-    .then(() => {
-      dispatch({ type: CREATING_GAME_SUCCESS, payload: data });
-      history.push(`/game/${id}`);
-    })
-    .catch((err) => {
-      dispatch({ type: CREATING_GAME_FAIL, payload: data });
-      console.log(err);
-    });
+  try {
+    await db.collection("games").doc(id).set(data);
+    dispatch({ type: CREATING_GAME_SUCCESS, payload: data });
+    history.push(`/game/${id}`);
+  } catch (error) {
+    dispatch({ type: CREATING_GAME_FAIL, payload: data });
+  }
 };
 
 const generateLetter = (paraIndex) => {
@@ -65,21 +61,19 @@ const generateLetter = (paraIndex) => {
   }
 };
 
-export const deleteGame = (gameId) => (dispatch) => {
+export const deleteGame = (gameId) => async (dispatch) => {
   dispatch({
     type: DELETING_GAME,
     payload: true,
   });
 
   if (window.confirm("Are you sure you want to delete this game?")) {
-    db.collection("games")
-      .doc(gameId)
-      .get()
-      .then((doc) => {
-        if (doc.data()) {
-          doc.ref.delete().then(() => dispatch(fetchGames()));
-        }
-      });
+    try {
+      await db.collection("games").doc(gameId).delete();
+      dispatch(fetchGames());
+    } catch (error) {
+      alert("Error in deleting game.");
+    }
   }
 };
 
@@ -96,21 +90,22 @@ export const listenToRealTimeGameChanges =
     });
   };
 
-export const addNewPlayerToCurrGame = (games_doc) => (dispatch, getState) => {
-  const { uid } = getState().auth.user;
-  const { game } = getState().game;
+export const addNewPlayerToCurrGame =
+  (games_doc) => async (dispatch, getState) => {
+    const { uid } = getState().auth.user;
+    const { game } = getState().game;
 
-  if (game.players.indexOf(uid) === -1) {
-    games_doc.get().then((doc) => {
-      if (doc.data()) {
-        doc.ref.update({
-          players: firebase.firestore.FieldValue.arrayUnion(uid),
-          [uid]: [],
-        });
+    if (game.players.indexOf(uid) === -1) {
+      try {
+        await games_doc.set(
+          { players: firebase.firestore.FieldValue.arrayUnion(uid), [uid]: [] },
+          { merge: true }
+        );
+      } catch (error) {
+        alert("Error in adding new player to the game.");
       }
-    });
-  }
-};
+    }
+  };
 
 export const gameOver = (games_doc, winnerUid) => () => {
   const { overdate, overtime } = getCurrentDateAndTime();

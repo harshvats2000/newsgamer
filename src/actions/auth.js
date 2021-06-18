@@ -25,55 +25,48 @@ export const listenToAuthChanges = () => (dispatch) => {
   });
 };
 
-export const login = () => (dispatch) => {
+export const login = () => async (dispatch) => {
   dispatch({
     type: LOGGING_IN,
   });
   var provider = new firebase.auth.GoogleAuthProvider();
-  auth
-    .signInWithPopup(provider)
-    .then((res) => {
-      db.collection("users")
+
+  try {
+    const res = await auth.signInWithPopup(provider);
+
+    try {
+      await db
+        .collection("users")
         .doc(res.user.uid)
-        .set(
-          {
-            displayName: res.user.displayName,
-          },
-          { merge: true }
-        )
-        .then(() => {
-          dispatch({
-            type: LOGIN_SUCCESS,
-            payload: res.user,
-          });
-        })
-        .catch((err) => {
-          dispatch({
-            type: LOGIN_FAIL,
-          });
-          console.log(err);
-        });
-    })
-    .catch((err) =>
+        .set({ displayName: res.user.displayName }, { merge: true });
+
+      dispatch({
+        type: LOGIN_SUCCESS,
+        payload: res.user,
+      });
+    } catch (error) {
       dispatch({
         type: LOGIN_FAIL,
-      })
-    );
+      });
+    }
+  } catch (error) {
+    dispatch({
+      type: LOGIN_FAIL,
+    });
+  }
 };
 
-export const logout = () => (dispatch) => {
+export const logout = () => async (dispatch) => {
   if (window.confirm("Are you sure you want to logout of NewsGamer?")) {
-    auth
-      .signOut()
-      .then(() =>
-        dispatch({
-          type: LOGOUT_SUCCESS,
-        })
-      )
-      .catch((err) =>
-        dispatch({
-          type: LOGOUT_FAIL,
-        })
-      );
+    try {
+      await auth.signOut();
+      dispatch({
+        type: LOGOUT_SUCCESS,
+      });
+    } catch (error) {
+      dispatch({
+        type: LOGOUT_FAIL,
+      });
+    }
   }
 };

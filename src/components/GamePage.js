@@ -2,7 +2,6 @@ import React, { useEffect } from "react";
 import { useLocation } from "react-router-dom";
 import { content } from "../constants";
 import firebase from "../firebase";
-import classes from "../styles/gamepage.module.css";
 import { useSelector, useDispatch } from "react-redux";
 import {
   addNewPlayerToCurrGame,
@@ -101,7 +100,7 @@ export const GamePage = () => {
 
   return (
     <>
-      <HeaderScreen {...{ classes, game }} />
+      <HeaderScreen {...{ game }} />
 
       {!game?.start ? (
         <div style={{ marginTop: "130px" }}>
