@@ -16,7 +16,7 @@ import {
   OtherPlayersInitialScreen,
   Loader,
   NewsPaper,
-  HeaderScreen,
+  GamePageHeader,
   GameDoesNotExistScreen,
   GameOverScreen,
 } from "components";
@@ -100,7 +100,7 @@ export const GamePage = () => {
 
   return (
     <>
-      <HeaderScreen {...{ game }} />
+      <GamePageHeader {...{ game }} />
 
       {!game?.start ? (
         <div style={{ marginTop: "130px" }}>

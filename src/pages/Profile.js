@@ -50,7 +50,9 @@ export const Profile = () => {
         <h3 style={{ textAlign: "center" }}>
           Winning % = {!isNaN(winPercent) && winPercent.toFixed(2)}
         </h3>
-        <div></div>
+        <div>
+          <strong>Games Played:</strong> {playedGames?.length}
+        </div>
       </div>
     </>
   );

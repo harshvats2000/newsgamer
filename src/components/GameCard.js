@@ -8,25 +8,27 @@ import { useSelector } from "react-redux";
 
 export function GameCard({ game, dispatch }) {
   const { gameid, createdby, players, createdAt } = game;
-  const {
-    user: { uid },
-  } = useSelector((state) => state.auth);
+  const { user } = useSelector((state) => state.auth);
   const [hostName, setHostName] = useState(null);
 
   React.useEffect(() => {
-    getDisplayNameByUid(createdby).then((name) => setHostName(name));
-  }, [createdby]);
+    if (createdby === user.uid) {
+      setHostName("You");
+    } else {
+      getDisplayNameByUid(createdby).then((name) => setHostName(name));
+    }
+  }, [createdby, user.uid]);
 
   return (
     <Card key={gameid}>
       <Row1>
-        <Link to={`/game/${gameid}`} style={{ flex: 1 }}>
+        <Link to={`/game/${gameid}`}>
           <Text>
             Game by <span>{hostName}</span>.
             <br />
           </Text>
         </Link>
-        {createdby === uid ? (
+        {createdby === user.uid ? (
           <Actions>
             <TrashIcon
               className="fa fa-trash"
@@ -51,6 +53,7 @@ const Card = styled.div`
 const Row1 = styled.div`
   display: flex;
   justify-content: space-between;
+  align-items: center;
 `;
 const Text = styled.p`
   color: rgb(0, 0, 0, 0.6);
@@ -68,7 +71,12 @@ const Row2 = styled.div`
 `;
 const Players = styled.div``;
 const TimeAgo = styled.div``;
-const Actions = styled.div``;
+const Actions = styled.div`
+  i {
+    cursor: pointer;
+    padding: 10px;
+  }
+`;
 const TrashIcon = styled.i`
   color: red;
 `;
