@@ -20,17 +20,23 @@ const backgroundStyles = (variant) => {
 const ButtonEl = styled.button`
   ${(props) => backgroundStyles(props.variant)}
   font-size: ${(props) => props.size};
+  padding: 8px 15px;
+  border-radius: 4px;
   border: none;
-  padding: 8px 10px;
-  border-radius: 5px;
   text-transform: capitalize;
   cursor: pointer;
-  font-weight: bold;
   color: ${(props) => props.color};
+  transition: 0.3s;
 `;
 
 export const Button = (props) => {
-  const { children, color = "white", size = "16px", variant = "black", ...rest } = props;
+  const {
+    children,
+    color = "white",
+    size = "16px",
+    variant = "black",
+    ...rest
+  } = props;
   return (
     <ButtonEl {...{ color, size, variant }} {...rest}>
       {children}

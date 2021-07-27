@@ -8,62 +8,51 @@ import styled from "styled-components";
 
 export const GamePageHeader = ({ game }) => {
   const {
-    user: { uid },
+    user: { uid: currentUserUid },
   } = useSelector((state) => state.auth);
-  const [playerNames, setPlayerNames] = useState([]);
+  const [players, setPlayers] = useState([]);
   const [hostName, setHostName] = useState(null);
 
   React.useEffect(() => {
-    getDisplayNameByUid(uid).then((name) => {
+    getDisplayNameByUid(currentUserUid).then((name) => {
       setHostName(name);
     });
     getDiplayNamesByUidArray(game?.players).then((names) => {
-      setPlayerNames(names);
+      setPlayers(names.map((name, i) => ({ name, uid: game.players[i] })));
     });
-  }, [game, uid]);
+  }, [game, currentUserUid]);
 
   return (
     <Wrapper>
       <Container>
-        <div>
-          Host: <span>{hostName}</span>
-        </div>
-        <div>
-          Click words starting with letter: <span>{game?.letter}</span>
-        </div>
+        <Flex>
+          <div>
+            Host: <span>{hostName}</span>
+          </div>
+          <div>
+            Letter: <span>{game?.letter}</span>
+          </div>
+        </Flex>
 
         <PlayerNamesList>
-          {playerNames.length > 0 &&
-            playerNames.map((playerName, i) => {
-              return (
-                <>
+          {players.length > 0
+            ? players.map(({ name, uid }, i) => {
+                return (
                   <li
-                    key={i}
-                    style={{ color: uid === playerName ? "green" : "red" }}
+                    key={uid}
+                    style={{ color: currentUserUid === uid ? "green" : "red" }}
                   >
                     <div>
-                      {playerName.split(" ")[0][0]}
-                      {playerName.split(" ")[1][0]}
+                      {name.split(" ")[0][0]}
+                      {name.split(" ")[1][0]}
                     </div>
                     <div style={{ fontSize: "2rem" }}>
                       {game[game.players[i]].length}
                     </div>
                   </li>
-                  <li
-                    key={i}
-                    style={{ color: uid === playerName ? "green" : "red" }}
-                  >
-                    <div>
-                      {playerName.split(" ")[0][0]}
-                      {playerName.split(" ")[1][0]}
-                    </div>
-                    <div style={{ fontSize: "2rem" }}>
-                      {game[game.players[i]].length}
-                    </div>
-                  </li>
-                </>
-              );
-            })}
+                );
+              })
+            : "Loading players..."}
         </PlayerNamesList>
       </Container>
     </Wrapper>
@@ -84,6 +73,18 @@ const Container = styled.div`
   span {
     font-weight: bold;
     color: black;
+  }
+`;
+
+const Flex = styled.div`
+  max-width: 300px;
+  margin: auto;
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  justify-content: center;
+  line-height: 25px;
+  > div {
+    text-align: center;
   }
 `;
 

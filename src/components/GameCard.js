@@ -20,19 +20,20 @@ export function GameCard({ game, dispatch }) {
   }, [createdby, user.uid]);
 
   return (
-    <Card key={gameid}>
+    <Card key={gameid} to={`/game/${gameid}`}>
       <Row1>
-        <Link to={`/game/${gameid}`}>
-          <Text>
-            Game by <span>{hostName}</span>.
-            <br />
-          </Text>
-        </Link>
+        <Text>
+          Game by <span>{hostName}</span>.
+          <br />
+        </Text>
         {createdby === user.uid ? (
           <Actions>
             <TrashIcon
               className="fa fa-trash"
-              onClick={() => dispatch(deleteGame(gameid))}
+              onClick={(e) => {
+                e.preventDefault();
+                dispatch(deleteGame(gameid));
+              }}
             />
           </Actions>
         ) : null}
@@ -45,10 +46,14 @@ export function GameCard({ game, dispatch }) {
   );
 }
 
-const Card = styled.div`
-  box-shadow: 0px 23px 25px gainsboro;
+const Card = styled(Link)`
+  display: block;
+  text-decoration: none;
+  box-shadow: 0px 23px 25px rgb(0 0 0 / 7%);
   margin-bottom: 15px;
   padding: 10px;
+  border: 1px solid rgb(0, 0, 0, 0.1);
+  border-radius: 4px;
 `;
 const Row1 = styled.div`
   display: flex;
@@ -74,7 +79,12 @@ const TimeAgo = styled.div``;
 const Actions = styled.div`
   i {
     cursor: pointer;
-    padding: 10px;
+    width: 40px;
+    height: 40px;
+    display: grid;
+    place-items: center;
+    border-radius: 50%;
+    background-color: rgb(255 0 0 / 10%);
   }
 `;
 const TrashIcon = styled.i`
