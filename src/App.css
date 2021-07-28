@@ -2,16 +2,6 @@
   box-sizing: border-box;
 }
 
-.newspaper {
-  white-space: pre-wrap;
-  padding: 20px;
-  background-color: gainsboro;
-  line-height: 2.5rem;
-  margin-top: 120px;
-  text-align: justify;
-  font-size: 1.3rem;
-}
-
 button:focus {
   outline: none;
 }

@@ -5,7 +5,7 @@ import { Button } from "ui";
 export const GameDoesNotExistScreen = () => {
   return (
     <div style={{ paddingTop: "50px" }}>
-      <p className="para">This game is either over or deleted by the host.</p>
+      <p className="para">This game is either over or deleted.</p>
       <div style={{ textAlign: "center" }}>
         <Link to="/">
           <Button bg="black">

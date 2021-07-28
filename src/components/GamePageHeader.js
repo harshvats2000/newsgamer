@@ -5,13 +5,14 @@ import {
   getDisplayNameByUid,
 } from "functions/getDisplayNameByUid";
 import styled from "styled-components";
+import { header_height } from "../constants";
 
 export const GamePageHeader = ({ game }) => {
   const {
     user: { uid: currentUserUid },
   } = useSelector((state) => state.auth);
   const [players, setPlayers] = useState([]);
-  const [hostName, setHostName] = useState(null);
+  const [hostName, setHostName] = useState("Loading...");
 
   React.useEffect(() => {
     getDisplayNameByUid(currentUserUid).then((name) => {
@@ -42,10 +43,7 @@ export const GamePageHeader = ({ game }) => {
                     key={uid}
                     style={{ color: currentUserUid === uid ? "green" : "red" }}
                   >
-                    <div>
-                      {name.split(" ")[0][0]}
-                      {name.split(" ")[1][0]}
-                    </div>
+                    <div>{name.split(" ")[0]}</div>
                     <div style={{ fontSize: "2rem" }}>
                       {game[game.players[i]].length}
                     </div>
@@ -60,6 +58,7 @@ export const GamePageHeader = ({ game }) => {
 };
 
 const Wrapper = styled.div`
+  height: ${header_height};
   position: fixed;
   top: 0;
   background: white;

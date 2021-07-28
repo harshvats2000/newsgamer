@@ -66,14 +66,11 @@ export const deleteGame = (gameId) => async (dispatch) => {
     type: DELETING_GAME,
     payload: true,
   });
-
-  if (window.confirm("Are you sure you want to delete this game?")) {
-    try {
-      await db.collection("games").doc(gameId).delete();
-      dispatch(fetchGames());
-    } catch (error) {
-      alert("Error in deleting game.");
-    }
+  try {
+    await db.collection("games").doc(gameId).delete();
+    dispatch(fetchGames());
+  } catch (error) {
+    alert("Error in deleting game.");
   }
 };
 

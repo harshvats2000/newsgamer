@@ -5,6 +5,8 @@ import styled from "styled-components";
 import { timeSince } from "utils";
 import { getDisplayNameByUid } from "functions/getDisplayNameByUid";
 import { useSelector } from "react-redux";
+import { adminUid } from "../constants";
+import { isAdmin } from "functions/isAdmin";
 
 export function GameCard({ game, dispatch }) {
   const { gameid, createdby, players, createdAt } = game;
@@ -12,6 +14,7 @@ export function GameCard({ game, dispatch }) {
   const [hostName, setHostName] = useState(null);
 
   React.useEffect(() => {
+    console.log(createdby, adminUid);
     if (createdby === user.uid) {
       setHostName("You");
     } else {
@@ -26,13 +29,17 @@ export function GameCard({ game, dispatch }) {
           Game by <span>{hostName}</span>.
           <br />
         </Text>
-        {createdby === user.uid ? (
+        {user.uid === createdby || isAdmin() ? (
           <Actions>
             <TrashIcon
               className="fa fa-trash"
               onClick={(e) => {
                 e.preventDefault();
-                dispatch(deleteGame(gameid));
+                if (
+                  window.confirm("Are you sure you want to delete this game?")
+                ) {
+                  dispatch(deleteGame(gameid));
+                }
               }}
             />
           </Actions>

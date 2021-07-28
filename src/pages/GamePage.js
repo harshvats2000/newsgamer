@@ -1,6 +1,6 @@
 import React, { useEffect } from "react";
 import { useLocation } from "react-router-dom";
-import { content } from "../constants";
+import { content, header_height } from "../constants";
 import firebase from "../firebase";
 import { useSelector, useDispatch } from "react-redux";
 import {
@@ -71,7 +71,7 @@ export const GamePage = () => {
   const handleClick = (id) => {
     let words = game[uid];
     if (id.toLowerCase().search(game.letter) === 0) {
-      if (words.indexOf(id) === -1) {
+      if (!words.includes(id)) {
         words.push(id);
         games_doc.update({ [uid]: words });
       } else {
@@ -103,7 +103,7 @@ export const GamePage = () => {
       <GamePageHeader {...{ game }} />
 
       {!game?.start ? (
-        <div style={{ marginTop: "130px" }}>
+        <div style={{ marginTop: header_height }}>
           {game?.createdby === uid ? (
             <HostInitialScreen {...{ gameId }} />
           ) : (

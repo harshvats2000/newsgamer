@@ -1,5 +1,7 @@
+import { header_height } from "../constants";
 import { getDisplayNameByUid } from "functions/getDisplayNameByUid";
 import React, { useState } from "react";
+import styled from "styled-components";
 
 export const OtherPlayersInitialScreen = ({ game }) => {
   const [hostName, setHostName] = useState(null);
@@ -9,10 +11,15 @@ export const OtherPlayersInitialScreen = ({ game }) => {
   }, [game]);
 
   return (
-    <>
-      <h2 style={{ paddingLeft: "10px" }}>
-        Game is not yet started by {hostName}.
-      </h2>
-    </>
+    <Wrapper>
+      <h2>Game is not yet started by {hostName}.</h2>
+    </Wrapper>
   );
 };
+
+const Wrapper = styled.div`
+  padding: 10px;
+  display: grid;
+  place-items: center;
+  height: calc(100vh - ${header_height});
+`;
