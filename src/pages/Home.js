@@ -86,7 +86,7 @@ export const Home = () => {
           <i
             className="fa fa-refresh"
             id="refresh-icon"
-            onClick={(e) => fetchGames()}
+            onClick={(e) => dispatch(fetchGames())}
           />
         </div>
       </Refresh>
