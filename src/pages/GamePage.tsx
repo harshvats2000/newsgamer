@@ -20,6 +20,7 @@ import {
   GameDoesNotExistScreen,
   GameOverScreen,
 } from "components";
+import { RootState } from "store";
 
 const db = firebase.firestore();
 
@@ -28,15 +29,19 @@ export const GamePage = () => {
   const dispatch = useDispatch();
   const gameId = location.pathname.split("/")[2];
   const games_doc = db.collection("games").doc(gameId);
-  const { game, fetchingGame: fetching } = useSelector((state) => state.game);
+  const { game, fetchingGame: fetching } = useSelector(
+    (state: RootState) => state.game
+  );
   const {
     user: { uid },
-  } = useSelector((state) => state.auth);
+  } = useSelector((state: RootState) => state.auth);
 
   useEffect(() => {
     dispatch({ type: FETCHING_CURRENT_GAME });
 
-    return () => dispatch({ type: RESET_CURRENT_GAME });
+    return () => {
+      dispatch({ type: RESET_CURRENT_GAME });
+    };
     // eslint-disable-next-line
   }, []);
 
@@ -51,7 +56,7 @@ export const GamePage = () => {
 
   useEffect(() => {
     if (game?.[uid]) {
-      game[uid].forEach((id) => {
+      game[uid].forEach((id: string) => {
         let el = document.getElementById(id);
         if (el) el.style.backgroundColor = "yellow";
       });
@@ -68,15 +73,16 @@ export const GamePage = () => {
     }
   }, [game, dispatch, games_doc]);
 
-  const handleClick = (id) => {
+  const handleClick = (id: string) => {
     let words = game[uid];
     if (id.toLowerCase().search(game.letter) === 0) {
       if (!words.includes(id)) {
         words.push(id);
         games_doc.update({ [uid]: words });
       } else {
-        document.getElementById(id).style.background = "gainsboro";
-        words = words.filter((item) => item !== id);
+        (document.getElementById(id) as HTMLElement).style.background =
+          "gainsboro";
+        words = words.filter((word: string) => word !== id);
         games_doc.update({ [uid]: words });
       }
     }

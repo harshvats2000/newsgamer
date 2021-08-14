@@ -1,11 +1,12 @@
 import React from "react";
-import { Redirect, withRouter } from "react-router-dom";
+import { Redirect } from "react-router-dom";
 import { Header } from "components";
 import { max_score } from "../constants";
 import { useDispatch, useSelector } from "react-redux";
 import { login } from "actions";
 import { Button, Para } from "ui";
 import styled from "styled-components";
+import { RootState } from "store";
 
 const Body = styled.div`
   height: 100vh;
@@ -35,9 +36,9 @@ const Footer = styled.div`
   }
 `;
 
-export const LoginComp = () => {
+export const Login = () => {
   const dispatch = useDispatch();
-  const { isAuthenticated } = useSelector((state) => state.auth);
+  const { isAuthenticated } = useSelector((state: RootState) => state.auth);
 
   return (
     <div>
@@ -49,7 +50,7 @@ export const LoginComp = () => {
             <Para>
               Find and click <MaxScore>{max_score}</MaxScore> words to win.
             </Para>
-            <Button bg="black" onClick={() => dispatch(login())}>
+            <Button variant="black" onClick={() => dispatch(login())}>
               Login with Google
             </Button>
           </div>
@@ -70,5 +71,3 @@ export const LoginComp = () => {
     </div>
   );
 };
-
-export const Login = withRouter(LoginComp);

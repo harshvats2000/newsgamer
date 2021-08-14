@@ -2,13 +2,13 @@ import React from "react";
 import styled from "styled-components";
 
 interface Props {
-  color: string,
-  size: string,
+  color?: string,
+  size?: string,
   children: {},
-  lh: string,
-  weight: number,
-  align: string,
-  m: string
+  lh?: string,
+  weight?: number,
+  align?: string,
+  m?: string
 }
 
 export const Para = (props: Props) => {

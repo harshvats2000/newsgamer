@@ -10,15 +10,11 @@ import { Profile } from "pages/Profile";
 import { GamePage } from "pages/GamePage";
 import { Login } from "pages/Login";
 import { HowToPlay } from "pages/HowToPlay";
+import { RootState } from "store";
 
-interface AuthRootState {
-  auth: {
-    authenticating: boolean
-  }
-}
 
 function App() {
-  const authenticating = useSelector((state: AuthRootState) => state.auth.authenticating);
+  const authenticating = useSelector((state: RootState) => state.auth.authenticating);
   const dispatch = useDispatch();
 
   useEffect(() => {
