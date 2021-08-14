@@ -6,6 +6,7 @@ import {
   FETCHING_CURRENT_GAME_SUCCESS,
   RESET_CURRENT_GAME
 } from "actions";
+import { AnyAction } from "redux";
 
 const initialState = {
   game: null,
@@ -13,7 +14,7 @@ const initialState = {
   fetchingGame: true
 };
 
-export default function (state = initialState, { type, payload }) {
+export default function (state = initialState, {type, payload}: AnyAction) {  
   switch (type) {
     case CREATING_GAME:
       return {

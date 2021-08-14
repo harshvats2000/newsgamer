@@ -1,3 +1,4 @@
+import { AnyAction } from 'redux';
 import { FETCHING_GAMES, FETCHING_GAMES_SUCCESS, FETCHING_GAMES_FAIL } from "actions";
 
 const initialState = {
@@ -5,7 +6,7 @@ const initialState = {
   fetchingGames: true
 };
 
-export default function (state = initialState, { type, payload }) {
+export default function (state = initialState,  {type, payload}: AnyAction) {  
   switch (type) {
     case FETCHING_GAMES:
       return {

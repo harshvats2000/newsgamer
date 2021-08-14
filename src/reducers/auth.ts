@@ -1,4 +1,5 @@
 import { LOGIN_SUCCESS, LOGOUT_FAIL, LOGIN_FAIL, LOGOUT_SUCCESS, LOGGING_IN } from "actions";
+import { AnyAction } from "redux";
 
 const initialState = {
   isAuthenticated: false,
@@ -6,7 +7,8 @@ const initialState = {
   user: null
 };
 
-export default function (state = initialState, { type, payload }) {
+export default function (state = initialState, {type, payload}: AnyAction) {
+  
   switch (type) {
     case LOGGING_IN:
       return {

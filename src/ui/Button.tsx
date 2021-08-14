@@ -1,7 +1,29 @@
 import React from "react";
 import styled, { css } from "styled-components";
 
-const backgroundStyles = (variant) => {
+interface Props {
+  color: string,
+  size: string,
+  variant: string,
+  children: {},
+}
+
+export const Button = (props: Props) => {
+  const {
+    children,
+    color = "white",
+    size = "16px",
+    variant = "black",
+    ...rest
+  } = props;
+  return (
+    <ButtonEl {...{ color, size, variant }} {...rest}>
+      {children}
+    </ButtonEl>
+  );
+};
+
+const backgroundStyles = (variant: string) => {
   if (variant === "green") {
     return css`
       background: linear-gradient(180deg, #27f662 0%, #007220 100%);
@@ -17,7 +39,12 @@ const backgroundStyles = (variant) => {
   }
 };
 
-const ButtonEl = styled.button`
+interface ButtonProps {
+  variant: string,
+  size: string;
+}
+
+const ButtonEl = styled.button<ButtonProps>`
   ${(props) => backgroundStyles(props.variant)}
   font-size: ${(props) => props.size};
   padding: 8px 15px;
@@ -28,18 +55,3 @@ const ButtonEl = styled.button`
   color: ${(props) => props.color};
   transition: 0.3s;
 `;
-
-export const Button = (props) => {
-  const {
-    children,
-    color = "white",
-    size = "16px",
-    variant = "black",
-    ...rest
-  } = props;
-  return (
-    <ButtonEl {...{ color, size, variant }} {...rest}>
-      {children}
-    </ButtonEl>
-  );
-};

@@ -11,8 +11,14 @@ import { GamePage } from "pages/GamePage";
 import { Login } from "pages/Login";
 import { HowToPlay } from "pages/HowToPlay";
 
+interface AuthRootState {
+  auth: {
+    authenticating: boolean
+  }
+}
+
 function App() {
-  const authenticating = useSelector((state) => state.auth.authenticating);
+  const authenticating = useSelector((state: AuthRootState) => state.auth.authenticating);
   const dispatch = useDispatch();
 
   useEffect(() => {

@@ -1,4 +1,4 @@
-export const invitePlayers = (gameId) => {
+export const invitePlayers = (gameId: string) => {
   if (navigator.share) {
     navigator.share({
       title: 'Come play NewsGamer with me.',
