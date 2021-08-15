@@ -5,7 +5,7 @@ export interface GameInterface {
   players: string[];
   over: boolean;
   creationDate: {};
-  gameid: string;
+  gameId: string;
   paraIndex: number;
   start: boolean;
   winner?: string;

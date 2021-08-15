@@ -1,1 +1,1 @@
-Play game at https://newsgamer.vercel.app
+Play game at https://newsgamer.harshvats.dev

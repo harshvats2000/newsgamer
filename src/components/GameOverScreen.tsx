@@ -4,21 +4,34 @@ import { Link } from "react-router-dom";
 import styled from "styled-components";
 import { Button } from "ui";
 
-export const GameOverScreen = ({ game, uid }) => {
-  const initial_array = game.players.map((playerUid) => ({
-    playerUid: playerUid,
-    score: game?.[playerUid].length,
-  }));
-  const [playerNames, setPlayerNames] = useState([]);
+interface Props {
+  game: any;
+  uid: string;
+}
 
-  const sorted_array = initial_array.sort((a, b) => b.score - a.score);
+interface Player {
+  playerId: string;
+  score: number;
+}
+
+export const GameOverScreen = ({ game, uid }: Props) => {
+  const [playerNames, setPlayerNames] = useState<string[]>([]);
+
+  const initial_array: Player[] = game.players.map((playerId: string) => ({
+    playerId: playerId,
+    score: game?.[playerId].length,
+  }));
+
+  const sorted_array = initial_array.sort(
+    (a: any, b: any) => b.score - a.score
+  );
 
   React.useEffect(() => {
-    getDiplayNamesByUidArray(sorted_array.map((item) => item.playerUid)).then(
-      (names) => {
-        names = setPlayerNames(names);
-      }
-    );
+    getDiplayNamesByUidArray(
+      sorted_array.map((player: Player) => player.playerId)
+    ).then((names) => {
+      setPlayerNames(names);
+    });
   }, [sorted_array]);
 
   return (
@@ -31,11 +44,11 @@ export const GameOverScreen = ({ game, uid }) => {
           </h3>
           <hr />
           <Players>
-            {sorted_array.map((player, i) => {
+            {sorted_array.map((player: Player, i: number) => {
               return (
                 <div
                   style={{
-                    color: player.uid === uid ? "green" : "red",
+                    color: player.playerId === uid ? "green" : "red",
                   }}
                 >
                   {i + 1}. {playerNames[i]}: {player.score}

@@ -89,7 +89,7 @@ export const Home = () => {
                 </Para>
               ) : null}
               {availGames.map((game: GameInterface, i: number) => (
-                <GameCard key={game.gameid} {...{ game, dispatch }} />
+                <GameCard key={game.gameId} {...{ game, dispatch }} />
               ))}
             </AvailGamesWrapper>
           )}

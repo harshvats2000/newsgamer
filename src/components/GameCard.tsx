@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { Dispatch, useState } from "react";
 import { Link } from "react-router-dom";
 import { deleteGame } from "actions";
 import styled from "styled-components";
@@ -7,29 +7,35 @@ import { getDisplayNameByUid } from "functions/getDisplayNameByUid";
 import { useSelector } from "react-redux";
 import { adminUid } from "../constants";
 import { isAdmin } from "functions/isAdmin";
+import { RootState } from "store";
+import { GameInterface } from "../interfaces";
 
-export function GameCard({ game, dispatch }) {
-  const { gameid, createdby, players, createdAt } = game;
-  const { user } = useSelector((state) => state.auth);
-  const [hostName, setHostName] = useState(null);
+interface Props {
+  game: GameInterface;
+  dispatch: Dispatch<any>;
+}
+
+export function GameCard({ game, dispatch }: Props) {
+  const { gameId, createdBy, players, createdAt } = game;
+  const { user } = useSelector((state: RootState) => state.auth);
+  const [hostName, setHostName] = useState<string | null>(null);
 
   React.useEffect(() => {
-    console.log(createdby, adminUid);
-    if (createdby === user.uid) {
+    if (createdBy === user.uid) {
       setHostName("You");
     } else {
-      getDisplayNameByUid(createdby).then((name) => setHostName(name));
+      getDisplayNameByUid(createdBy).then((name) => setHostName(name));
     }
-  }, [createdby, user.uid]);
+  }, [createdBy, user.uid]);
 
   return (
-    <Card key={gameid} to={`/game/${gameid}`}>
+    <Card key={gameId} to={`/game/${gameId}`}>
       <Row1>
         <Text>
           Game by <span>{hostName}</span>.
           <br />
         </Text>
-        {user.uid === createdby || isAdmin() ? (
+        {user.uid === createdBy || isAdmin() ? (
           <Actions>
             <TrashIcon
               className="fa fa-trash"
@@ -38,7 +44,7 @@ export function GameCard({ game, dispatch }) {
                 if (
                   window.confirm("Are you sure you want to delete this game?")
                 ) {
-                  dispatch(deleteGame(gameid));
+                  dispatch(deleteGame(gameId));
                 }
               }}
             />

@@ -64,7 +64,7 @@ export const GamePage = () => {
   });
 
   useEffect(() => {
-    if (game?.createdby) {
+    if (game?.createdBy) {
       dispatch(addNewPlayerToCurrGame(games_doc));
       const { isGameOver, winnerUid } = findWinner(game);
       if (isGameOver) {
@@ -110,7 +110,7 @@ export const GamePage = () => {
 
       {!game?.start ? (
         <div style={{ marginTop: header_height }}>
-          {game?.createdby === uid ? (
+          {game?.createdBy === uid ? (
             <HostInitialScreen {...{ gameId }} />
           ) : (
             <OtherPlayersInitialScreen {...{ game }} />

@@ -2,10 +2,17 @@ import React from "react";
 import styled from "styled-components";
 import { header_height } from "../constants";
 
-export const NewsPaper = ({ content, game, handleClick }) => {
+interface Props {
+  content: string[];
+  game: any;
+  handleClick: any;
+}
+
+export const NewsPaper = ({ content, game, handleClick }: Props) => {
+  console.log(content);
   return (
     <Wrapper>
-      {content[game?.paraindex].split(" ").map((word, i) => {
+      {content[game?.paraIndex].split(" ").map((word: string, i: number) => {
         let id =
           word.trim().replace("”", "").replace("“", "").replace(",", "") + i;
         return (

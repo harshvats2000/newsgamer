@@ -2,11 +2,12 @@ import React from "react";
 import styled, { css } from "styled-components";
 
 interface Props {
-  color?: string,
-  size?: string,
-  variant?: string,
-  children: {},
-  onClick?: () => {}
+  color?: string;
+  size?: string;
+  variant?: string;
+  children: {};
+  onClick?: () => void;
+  style?: {};
 }
 
 export const Button = (props: Props) => {
@@ -15,10 +16,11 @@ export const Button = (props: Props) => {
     color = "white",
     size = "16px",
     variant = "black",
-    onClick
+    onClick,
+    style = {},
   } = props;
   return (
-    <ButtonEl {...{ color, size, variant, onClick }}>
+    <ButtonEl {...{ color, size, variant, onClick, style }}>
       {children}
     </ButtonEl>
   );
@@ -41,7 +43,7 @@ const backgroundStyles = (variant: string) => {
 };
 
 interface ButtonProps {
-  variant: string,
+  variant: string;
   size: string;
 }
 

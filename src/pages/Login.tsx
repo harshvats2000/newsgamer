@@ -50,9 +50,7 @@ export const Login = () => {
             <Para>
               Find and click <MaxScore>{max_score}</MaxScore> words to win.
             </Para>
-            <Button variant="black" onClick={() => dispatch(login())}>
-              Login with Google
-            </Button>
+            <Button onClick={() => dispatch(login())}>Login with Google</Button>
           </div>
         </Body>
 

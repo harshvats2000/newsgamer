@@ -6,16 +6,26 @@ import {
 } from "functions/getDisplayNameByUid";
 import styled from "styled-components";
 import { header_height } from "../constants";
+import { RootState } from "store";
 
-export const GamePageHeader = ({ game }) => {
+interface Props {
+  game: any;
+}
+
+interface Player {
+  name: string;
+  uid: string;
+}
+
+export const GamePageHeader = ({ game }: Props) => {
   const {
     user: { uid: currentUserUid },
-  } = useSelector((state) => state.auth);
-  const [players, setPlayers] = useState([]);
+  } = useSelector((state: RootState) => state.auth);
+  const [players, setPlayers] = useState<Player[]>([]);
   const [hostName, setHostName] = useState("Loading...");
 
   React.useEffect(() => {
-    getDisplayNameByUid(currentUserUid).then((name) => {
+    getDisplayNameByUid(currentUserUid).then((name: string) => {
       setHostName(name);
     });
     getDiplayNamesByUidArray(game?.players).then((names) => {

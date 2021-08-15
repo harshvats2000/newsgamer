@@ -1,5 +1,5 @@
-export function timeSince(date) {
-  var seconds = Math.floor((new Date() - date) / 1000);
+export function timeSince(date: number) {
+  var seconds = Math.floor((new Date().valueOf() - date.valueOf()) / 1000);
 
   var interval = seconds / 31536000;
 

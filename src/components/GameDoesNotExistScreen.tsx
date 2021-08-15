@@ -8,7 +8,7 @@ export const GameDoesNotExistScreen = () => {
       <p className="para">This game is either over or deleted.</p>
       <div style={{ textAlign: "center" }}>
         <Link to="/">
-          <Button bg="black">
+          <Button>
             <i className="fa fa-arrow-left btn-icon" />
             Go Back To Home
           </Button>

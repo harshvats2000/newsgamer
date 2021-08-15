@@ -26,10 +26,10 @@ export const createGame = (history) => async (dispatch, getState) => {
 
   const data = {
     players: [uid],
-    createdby: uid,
-    gameid: id,
+    createdBy: uid,
+    gameId: id,
     letter: letter,
-    paraindex: paraIndex,
+    paraIndex: paraIndex,
     [uid]: [],
     creationdate: firebase.database.ServerValue.TIMESTAMP,
     createdAt: Date.now(),

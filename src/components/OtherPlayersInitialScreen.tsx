@@ -3,11 +3,15 @@ import { getDisplayNameByUid } from "functions/getDisplayNameByUid";
 import React, { useState } from "react";
 import styled from "styled-components";
 
-export const OtherPlayersInitialScreen = ({ game }) => {
-  const [hostName, setHostName] = useState(null);
+interface Props {
+  game: any;
+}
+
+export const OtherPlayersInitialScreen = ({ game }: Props) => {
+  const [hostName, setHostName] = useState<string | null>(null);
 
   React.useEffect(() => {
-    getDisplayNameByUid(game?.createdby).then((name) => setHostName(name));
+    getDisplayNameByUid(game?.createdBy).then((name) => setHostName(name));
   }, [game]);
 
   return (

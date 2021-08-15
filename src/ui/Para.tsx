@@ -1,14 +1,14 @@
 import React from "react";
 import styled from "styled-components";
-
 interface Props {
-  color?: string,
-  size?: string,
-  children: {},
-  lh?: string,
-  weight?: number,
-  align?: string,
-  m?: string
+  color?: string;
+  size?: string;
+  children: {};
+  lh?: string;
+  weight?: number;
+  align?: string;
+  m?: string;
+  style?: {};
 }
 
 export const Para = (props: Props) => {
@@ -20,11 +20,11 @@ export const Para = (props: Props) => {
     weight = 400,
     align = "left",
     m = "10px",
-    ...rest
+    style = {},
   } = props;
-  
+
   return (
-    <ParaEl {...rest} {...{ color, size, weight, m, lh, align }}>
+    <ParaEl {...{ color, size, weight, m, lh, align, style }}>
       {children}
     </ParaEl>
   );

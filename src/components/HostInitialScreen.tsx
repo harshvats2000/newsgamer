@@ -5,10 +5,16 @@ import { invitePlayers } from "functions/invitePlayers";
 import { useSelector } from "react-redux";
 import styled from "styled-components";
 import { header_height } from "../constants";
+import { RootState } from "store";
+
 const db = firebase.firestore();
 
-export const HostInitialScreen = ({ gameId }) => {
-  const { game } = useSelector((state) => state.game);
+interface Props {
+  gameId: string;
+}
+
+export const HostInitialScreen = ({ gameId }: Props) => {
+  const { game } = useSelector((state: RootState) => state.game);
   const games_doc = db.collection("games").doc(gameId);
 
   const startgame = async () => {
@@ -25,20 +31,14 @@ export const HostInitialScreen = ({ gameId }) => {
       <Wrapper>
         <Container>
           {game.players.length > 1 ? (
-            <Button
-              bg="linear-gradient(0deg, #008900, #00dd00)"
-              onClick={() => startgame()}
-            >
+            <Button variant="green" onClick={() => startgame()}>
               start game
             </Button>
           ) : (
             <p>You will be able to start this game once someone joins.</p>
           )}
           <div style={{ marginTop: "10px" }}>
-            <Button
-              bg="linear-gradient(0deg, #008900, #00dd00)"
-              onClick={() => invitePlayers(gameId)}
-            >
+            <Button variant="green" onClick={() => invitePlayers(gameId)}>
               <i className="fa fa-user-plus btn-icon" aria-hidden="true"></i>
               Invite Players
             </Button>

@@ -1,8 +1,11 @@
 import React from "react";
 import styled from "styled-components";
 
-export const Layout = (props) => {
-  const { children } = props;
+interface Props {
+  children: {};
+}
+
+export const Layout = ({ children }: Props) => {
   return <Wrapper>{children}</Wrapper>;
 };
 
