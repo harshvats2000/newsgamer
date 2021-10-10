@@ -1,20 +1,19 @@
+import { GameInterface } from "interfaces";
 import React from "react";
 import styled from "styled-components";
 import { header_height } from "../constants";
 
 interface Props {
   content: string[];
-  game: any;
+  game: GameInterface;
   handleClick: any;
 }
 
 export const NewsPaper = ({ content, game, handleClick }: Props) => {
-  console.log(content);
   return (
     <Wrapper>
       {content[game?.paraIndex].split(" ").map((word: string, i: number) => {
-        let id =
-          word.trim().replace("”", "").replace("“", "").replace(",", "") + i;
+        let id = word.trim().replace("”", "").replace("“", "").replace(",", "") + i;
         return (
           <span key={i} style={{ whiteSpace: "initial" }}>
             <span id={id} onClick={(e) => handleClick(id)}>

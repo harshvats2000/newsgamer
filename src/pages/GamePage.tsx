@@ -29,9 +29,7 @@ export const GamePage = () => {
   const dispatch = useDispatch();
   const gameId = location.pathname.split("/")[2];
   const games_doc = db.collection("games").doc(gameId);
-  const { game, fetchingGame: fetching } = useSelector(
-    (state: RootState) => state.game
-  );
+  const { game, fetchingGame: fetching } = useSelector((state: RootState) => state.game);
   const {
     user: { uid },
   } = useSelector((state: RootState) => state.auth);
@@ -55,8 +53,8 @@ export const GamePage = () => {
   }, []);
 
   useEffect(() => {
-    if (game?.[uid]) {
-      game[uid].forEach((id: string) => {
+    if (game?.players[uid]) {
+      game.players[uid].words.forEach((id: string) => {
         let el = document.getElementById(id);
         if (el) el.style.backgroundColor = "yellow";
       });
@@ -74,16 +72,15 @@ export const GamePage = () => {
   }, [game, dispatch, games_doc]);
 
   const handleClick = (id: string) => {
-    let words = game[uid];
+    let words = game.players[uid].words;
     if (id.toLowerCase().search(game.letter) === 0) {
       if (!words.includes(id)) {
         words.push(id);
-        games_doc.update({ [uid]: words });
+        games_doc.update({ [`players.${uid}.words`]: words });
       } else {
-        (document.getElementById(id) as HTMLElement).style.background =
-          "gainsboro";
+        (document.getElementById(id) as HTMLElement).style.background = "gainsboro";
         words = words.filter((word: string) => word !== id);
-        games_doc.update({ [uid]: words });
+        games_doc.update({ [`players.${uid}.words`]: words });
       }
     }
   };

@@ -1,22 +1,16 @@
 import { header_height } from "../constants";
-import { getDisplayNameByUid } from "functions/getDisplayNameByUid";
-import React, { useState } from "react";
+import React from "react";
 import styled from "styled-components";
+import { GameInterface } from "interfaces";
 
 interface Props {
-  game: any;
+  game: GameInterface;
 }
 
 export const OtherPlayersInitialScreen = ({ game }: Props) => {
-  const [hostName, setHostName] = useState<string | null>(null);
-
-  React.useEffect(() => {
-    getDisplayNameByUid(game?.createdBy).then((name) => setHostName(name));
-  }, [game]);
-
   return (
     <Wrapper>
-      <h2>Game is not yet started by {hostName}.</h2>
+      <h2>Game is not yet started by {game.createdBy.name}.</h2>
     </Wrapper>
   );
 };

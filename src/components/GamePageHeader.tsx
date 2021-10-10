@@ -1,15 +1,13 @@
 import React, { useState } from "react";
 import { useSelector } from "react-redux";
-import {
-  getDiplayNamesByUidArray,
-  getDisplayNameByUid,
-} from "functions/getDisplayNameByUid";
+import { getDisplayNameByUid } from "functions/getDisplayNameByUid";
 import styled from "styled-components";
 import { header_height } from "../constants";
 import { RootState } from "store";
+import { GameInterface } from "interfaces";
 
 interface Props {
-  game: any;
+  game: GameInterface;
 }
 
 interface Player {
@@ -18,20 +16,20 @@ interface Player {
 }
 
 export const GamePageHeader = ({ game }: Props) => {
+  const players = {} as any;
+  Object.keys(game.players)
+    .sort()
+    .forEach((key) => (players[key] = game.players[key]));
   const {
     user: { uid: currentUserUid },
   } = useSelector((state: RootState) => state.auth);
-  const [players, setPlayers] = useState<Player[]>([]);
   const [hostName, setHostName] = useState("Loading...");
 
   React.useEffect(() => {
     getDisplayNameByUid(currentUserUid).then((name: string) => {
       setHostName(name);
     });
-    getDiplayNamesByUidArray(game?.players).then((names) => {
-      setPlayers(names.map((name, i) => ({ name, uid: game.players[i] })));
-    });
-  }, [game, currentUserUid]);
+  });
 
   return (
     <Wrapper>
@@ -46,17 +44,15 @@ export const GamePageHeader = ({ game }: Props) => {
         </Flex>
 
         <PlayerNamesList>
-          {players.length > 0
-            ? players.map(({ name, uid }, i) => {
+          {Object.keys(players).length > 0
+            ? Object.keys(players).map((key, i) => {
                 return (
                   <li
-                    key={uid}
-                    style={{ color: currentUserUid === uid ? "green" : "red" }}
+                    key={players[key].uid}
+                    style={{ color: currentUserUid === players[key].uid ? "green" : "red" }}
                   >
-                    <div>{name.split(" ")[0]}</div>
-                    <div style={{ fontSize: "2rem" }}>
-                      {game[game.players[i]].length}
-                    </div>
+                    <div>{players[key].name.split(" ")[0]}</div>
+                    <div style={{ fontSize: "2rem" }}>{players[key].words.length}</div>
                   </li>
                 );
               })

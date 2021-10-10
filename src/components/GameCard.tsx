@@ -5,7 +5,6 @@ import styled from "styled-components";
 import { timeSince } from "utils";
 import { getDisplayNameByUid } from "functions/getDisplayNameByUid";
 import { useSelector } from "react-redux";
-import { adminUid } from "../constants";
 import { isAdmin } from "functions/isAdmin";
 import { RootState } from "store";
 import { GameInterface } from "../interfaces";
@@ -18,15 +17,8 @@ interface Props {
 export function GameCard({ game, dispatch }: Props) {
   const { gameId, createdBy, players, createdAt } = game;
   const { user } = useSelector((state: RootState) => state.auth);
-  const [hostName, setHostName] = useState<string | null>(null);
-
-  React.useEffect(() => {
-    if (createdBy === user.uid) {
-      setHostName("You");
-    } else {
-      getDisplayNameByUid(createdBy).then((name) => setHostName(name));
-    }
-  }, [createdBy, user.uid]);
+  const hostName = createdBy.uid === user.uid ? "You" : createdBy.name;
+  const totalPlayers = Object.keys(players).length;
 
   return (
     <Card key={gameId} to={`/game/${gameId}`}>
@@ -35,15 +27,13 @@ export function GameCard({ game, dispatch }: Props) {
           Game by <span>{hostName}</span>.
           <br />
         </Text>
-        {user.uid === createdBy || isAdmin() ? (
+        {user.uid === createdBy.uid || isAdmin() ? (
           <Actions>
             <TrashIcon
               className="fa fa-trash"
               onClick={(e) => {
                 e.preventDefault();
-                if (
-                  window.confirm("Are you sure you want to delete this game?")
-                ) {
+                if (window.confirm("Are you sure you want to delete this game?")) {
                   dispatch(deleteGame(gameId));
                 }
               }}
@@ -52,7 +42,9 @@ export function GameCard({ game, dispatch }: Props) {
         ) : null}
       </Row1>
       <Row2>
-        <Players>{players.length} players</Players>
+        <Players>
+          {totalPlayers} {totalPlayers === 1 ? "player" : "players"}
+        </Players>
         <TimeAgo>{timeSince(createdAt)} ago</TimeAgo>
       </Row2>
     </Card>
@@ -62,10 +54,11 @@ export function GameCard({ game, dispatch }: Props) {
 const Card = styled(Link)`
   display: block;
   text-decoration: none;
-  box-shadow: 0px 23px 25px rgb(0 0 0 / 7%);
-  margin-bottom: 15px;
+  box-shadow: 0 2.8px 2.2px rgba(0, 0, 0, 0.034), 0 6.7px 5.3px rgba(0, 0, 0, 0.048),
+    0 12.5px 10px rgba(0, 0, 0, 0.06), 0 22.3px 17.9px rgba(0, 0, 0, 0.072),
+    0 41.8px 33.4px rgba(0, 0, 0, 0.086), 0 100px 80px rgba(0, 0, 0, 0.12);
+  margin-bottom: 35px;
   padding: 10px;
-  border: 1px solid rgb(0, 0, 0, 0.1);
   border-radius: 4px;
 `;
 const Row1 = styled.div`

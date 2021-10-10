@@ -14,16 +14,11 @@ export const Home = () => {
   const dispatch = useDispatch();
   const history = useHistory();
   const { user } = useSelector((state: RootState) => state.auth);
-  const { availGames, fetchingGames: loading } = useSelector(
-    (state: RootState) => state.games
-  );
+  const { availGames, fetchingGames: loading } = useSelector((state: RootState) => state.games);
 
   useEffect(() => {
     dispatch(fetchGames());
-    const interval = setInterval(
-      () => dispatch(fetchGames()),
-      game_updating_interval * 1000
-    );
+    const interval = setInterval(() => dispatch(fetchGames()), game_updating_interval * 1000);
     return () => {
       clearInterval(interval);
     };
@@ -52,17 +47,11 @@ export const Home = () => {
       <Refresh>
         <Para m="0px" size="13px">
           The games are updated every{" "}
-          <span style={{ fontWeight: 900, verticalAlign: "middle" }}>
-            {game_updating_interval}
-          </span>{" "}
+          <span style={{ fontWeight: 900, verticalAlign: "middle" }}>{game_updating_interval}</span>{" "}
           seconds.
         </Para>
         <div>
-          <i
-            className="fa fa-refresh"
-            id="refresh-icon"
-            onClick={(e) => dispatch(fetchGames())}
-          />
+          <i className="fa fa-refresh" id="refresh-icon" onClick={(e) => dispatch(fetchGames())} />
         </div>
       </Refresh>
     );

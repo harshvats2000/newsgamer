@@ -1,12 +1,12 @@
 export interface GameInterface {
   letter: string;
   createdAt: number;
-  createdBy: string;
-  players: string[];
+  createdBy: { uid: string; name: string };
+  players: { [key: string]: { name: string; uid: string; words: string[] } };
   over: boolean;
   creationDate: {};
   gameId: string;
   paraIndex: number;
   start: boolean;
-  winner?: string;
+  winner: { uid: string; name: string };
 }

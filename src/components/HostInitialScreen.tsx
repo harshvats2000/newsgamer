@@ -30,7 +30,7 @@ export const HostInitialScreen = ({ gameId }: Props) => {
     <>
       <Wrapper>
         <Container>
-          {game.players.length > 1 ? (
+          {Object.keys(game.players).length > 1 ? (
             <Button variant="green" onClick={() => startgame()}>
               start game
             </Button>
@@ -45,8 +45,7 @@ export const HostInitialScreen = ({ gameId }: Props) => {
           </div>
           <div>
             <Para color="red" style={{ textAlign: "center" }}>
-              *Starting the game will reveal the paragraph to everyone in the
-              game.
+              *Starting the game will reveal the paragraph to everyone in the game.
             </Para>
           </div>
         </Container>
