@@ -1,6 +1,5 @@
-import React, { useState } from "react";
+import React from "react";
 import { useSelector } from "react-redux";
-import { getDisplayNameByUid } from "functions/getDisplayNameByUid";
 import styled from "styled-components";
 import { header_height } from "../constants";
 import { RootState } from "store";
@@ -8,11 +7,6 @@ import { GameInterface } from "interfaces";
 
 interface Props {
   game: GameInterface;
-}
-
-interface Player {
-  name: string;
-  uid: string;
 }
 
 export const GamePageHeader = ({ game }: Props) => {
@@ -23,20 +17,13 @@ export const GamePageHeader = ({ game }: Props) => {
   const {
     user: { uid: currentUserUid },
   } = useSelector((state: RootState) => state.auth);
-  const [hostName, setHostName] = useState("Loading...");
-
-  React.useEffect(() => {
-    getDisplayNameByUid(currentUserUid).then((name: string) => {
-      setHostName(name);
-    });
-  });
 
   return (
     <Wrapper>
       <Container>
         <Flex>
           <div>
-            Host: <span>{hostName}</span>
+            Host: <span>{game.createdBy.name}</span>
           </div>
           <div>
             Letter: <span>{game?.letter}</span>

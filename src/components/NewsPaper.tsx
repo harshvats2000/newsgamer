@@ -9,9 +9,30 @@ interface Props {
   handleClick: any;
 }
 
+const disableBrowserFind = () => {
+  document.addEventListener("keydown", (e) => {
+    e.preventDefault();
+    if (e.metaKey && e.key === "f") {
+      alert(`Seriously?? NewsGamer will kick your ass next time if you tried to cheat.`);
+    }
+  });
+};
+
+const disableRightClick = () => {
+  window.addEventListener("contextmenu", (e) => {
+    e.preventDefault();
+    alert(`Don't you even think about that. We don't allow right clicks here.`);
+  });
+};
+
 export const NewsPaper = ({ content, game, handleClick }: Props) => {
+  React.useEffect(() => {
+    disableBrowserFind();
+    disableRightClick();
+  }, []);
+
   return (
-    <Wrapper>
+    <Wrapper onContextMenu={() => false}>
       {content[game?.paraIndex].split(" ").map((word: string, i: number) => {
         let id = word.trim().replace("”", "").replace("“", "").replace(",", "") + i;
         return (

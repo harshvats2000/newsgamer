@@ -107,7 +107,7 @@ export const GamePage = () => {
 
       {!game?.start ? (
         <div style={{ marginTop: header_height }}>
-          {game?.createdBy === uid ? (
+          {game?.createdBy.uid === uid ? (
             <HostInitialScreen {...{ gameId }} />
           ) : (
             <OtherPlayersInitialScreen {...{ game }} />

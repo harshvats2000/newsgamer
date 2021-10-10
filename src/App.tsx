@@ -12,7 +12,6 @@ import { Login } from "pages/Login";
 import { HowToPlay } from "pages/HowToPlay";
 import { RootState } from "store";
 
-
 function App() {
   const authenticating = useSelector((state: RootState) => state.auth.authenticating);
   const dispatch = useDispatch();
@@ -21,9 +20,7 @@ function App() {
     dispatch({
       type: LOGGING_IN,
     });
-  }, [dispatch]);
 
-  useEffect(() => {
     dispatch(listenToAuthChanges());
   }, [dispatch]);
 

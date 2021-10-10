@@ -1,9 +1,8 @@
-import React, { Dispatch, useState } from "react";
+import React from "react";
 import { Link } from "react-router-dom";
 import { deleteGame } from "actions";
 import styled from "styled-components";
 import { timeSince } from "utils";
-import { getDisplayNameByUid } from "functions/getDisplayNameByUid";
 import { useSelector } from "react-redux";
 import { isAdmin } from "functions/isAdmin";
 import { RootState } from "store";
@@ -11,7 +10,7 @@ import { GameInterface } from "../interfaces";
 
 interface Props {
   game: GameInterface;
-  dispatch: Dispatch<any>;
+  dispatch: any;
 }
 
 export function GameCard({ game, dispatch }: Props) {
@@ -19,6 +18,14 @@ export function GameCard({ game, dispatch }: Props) {
   const { user } = useSelector((state: RootState) => state.auth);
   const hostName = createdBy.uid === user.uid ? "You" : createdBy.name;
   const totalPlayers = Object.keys(players).length;
+
+  const handleDelete = (e: any) => {
+    e.preventDefault();
+
+    if (window.confirm("Are you sure you want to delete this game?")) {
+      dispatch(deleteGame(gameId));
+    }
+  };
 
   return (
     <Card key={gameId} to={`/game/${gameId}`}>
@@ -29,15 +36,7 @@ export function GameCard({ game, dispatch }: Props) {
         </Text>
         {user.uid === createdBy.uid || isAdmin() ? (
           <Actions>
-            <TrashIcon
-              className="fa fa-trash"
-              onClick={(e) => {
-                e.preventDefault();
-                if (window.confirm("Are you sure you want to delete this game?")) {
-                  dispatch(deleteGame(gameId));
-                }
-              }}
-            />
+            <TrashIcon className="fa fa-trash" onClick={handleDelete} />
           </Actions>
         ) : null}
       </Row1>
