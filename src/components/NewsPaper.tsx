@@ -28,7 +28,19 @@ const disableRightClick = () => {
 export const NewsPaper = ({ content, game, handleClick }: Props) => {
   React.useEffect(() => {
     disableBrowserFind();
-    disableRightClick();
+
+    // disable right click
+    const temp = (e: any) => {
+      e.preventDefault();
+      alert(`Don't you even think about that. We don't allow right clicks here.`);
+    };
+
+    window.addEventListener("contextmenu", temp);
+
+    return () => {
+      // enable right click
+      window.removeEventListener("contextmenu", temp);
+    };
   }, []);
 
   return (
