@@ -36,6 +36,7 @@ export const createGame = (history) => async (dispatch, getState) => {
     dispatch({ type: CREATING_GAME_SUCCESS, payload: data });
     history.push(`/game/${id}`);
   } catch (error) {
+    console.log(error);
     dispatch({ type: CREATING_GAME_FAIL, payload: data });
   }
 };

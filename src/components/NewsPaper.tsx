@@ -1,3 +1,4 @@
+import { isProduction } from "functions";
 import { GameInterface } from "interfaces";
 import React from "react";
 import styled from "styled-components";
@@ -18,28 +19,23 @@ const disableBrowserFind = () => {
   });
 };
 
-const disableRightClick = () => {
-  window.addEventListener("contextmenu", (e) => {
-    e.preventDefault();
-    alert(`Don't you even think about that. We don't allow right clicks here.`);
-  });
+const disableRightClick = (e: any) => {
+  e.preventDefault();
+  alert(`Don't you even think about that. We don't allow right clicks here.`);
 };
 
 export const NewsPaper = ({ content, game, handleClick }: Props) => {
   React.useEffect(() => {
-    disableBrowserFind();
+    if (isProduction()) {
+      disableBrowserFind();
 
-    // disable right click
-    const temp = (e: any) => {
-      e.preventDefault();
-      alert(`Don't you even think about that. We don't allow right clicks here.`);
-    };
-
-    window.addEventListener("contextmenu", temp);
+      // disable right click
+      window.addEventListener("contextmenu", disableRightClick);
+    }
 
     return () => {
       // enable right click
-      window.removeEventListener("contextmenu", temp);
+      window.removeEventListener("contextmenu", disableRightClick);
     };
   }, []);
 
