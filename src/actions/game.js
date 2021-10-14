@@ -66,10 +66,9 @@ const listenToRealTimeGameChanges = (gameId) => (dispatch, getState) => {
   const game_doc = db.collection("games").doc(gameId);
 
   return game_doc.onSnapshot((doc) => {
-    const { game } = getState().game;
-    if (!isEqual(doc.data(), game)) {
+    if (doc.exists) {
       dispatch({ type: FETCHING_CURRENT_GAME_SUCCESS, payload: doc.data() });
-    } else if (!doc.data()) {
+    } else {
       dispatch({ type: RESET_CURRENT_GAME });
     }
   });
