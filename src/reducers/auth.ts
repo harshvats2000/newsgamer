@@ -1,26 +1,26 @@
-import { LOGIN_SUCCESS, LOGOUT_FAIL, LOGIN_FAIL, LOGOUT_SUCCESS, LOGGING_IN } from "actions";
+import { LOGGING_IN, LOGIN_SUCCESS, LOGOUT_FAIL, LOGIN_FAIL, LOGOUT_SUCCESS } from "actions";
 import { AnyAction } from "redux";
 
 const initialState = {
   isAuthenticated: false,
   authenticating: true,
-  user: null
+  user: null,
 };
 
-export default function (state = initialState, {type, payload}: AnyAction) {
-  
+export default function (state = initialState, { type, payload }: AnyAction) {
   switch (type) {
     case LOGGING_IN:
       return {
         ...state,
-        authenticating: true
+        authenticating: true,
       };
+
     case LOGIN_SUCCESS:
       return {
         ...state,
         authenticating: false,
         isAuthenticated: true,
-        user: payload
+        user: payload,
       };
 
     case LOGIN_FAIL:
@@ -28,7 +28,7 @@ export default function (state = initialState, {type, payload}: AnyAction) {
         ...state,
         authenticating: false,
         isAuthenticated: false,
-        user: null
+        user: null,
       };
 
     case LOGOUT_SUCCESS:
@@ -36,13 +36,13 @@ export default function (state = initialState, {type, payload}: AnyAction) {
         ...state,
         authenticating: false,
         user: null,
-        isAuthenticated: false
+        isAuthenticated: false,
       };
 
     case LOGOUT_FAIL:
       return {
         ...state,
-        authenticating: false
+        authenticating: false,
       };
     default:
       return state;

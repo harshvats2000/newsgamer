@@ -1,14 +1,24 @@
 import firebase from "../firebase";
 import { v4 as uuidv4 } from "uuid";
-import { getRandomAlphabet } from "../functions/getRandomAlphabet";
-import { content, max_score } from "../constants";
-import { CREATING_GAME, DELETING_GAME, CREATING_GAME_SUCCESS, CREATING_GAME_FAIL } from ".";
+import { content, POINTS_ON_WIN } from "../constants";
+import {
+  CREATING_GAME,
+  CREATING_GAME_SUCCESS,
+  CREATING_GAME_FAIL,
+  UPDATING_SCORE,
+  UPDATING_SCORE_FAIL,
+  UPDATING_SCORE_SUCCESS,
+  FETCHING_CURRENT_GAME,
+} from ".";
 import { fetchGames } from "./games";
 import { FETCHING_CURRENT_GAME_SUCCESS, RESET_CURRENT_GAME } from "actions";
+import { generateLetter } from "helpers";
+import { getCurrentDateAndTime } from "helpers";
+import { isEqual } from "lodash";
 
 const db = firebase.firestore();
 
-export const createGame = (history) => async (dispatch, getState) => {
+const createGame = (history) => async (dispatch, getState) => {
   const { uid, displayName } = getState().auth.user;
 
   dispatch({
@@ -36,31 +46,12 @@ export const createGame = (history) => async (dispatch, getState) => {
     dispatch({ type: CREATING_GAME_SUCCESS, payload: data });
     history.push(`/game/${id}`);
   } catch (error) {
-    console.log(error);
+    console.error(error);
     dispatch({ type: CREATING_GAME_FAIL, payload: data });
   }
 };
 
-const generateLetter = (paraIndex) => {
-  let letter = getRandomAlphabet();
-
-  // Check if paragraph contains enough words with alphabet
-  let arr = content[paraIndex]
-    .split(" ")
-    .filter((word) => word.toLowerCase().indexOf(letter) === 0);
-
-  if (arr.length >= max_score && arr.length <= max_score + 5) {
-    return letter;
-  } else {
-    return generateLetter(paraIndex);
-  }
-};
-
-export const deleteGame = (gameId) => async (dispatch) => {
-  dispatch({
-    type: DELETING_GAME,
-    payload: true,
-  });
+const deleteGame = (gameId) => async (dispatch) => {
   try {
     await db.collection("games").doc(gameId).delete();
     dispatch(fetchGames());
@@ -69,11 +60,14 @@ export const deleteGame = (gameId) => async (dispatch) => {
   }
 };
 
-export const listenToRealTimeGameChanges = (games_doc) => (dispatch, getState) => {
-  const { game } = getState().game;
+const listenToRealTimeGameChanges = (gameId) => (dispatch, getState) => {
+  dispatch({ type: FETCHING_CURRENT_GAME });
 
-  return games_doc.onSnapshot((doc) => {
-    if (JSON.stringify(doc.data()) !== JSON.stringify(game)) {
+  const game_doc = db.collection("games").doc(gameId);
+
+  return game_doc.onSnapshot((doc) => {
+    const { game } = getState().game;
+    if (!isEqual(doc.data(), game)) {
       dispatch({ type: FETCHING_CURRENT_GAME_SUCCESS, payload: doc.data() });
     } else if (!doc.data()) {
       dispatch({ type: RESET_CURRENT_GAME });
@@ -81,36 +75,63 @@ export const listenToRealTimeGameChanges = (games_doc) => (dispatch, getState) =
   });
 };
 
-export const addNewPlayerToCurrGame = (games_doc) => async (dispatch, getState) => {
-  const { uid, displayName } = getState().auth.user;
-  const { game } = getState().game;
+const updateScore = (words) => async (dispatch, getState) => {
+  dispatch({ type: UPDATING_SCORE });
 
-  if (!game.players[uid]) {
-    await games_doc.update({
-      [`players.${uid}`]: { name: displayName, uid, words: [] },
+  const { game } = getState().game;
+  const game_doc = db.collection("games").doc(game.gameId);
+  const { uid } = getState().auth.user;
+
+  try {
+    await game_doc.update({ [`players.${uid}.words`]: words });
+    dispatch({
+      type: UPDATING_SCORE_SUCCESS,
     });
+  } catch (error) {
+    console.error(error);
+
+    dispatch({ type: UPDATING_SCORE_FAIL });
   }
 };
 
-export const gameOver = (games_doc, winnerUid) => () => {
-  const { overdate, overtime } = getCurrentDateAndTime();
+const addNewPlayerToCurrGame = (gameId) => async (dispatch, getState) => {
+  const game_doc = db.collection("games").doc(gameId);
+  const { uid, displayName } = await getState().auth.user;
 
-  games_doc.update({
-    over: true,
-    winner: winnerUid,
-    overdate,
-    overtime,
+  await game_doc.update({
+    [`players.${uid}`]: { name: displayName, uid, words: [] },
   });
 };
 
-const getCurrentDateAndTime = () => {
-  var today = new Date();
-  var dd = String(today.getDate()).padStart(2, "0");
-  var mm = String(today.getMonth() + 1).padStart(2, "0");
-  var yyyy = today.getFullYear();
+const gameOver = (gameId, winner) => async (dispatch, getState) => {
+  const game_doc = db.collection("games").doc(gameId);
+  const { overdate, overtime } = getCurrentDateAndTime();
 
-  const overdate = dd + "/" + mm + "/" + yyyy;
-  const overtime = today.getHours() + ":" + today.getMinutes();
+  try {
+    await game_doc.update({
+      over: true,
+      winner: winner,
+      overdate,
+      overtime,
+    });
 
-  return { overdate, overtime };
+    const { user } = getState().auth;
+    await db
+      .collection("users")
+      .doc(user.uid)
+      .update({
+        points: firebase.firestore.FieldValue.increment(POINTS_ON_WIN),
+      });
+  } catch (error) {
+    console.error(error);
+  }
+};
+
+export {
+  createGame,
+  deleteGame,
+  updateScore,
+  listenToRealTimeGameChanges,
+  addNewPlayerToCurrGame,
+  gameOver,
 };

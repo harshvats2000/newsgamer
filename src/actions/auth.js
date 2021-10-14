@@ -1,11 +1,5 @@
 import firebase from "../firebase";
-import {
-  LOGIN_SUCCESS,
-  LOGOUT_SUCCESS,
-  LOGOUT_FAIL,
-  LOGIN_FAIL,
-  LOGGING_IN,
-} from ".";
+import { LOGIN_SUCCESS, LOGOUT_SUCCESS, LOGOUT_FAIL, LOGIN_FAIL, LOGGING_IN } from ".";
 
 const auth = firebase.auth();
 const db = firebase.firestore();

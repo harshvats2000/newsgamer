@@ -1,7 +1,7 @@
 import React from "react";
 import { Button, Para } from "ui";
 import firebase from "../firebase";
-import { invitePlayers } from "functions/invitePlayers";
+import { invitePlayers } from "helpers";
 import { useSelector } from "react-redux";
 import styled from "styled-components";
 import { header_height } from "../constants";
@@ -15,11 +15,11 @@ interface Props {
 
 export const HostInitialScreen = ({ gameId }: Props) => {
   const { game } = useSelector((state: RootState) => state.game);
-  const games_doc = db.collection("games").doc(gameId);
+  const game_doc = db.collection("games").doc(gameId);
 
   const startgame = async () => {
     try {
-      const doc = await games_doc.get();
+      const doc = await game_doc.get();
       doc.ref.set({ start: true }, { merge: true });
     } catch (error) {
       alert("Error in starting game.");

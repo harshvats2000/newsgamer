@@ -4,7 +4,7 @@ import "./App.css";
 import { Route, Switch } from "react-router-dom";
 import { Loader } from "components";
 import PrivateRoute from "./routes/PrivateRoute";
-import { LOGGING_IN, listenToAuthChanges } from "actions";
+import { listenToAuthChanges, LOGGING_IN } from "actions";
 import { Home } from "pages/Home";
 import { Profile } from "pages/Profile";
 import { GamePage } from "pages/GamePage";

@@ -7,8 +7,7 @@ import styled from "styled-components";
 import { GameCard, Button, Para } from "ui";
 import { RootState } from "store";
 import { GameInterface } from "interfaces";
-
-const game_updating_interval = 30;
+import { GAME_UPDATING_INTERVAL } from "../constants";
 
 export const Home = () => {
   const dispatch = useDispatch();
@@ -18,7 +17,7 @@ export const Home = () => {
 
   useEffect(() => {
     dispatch(fetchGames());
-    const interval = setInterval(() => dispatch(fetchGames()), game_updating_interval * 1000);
+    const interval = setInterval(() => dispatch(fetchGames()), GAME_UPDATING_INTERVAL * 1000);
     return () => {
       clearInterval(interval);
     };
@@ -46,9 +45,7 @@ export const Home = () => {
     return (
       <Refresh>
         <Para m="0px" size="13px">
-          The games are updated every{" "}
-          <span style={{ fontWeight: 900, verticalAlign: "middle" }}>{game_updating_interval}</span>{" "}
-          seconds.
+          The games are updated every <Seconds>{GAME_UPDATING_INTERVAL}</Seconds> seconds.
         </Para>
         <div>
           <i className="fa fa-refresh" id="refresh-icon" onClick={(e) => dispatch(fetchGames())} />
@@ -113,4 +110,8 @@ const Refresh = styled.div`
 const AvailGamesWrapper = styled.div`
   padding: 10px 0;
   font-size: 1.2rem;
+`;
+const Seconds = styled.span`
+  font-weight: 900;
+  vertical-align: middle;
 `;

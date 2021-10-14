@@ -19,17 +19,13 @@ export const Button = (props: Props) => {
     onClick,
     style = {},
   } = props;
-  return (
-    <ButtonEl {...{ color, size, variant, onClick, style }}>
-      {children}
-    </ButtonEl>
-  );
+  return <ButtonEl {...{ color, size, variant, onClick, style }}>{children}</ButtonEl>;
 };
 
 const backgroundStyles = (variant: string) => {
   if (variant === "green") {
     return css`
-      background: linear-gradient(180deg, #27f662 0%, #007220 100%);
+      background: linear-gradient(180deg, #00e240 0%, #007220 100%);
     `;
   } else if (variant === "red") {
     return css`

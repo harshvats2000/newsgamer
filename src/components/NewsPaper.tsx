@@ -1,14 +1,67 @@
-import { isProduction } from "functions";
-import { GameInterface } from "interfaces";
+import { updateScore } from "actions";
+import { isProduction } from "helpers";
 import React from "react";
+import { useDispatch, useSelector } from "react-redux";
+import { RootState } from "store";
 import styled from "styled-components";
-import { header_height } from "../constants";
+import { content, header_height } from "../constants";
 
-interface Props {
-  content: string[];
-  game: GameInterface;
-  handleClick: any;
-}
+export const NewsPaper = () => {
+  const { game } = useSelector((state: RootState) => state.game);
+  const { uid } = useSelector((state: RootState) => state.auth.user);
+  const dispatch = useDispatch();
+
+  React.useEffect(() => {
+    if (isProduction()) {
+      disableBrowserFind();
+      window.addEventListener("contextmenu", disableRightClick);
+    }
+
+    return () => {
+      window.removeEventListener("contextmenu", disableRightClick);
+    };
+  }, []);
+
+  React.useEffect(() => {
+    if (game?.players[uid]) {
+      game.players[uid].words.forEach((id: string) => {
+        let el = document.getElementById(id);
+        if (el) el.style.backgroundColor = "yellow";
+      });
+    }
+  }, [game, uid]);
+
+  const handleClick = (id: string) => {
+    let words = [...game.players[uid].words];
+    const el = document.getElementById(id) as HTMLElement;
+
+    if (id.charAt(0).toLowerCase() === game.letter) {
+      if (!words.includes(id)) {
+        words.push(id);
+      } else {
+        words = words.filter((word: string) => word !== id);
+        el.style.background = "gainsboro";
+      }
+
+      dispatch(updateScore(words));
+    }
+  };
+
+  return (
+    <Wrapper onContextMenu={() => false}>
+      {content[game.paraIndex].split(" ").map((word: string, i: number) => {
+        let id = word.trim().replace("”", "").replace("“", "").replace(",", "") + i;
+        return (
+          <span key={i} style={{ whiteSpace: "initial" }}>
+            <span id={id} onClick={(e) => handleClick(id)}>
+              {word}
+            </span>{" "}
+          </span>
+        );
+      })}
+    </Wrapper>
+  );
+};
 
 const disableBrowserFind = () => {
   document.addEventListener("keydown", (e) => {
@@ -22,37 +75,6 @@ const disableBrowserFind = () => {
 const disableRightClick = (e: any) => {
   e.preventDefault();
   alert(`Don't you even think about that. We don't allow right clicks here.`);
-};
-
-export const NewsPaper = ({ content, game, handleClick }: Props) => {
-  React.useEffect(() => {
-    if (isProduction()) {
-      disableBrowserFind();
-
-      // disable right click
-      window.addEventListener("contextmenu", disableRightClick);
-    }
-
-    return () => {
-      // enable right click
-      window.removeEventListener("contextmenu", disableRightClick);
-    };
-  }, []);
-
-  return (
-    <Wrapper onContextMenu={() => false}>
-      {content[game?.paraIndex].split(" ").map((word: string, i: number) => {
-        let id = word.trim().replace("”", "").replace("“", "").replace(",", "") + i;
-        return (
-          <span key={i} style={{ whiteSpace: "initial" }}>
-            <span id={id} onClick={(e) => handleClick(id)}>
-              {word}
-            </span>{" "}
-          </span>
-        );
-      })}
-    </Wrapper>
-  );
 };
 
 const Wrapper = styled.div`

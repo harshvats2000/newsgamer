@@ -4,7 +4,7 @@ import { deleteGame } from "actions";
 import styled from "styled-components";
 import { timeSince } from "utils";
 import { useSelector } from "react-redux";
-import { isAdmin } from "functions/isAdmin";
+import { isAdmin } from "helpers";
 import { RootState } from "store";
 import { GameInterface } from "../interfaces";
 
@@ -34,7 +34,7 @@ export function GameCard({ game, dispatch }: Props) {
           Game by <span>{hostName}</span>.
           <br />
         </Text>
-        {user.uid === createdBy.uid || isAdmin() ? (
+        {user.uid === createdBy.uid || isAdmin(user.uid) ? (
           <Actions>
             <TrashIcon className="fa fa-trash" onClick={handleDelete} />
           </Actions>
