@@ -4,7 +4,7 @@
 <br />
 <div align="center">
   <a href="https://github.com/harshvats2000/newsgamer">
-    <img src="public/logo.png" alt="Logo" width="120" height="160">
+    <img src="public/logo.png" alt="Logo" width="180" height="250">
   </a>
 
   <h3 align="center">NewsGamer</h3>
@@ -32,7 +32,6 @@
       </ul>
     </li>
     <li><a href="#contributing">Contributing</a></li>
-    <li><a href="#license">License</a></li>
     <li><a href="#contact">Contact</a></li>
   </ol>
 </details>
@@ -70,14 +69,6 @@ I built newsgamer for a few reasons.
 
 Coming soon
 
-<!-- LICENSE -->
-
-## License
-
-Distributed under the MIT License. See `LICENSE.txt` for more information.
-
-<p align="right">(<a href="#top">back to top</a>)</p>
-
 <!-- CONTACT -->
 
 ## Contact
@@ -97,8 +88,6 @@ Harsh Vats - [LinkedIn](https://www.linkedin.com/in/harsh-vats-02b210150/)
 [stars-url]: https://github.com/harshvats2000/newsgamer/stargazers
 [issues-shield]: https://img.shields.io/github/issues/harshvats2000/newsgamer.svg?style=for-the-badge
 [issues-url]: https://github.com/harshvats2000/newsgamer/issues
-[license-shield]: https://img.shields.io/github/license/harshvats2000/newsgamer.svg?style=for-the-badge
-[license-url]: https://github.com/harshvats2000/newsgamer/blob/master/LICENSE.txt
 [linkedin-shield]: https://img.shields.io/badge/-LinkedIn-black.svg?style=for-the-badge&logo=linkedin&colorB=555
 [linkedin-url]: https://linkedin.com/in/harshvats2000
 [product-screenshot]: images/screenshot.png
