@@ -36,7 +36,7 @@ export const GamePage = () => {
       dispatch({ type: RESET_CURRENT_GAME });
       unsubscribe();
     };
-  }, [dispatch]);
+  }, [dispatch, gameId]);
 
   useEffect(() => {
     if (game?.createdBy) {
@@ -49,7 +49,7 @@ export const GamePage = () => {
         dispatch(gameOver(gameId, winner));
       }
     }
-  }, [game, dispatch, gameId]);
+  }, [game, dispatch, gameId, uid]);
 
   if (fetching) {
     return (

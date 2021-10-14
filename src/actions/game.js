@@ -14,7 +14,6 @@ import { fetchGames } from "./games";
 import { FETCHING_CURRENT_GAME_SUCCESS, RESET_CURRENT_GAME } from "actions";
 import { generateLetter } from "helpers";
 import { getCurrentDateAndTime } from "helpers";
-import { isEqual } from "lodash";
 
 const db = firebase.firestore();
 
