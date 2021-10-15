@@ -8,8 +8,9 @@ import {
   UPDATING_SCORE,
   UPDATING_SCORE_FAIL,
   UPDATING_SCORE_SUCCESS,
+  FETCHING_GAME_CHATS_SUCCESS,
 } from "actions";
-import { GameInterface } from "interfaces";
+import { Chat, GameInterface } from "interfaces";
 import { AnyAction } from "redux";
 
 interface stateProps {
@@ -17,6 +18,7 @@ interface stateProps {
   creatingGame: boolean;
   fetchingGame: boolean;
   updating: boolean;
+  chats: Chat[];
 }
 
 const initialState: stateProps = {
@@ -24,6 +26,7 @@ const initialState: stateProps = {
   creatingGame: false,
   fetchingGame: true,
   updating: false,
+  chats: [],
 };
 
 export default function (state = initialState, { type, payload }: AnyAction) {
@@ -84,6 +87,12 @@ export default function (state = initialState, { type, payload }: AnyAction) {
       return {
         ...state,
         updating: false,
+      };
+
+    case FETCHING_GAME_CHATS_SUCCESS:
+      return {
+        ...state,
+        chats: payload,
       };
 
     default:

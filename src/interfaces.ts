@@ -10,3 +10,10 @@ export interface GameInterface {
   start: boolean;
   winner: { uid: string; name: string };
 }
+
+export interface Chat {
+  uid: string;
+  displayName: string;
+  postedAt: string;
+  msg: string;
+}

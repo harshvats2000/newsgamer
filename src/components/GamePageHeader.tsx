@@ -59,6 +59,7 @@ const Wrapper = styled.div`
   padding: 10px 10px 0 10px;
   box-shadow: 0 0 10px grey;
   color: grey;
+  z-index: 100;
 `;
 
 const Container = styled.div`

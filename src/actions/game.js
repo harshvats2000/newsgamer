@@ -9,13 +9,18 @@ import {
   UPDATING_SCORE_FAIL,
   UPDATING_SCORE_SUCCESS,
   FETCHING_CURRENT_GAME,
+  FETCHING_GAME_CHATS_SUCCESS,
 } from ".";
 import { fetchGames } from "./games";
 import { FETCHING_CURRENT_GAME_SUCCESS, RESET_CURRENT_GAME } from "actions";
 import { generateLetter } from "helpers";
 import { getCurrentDateAndTime } from "helpers";
+import moment from "moment";
+import { orderBy, values } from "lodash";
 
 const db = firebase.firestore();
+
+const gamesRef = db.collection("games");
 
 const createGame = (history) => async (dispatch, getState) => {
   const { uid, displayName } = getState().auth.user;
@@ -41,7 +46,7 @@ const createGame = (history) => async (dispatch, getState) => {
   };
 
   try {
-    await db.collection("games").doc(id).set(data);
+    await gamesRef.doc(id).set(data);
     dispatch({ type: CREATING_GAME_SUCCESS, payload: data });
     history.push(`/game/${id}`);
   } catch (error) {
@@ -52,7 +57,7 @@ const createGame = (history) => async (dispatch, getState) => {
 
 const deleteGame = (gameId) => async (dispatch) => {
   try {
-    await db.collection("games").doc(gameId).delete();
+    await gamesRef.doc(gameId).delete();
     dispatch(fetchGames());
   } catch (error) {
     alert("Error in deleting game.");
@@ -62,12 +67,13 @@ const deleteGame = (gameId) => async (dispatch) => {
 const listenToRealTimeGameChanges = (gameId) => (dispatch, getState) => {
   dispatch({ type: FETCHING_CURRENT_GAME });
 
-  const game_doc = db.collection("games").doc(gameId);
+  const game_doc = gamesRef.doc(gameId);
 
   return game_doc.onSnapshot((doc) => {
     if (doc.exists) {
       dispatch({ type: FETCHING_CURRENT_GAME_SUCCESS, payload: doc.data() });
     } else {
+      console.error("game document does not exist.");
       dispatch({ type: RESET_CURRENT_GAME });
     }
   });
@@ -77,7 +83,7 @@ const updateScore = (words) => async (dispatch, getState) => {
   dispatch({ type: UPDATING_SCORE });
 
   const { game } = getState().game;
-  const game_doc = db.collection("games").doc(game.gameId);
+  const game_doc = gamesRef.doc(game.gameId);
   const { uid } = getState().auth.user;
 
   try {
@@ -93,7 +99,7 @@ const updateScore = (words) => async (dispatch, getState) => {
 };
 
 const addNewPlayerToCurrGame = (gameId) => async (dispatch, getState) => {
-  const game_doc = db.collection("games").doc(gameId);
+  const game_doc = gamesRef.doc(gameId);
   const { uid, displayName } = await getState().auth.user;
 
   await game_doc.update({
@@ -102,7 +108,7 @@ const addNewPlayerToCurrGame = (gameId) => async (dispatch, getState) => {
 };
 
 const gameOver = (gameId, winner) => async (dispatch, getState) => {
-  const game_doc = db.collection("games").doc(gameId);
+  const game_doc = gamesRef.doc(gameId);
   const { overdate, overtime } = getCurrentDateAndTime();
 
   try {
@@ -125,6 +131,52 @@ const gameOver = (gameId, winner) => async (dispatch, getState) => {
   }
 };
 
+const sendChatMessage = (msg) => async (dispatch, getState) => {
+  const {
+    game: { gameId },
+  } = getState().game;
+  const chat_doc = gamesRef.doc(gameId).collection("chats").doc("1");
+  const { uid, displayName } = getState().auth.user;
+
+  try {
+    const currTime = moment().format();
+    await chat_doc.set(
+      {
+        [currTime]: {
+          uid,
+          displayName,
+          postedAt: currTime,
+          msg,
+        },
+      },
+      { merge: true }
+    );
+  } catch (error) {
+    console.error(error, "error in send message.");
+  }
+};
+
+const listenToChats = () => (dispatch, getState) => {
+  const {
+    game: { gameId },
+  } = getState().game;
+  const chat_doc = gamesRef.doc(gameId).collection("chats").doc("1");
+
+  return chat_doc.onSnapshot((doc) => {
+    if (doc && doc.exists) {
+      const chats = orderBy(values(doc.data()), ["postedAt"], ["asc"]).map((d) => ({
+        uid: d.uid,
+        displayName: d.displayName,
+        postedAt: d.postedAt,
+        msg: d.msg,
+      }));
+      dispatch({ type: FETCHING_GAME_CHATS_SUCCESS, payload: chats });
+    } else {
+      console.error("chat document does not exist.");
+    }
+  });
+};
+
 export {
   createGame,
   deleteGame,
@@ -132,4 +184,6 @@ export {
   listenToRealTimeGameChanges,
   addNewPlayerToCurrGame,
   gameOver,
+  sendChatMessage,
+  listenToChats,
 };
