@@ -12,6 +12,7 @@ export const NewsPaper = () => {
   const { uid } = useSelector((state: RootState) => state.auth.user);
   const dispatch = useDispatch();
   const [showChats, setShowChats] = useState(true);
+  const [numOfUnreadChats, setNumOfUnreadChats] = useState(0);
 
   React.useEffect(() => {
     if (isProduction()) {
@@ -28,9 +29,17 @@ export const NewsPaper = () => {
   }, [dispatch]);
 
   React.useEffect(() => {
-    var chatsDiv = document.getElementById("chats-box");
-    if (chatsDiv) {
-      chatsDiv.scrollTop = chatsDiv.scrollHeight;
+    if (showChats) {
+      setNumOfUnreadChats(0);
+      scrollToBottomOfChats();
+    }
+  }, [showChats]);
+
+  React.useEffect(() => {
+    scrollToBottomOfChats();
+
+    if (!showChats) {
+      setNumOfUnreadChats(numOfUnreadChats + 1);
     }
   }, [chats]);
 
@@ -63,6 +72,10 @@ export const NewsPaper = () => {
     dispatch(sendChatMessage(msg));
   };
 
+  const toggleChatsDisplay = () => {
+    setShowChats(!showChats);
+  };
+
   return (
     <Wrapper>
       <Paper onContextMenu={() => false}>
@@ -88,8 +101,9 @@ export const NewsPaper = () => {
       </ChatsBox>
 
       <Actions>
-        <ChatToggleBtn onClick={() => setShowChats(!showChats)}>
-          {showChats ? "hide chats" : "show chats"}
+        <ChatToggleBtn onClick={toggleChatsDisplay}>
+          {showChats ? "hide chats" : "show chats"}{" "}
+          {!showChats && numOfUnreadChats > 0 && <UnRead>{numOfUnreadChats}</UnRead>}
         </ChatToggleBtn>
 
         <ChatsOptions>
@@ -100,6 +114,13 @@ export const NewsPaper = () => {
       </Actions>
     </Wrapper>
   );
+};
+
+const scrollToBottomOfChats = () => {
+  var chatsDiv = document.getElementById("chats-box");
+  if (chatsDiv) {
+    chatsDiv.scrollTop = chatsDiv.scrollHeight;
+  }
 };
 
 const disableBrowserFind = () => {
@@ -136,7 +157,8 @@ const ChatsBox = styled.div<{ showChats: boolean }>`
   position: fixed;
   left: 0px;
   bottom: 50px;
-  background: white;
+  background: ${({ theme }) => theme.dark.bg};
+  color: ${({ theme }) => theme.dark.text};
   z-index: 30;
   max-height: 200px;
   overflow: scroll;
@@ -152,20 +174,11 @@ const ChatsBox = styled.div<{ showChats: boolean }>`
 const ChatsOptions = styled.div`
   display: grid;
   grid-template-columns: repeat(3, 1fr);
-  grid-gap: 10px;
-  button {
-    padding: 10px;
-    border: none;
-    background: white;
-    border-radius: 4px;
-  }
+  grid-gap: 3px;
 `;
 
 const ChatToggleBtn = styled.button`
-  padding: 10px;
-  border: none;
-  background: white;
-  border-radius: 4px;
+  position: relative;
 `;
 
 const Actions = styled.div`
@@ -176,4 +189,25 @@ const Actions = styled.div`
   left: 0;
   width: 100%;
   z-index: 11;
+  button {
+    background: ${({ theme }) => theme.dark.bg};
+    color: ${({ theme }) => theme.dark.text};
+    border-radius: 4px 4px 0 0;
+    padding: 10px;
+    border: none;
+  }
+`;
+
+const UnRead = styled.span`
+  position: absolute;
+  right: -8px;
+  top: -8px;
+  width: 22px;
+  height: 24px;
+  display: grid;
+  place-items: center;
+  background: red;
+  border-radius: 100%;
+  font-weight: bold;
+  color: white;
 `;

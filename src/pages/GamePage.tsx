@@ -17,6 +17,7 @@ import {
   GamePageHeader,
   GameDoesNotExistScreen,
   GameOverScreen,
+  Layout,
 } from "components";
 import { RootState } from "store";
 
@@ -68,7 +69,7 @@ export const GamePage = () => {
   }
 
   return (
-    <>
+    <Layout>
       <GamePageHeader {...{ game }} />
 
       {!game?.start ? (
@@ -82,6 +83,6 @@ export const GamePage = () => {
       ) : (
         <NewsPaper />
       )}
-    </>
+    </Layout>
   );
 };
