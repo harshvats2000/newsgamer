@@ -69,6 +69,7 @@ export default function (state = initialState, { type, payload }: AnyAction) {
         ...state,
         game: null,
         fetchingGame: false,
+        chats: [],
       };
 
     case UPDATING_SCORE:

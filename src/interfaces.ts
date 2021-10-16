@@ -17,3 +17,10 @@ export interface Chat {
   postedAt: string;
   msg: string;
 }
+
+export interface User {
+  uid: string;
+  displayName: string;
+  email: string;
+  photoURL: string;
+}

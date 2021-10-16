@@ -5,8 +5,14 @@ const auth = firebase.auth();
 const db = firebase.firestore();
 
 export const listenToAuthChanges = () => (dispatch) => {
-  auth.onAuthStateChanged((user) => {
-    if (user) {
+  auth.onAuthStateChanged((firebaseUser) => {
+    if (firebaseUser) {
+      const user = {
+        displayName: firebaseUser.displayName,
+        uid: firebaseUser.uid,
+        photoURL: firebaseUser.photoURL,
+        email: firebaseUser.email,
+      };
       dispatch({
         type: LOGIN_SUCCESS,
         payload: user,
@@ -29,14 +35,18 @@ export const login = () => async (dispatch) => {
     const res = await auth.signInWithPopup(provider);
 
     try {
-      await db
-        .collection("users")
-        .doc(res.user.uid)
-        .set({ displayName: res.user.displayName }, { merge: true });
+      const user = {
+        displayName: res.user.displayName,
+        uid: res.user.uid,
+        photoURL: res.user.photoURL,
+        email: res.user.email,
+      };
+
+      await db.collection("users").doc(res.user.uid).set(user, { merge: true });
 
       dispatch({
         type: LOGIN_SUCCESS,
-        payload: res.user,
+        payload: user,
       });
     } catch (error) {
       dispatch({

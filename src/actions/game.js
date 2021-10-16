@@ -56,8 +56,12 @@ const createGame = (history) => async (dispatch, getState) => {
 };
 
 const deleteGame = (gameId) => async (dispatch) => {
+  const game_doc = gamesRef.doc(gameId);
+  const chat_doc = game_doc.collection("chats").doc("1");
+
   try {
-    await gamesRef.doc(gameId).delete();
+    await game_doc.delete();
+    await chat_doc.delete();
     dispatch(fetchGames());
   } catch (error) {
     alert("Error in deleting game.");
