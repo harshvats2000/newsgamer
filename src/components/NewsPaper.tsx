@@ -52,7 +52,7 @@ export const NewsPaper = () => {
     }
   }, [game, uid]);
 
-  const handleClick = (id: string) => {
+  const handleWordClick = (id: string) => {
     let words = [...game.players[uid].words];
     const el = document.getElementById(id) as HTMLElement;
 
@@ -83,7 +83,7 @@ export const NewsPaper = () => {
           let id = word.trim().replace("”", "").replace("“", "").replace(",", "") + i;
           return (
             <span key={i} style={{ whiteSpace: "initial" }}>
-              <span id={id} onClick={(e) => handleClick(id)}>
+              <span id={id} onClick={(e) => handleWordClick(id)}>
                 {word}
               </span>{" "}
             </span>

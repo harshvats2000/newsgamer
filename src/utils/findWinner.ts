@@ -1,9 +1,16 @@
-import { GameInterface } from "interfaces";
+import { GameInterface, Winner } from "interfaces";
 import { max_score } from "../constants";
-import { find } from "lodash";
+import { find, pick } from "lodash";
 
-export const findWinner = (game: GameInterface) => {
-  const winner = find(game.players, (p: any) => p.words.length >= max_score);
+export const findWinner = (game: GameInterface): Winner | undefined => {
+  let winner: Winner | undefined = find(game.players, (p: any) => p.words.length === max_score);
 
-  return { winner };
+  if (winner) {
+    return {
+      name: winner.name,
+      uid: winner.uid,
+    };
+  }
+
+  return winner;
 };

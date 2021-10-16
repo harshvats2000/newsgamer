@@ -17,6 +17,7 @@ import { generateLetter } from "helpers";
 import { getCurrentDateAndTime } from "helpers";
 import moment from "moment";
 import { orderBy, values } from "lodash";
+import { catchAsync } from "utils";
 
 const db = firebase.firestore();
 
@@ -55,18 +56,15 @@ const createGame = (history) => async (dispatch, getState) => {
   }
 };
 
-const deleteGame = (gameId) => async (dispatch) => {
-  const game_doc = gamesRef.doc(gameId);
-  const chat_doc = game_doc.collection("chats").doc("1");
+const deleteGame = (gameId) =>
+  catchAsync(async (dispatch) => {
+    const game_doc = gamesRef.doc(gameId);
+    const chat_doc = game_doc.collection("chats").doc("1");
 
-  try {
     await game_doc.delete();
     await chat_doc.delete();
     dispatch(fetchGames());
-  } catch (error) {
-    alert("Error in deleting game.");
-  }
-};
+  }, "error in deleting game.");
 
 const listenToRealTimeGameChanges = (gameId) => (dispatch, getState) => {
   dispatch({ type: FETCHING_CURRENT_GAME });
@@ -102,23 +100,24 @@ const updateScore = (words) => async (dispatch, getState) => {
   }
 };
 
-const addNewPlayerToCurrGame = (gameId) => async (dispatch, getState) => {
-  const game_doc = gamesRef.doc(gameId);
-  const { uid, displayName } = await getState().auth.user;
+const addNewPlayerToCurrGame = (gameId) =>
+  catchAsync(async (dispatch, getState) => {
+    const game_doc = gamesRef.doc(gameId);
+    const { uid, displayName } = await getState().auth.user;
 
-  await game_doc.update({
-    [`players.${uid}`]: { name: displayName, uid, words: [] },
-  });
-};
+    await game_doc.update({
+      [`players.${uid}`]: { name: displayName, uid, words: [] },
+    });
+  }, "error in adding new player to game.");
 
-const gameOver = (gameId, winner) => async (dispatch, getState) => {
-  const game_doc = gamesRef.doc(gameId);
-  const { overdate, overtime } = getCurrentDateAndTime();
+const gameOver = (gameId, winner) =>
+  catchAsync(async (dispatch, getState) => {
+    const game_doc = gamesRef.doc(gameId);
+    const { overdate, overtime } = getCurrentDateAndTime();
 
-  try {
     await game_doc.update({
       over: true,
-      winner: winner,
+      winner,
       overdate,
       overtime,
     });
@@ -130,10 +129,7 @@ const gameOver = (gameId, winner) => async (dispatch, getState) => {
       .update({
         points: firebase.firestore.FieldValue.increment(POINTS_ON_WIN),
       });
-  } catch (error) {
-    console.error(error);
-  }
-};
+  }, "error in ending game.");
 
 const sendChatMessage = (msg) => async (dispatch, getState) => {
   const {

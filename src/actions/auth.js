@@ -54,6 +54,7 @@ export const login = () => async (dispatch) => {
       });
     }
   } catch (error) {
+    console.error(error);
     dispatch({
       type: LOGIN_FAIL,
     });
@@ -68,6 +69,7 @@ export const logout = () => async (dispatch) => {
         type: LOGOUT_SUCCESS,
       });
     } catch (error) {
+      console.error(error);
       dispatch({
         type: LOGOUT_FAIL,
       });

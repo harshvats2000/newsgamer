@@ -24,3 +24,8 @@ export interface User {
   email: string;
   photoURL: string;
 }
+
+export interface Winner {
+  uid: string;
+  name: string;
+}

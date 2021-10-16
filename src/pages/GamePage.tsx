@@ -40,12 +40,14 @@ export const GamePage = () => {
   }, [dispatch, gameId]);
 
   useEffect(() => {
-    if (game?.createdBy) {
+    if (game) {
+      // Add user to game if not already there
       if (!game.players[uid]) {
         dispatch(addNewPlayerToCurrGame(gameId));
       }
 
-      const { winner } = findWinner(game);
+      const winner = findWinner(game);
+
       if (winner) {
         dispatch(gameOver(gameId, winner));
       }
