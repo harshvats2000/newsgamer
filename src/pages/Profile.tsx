@@ -7,6 +7,7 @@ import { logout } from "actions";
 import { Button } from "ui";
 import { RootState } from "store";
 import { GameInterface } from "interfaces";
+import styled from "styled-components";
 
 const db = firebase.firestore();
 
@@ -15,11 +16,10 @@ export const Profile = () => {
   const user = useSelector((state: RootState) => state.auth.user);
   const [playedGames, setPlayedGames] = useState([]);
 
-  const winPercent =
-    (playedGames.filter((game: GameInterface) => game.winner === user.uid)
-      .length /
-      playedGames.length) *
-    100;
+  // const winPercent =
+  //   (playedGames.filter((game: GameInterface) => game.winner === user.uid).length /
+  //     playedGames.length) *
+  //   100;
 
   useEffect(() => {
     let games: any = [];
@@ -50,13 +50,20 @@ export const Profile = () => {
           </Button>
         </div>
 
-        <h3 style={{ textAlign: "center" }}>
+        {/* <h3 style={{ textAlign: "center" }}>
           Winning % = {!isNaN(winPercent) && winPercent.toFixed(2)}
         </h3>
         <div>
           <strong>Games Played:</strong> {playedGames?.length}
-        </div>
+        </div> */}
+
+        <ComingSoon>*Profile Page Coming soon</ComingSoon>
       </div>
     </>
   );
 };
+
+const ComingSoon = styled.p`
+  text-align: center;
+  color: red;
+`;

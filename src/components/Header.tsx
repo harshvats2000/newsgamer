@@ -32,7 +32,7 @@ export const Header = () => {
 };
 
 const Wrapper = styled.header`
-  height: 65px;
+  height: 56px;
   position: fixed;
   top: 0;
   width: 100vw;
@@ -51,10 +51,11 @@ const Container = styled.div`
 
 const NewsGamer = styled.div`
   font-family: "Cinzel Decorative", cursive;
-  font-size: 2rem;
+  font-size: 24px;
   span {
     color: white;
     background: black;
-    padding: 0 4px;
+    border-radius: 5px;
+    padding: 0 10px;
   }
 `;

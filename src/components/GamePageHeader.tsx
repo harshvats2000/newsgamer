@@ -4,6 +4,7 @@ import styled from "styled-components";
 import { header_height } from "../constants";
 import { RootState } from "store";
 import { GameInterface } from "interfaces";
+import { Link } from "react-router-dom";
 
 interface Props {
   game: GameInterface;
@@ -21,6 +22,20 @@ export const GamePageHeader = ({ game }: Props) => {
   return (
     <Wrapper>
       <Container>
+        <Back to="/">
+          <svg
+            xmlns="http://www.w3.org/2000/svg"
+            width="16"
+            height="16"
+            fill="white"
+            viewBox="0 0 16 16"
+          >
+            <path
+              fillRule="evenodd"
+              d="M15 8a.5.5 0 0 0-.5-.5H2.707l3.147-3.146a.5.5 0 1 0-.708-.708l-4 4a.5.5 0 0 0 0 .708l4 4a.5.5 0 0 0 .708-.708L2.707 8.5H14.5A.5.5 0 0 0 15 8z"
+            />
+          </svg>
+        </Back>
         <Flex>
           <div>
             Host: <span>{game.createdBy.name}</span>
@@ -71,10 +86,11 @@ const Container = styled.div`
 const Flex = styled.div`
   max-width: 300px;
   margin: auto;
-  display: grid;
-  grid-template-columns: 1fr 1fr;
-  justify-content: center;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
   line-height: 25px;
+  padding-left: 15px;
   > div {
     text-align: center;
   }
@@ -90,5 +106,22 @@ const PlayerNamesList = styled.ul`
 
   li {
     padding: 0 10px;
+  }
+`;
+
+const Back = styled(Link)`
+  position: fixed;
+  top: 7px;
+  left: 5px;
+  padding: 10px;
+  background: black;
+  border-radius: 50%;
+  width: 30px;
+  height: 30px;
+  display: grid;
+  align-content: space-around;
+  justify-content: center;
+  svg {
+    stroke: white;
   }
 `;
