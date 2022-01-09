@@ -17,6 +17,18 @@ import { getCurrentDateAndTime } from "helpers";
 
 const db = firebase.firestore();
 
+const sendSlackMessage = (host, gameid) => {
+  fetch(`https://hooks.slack.com/services/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`, {
+    method: "POST",
+
+    body: JSON.stringify({
+      text: `New game created by ${host}. Join https://newsgamer.harshvats.dev/game/${gameid}`,
+    }),
+  }).catch((error) => {
+    console.error(error);
+  });
+};
+
 const createGame = (history) => async (dispatch, getState) => {
   const { uid, displayName } = getState().auth.user;
 
@@ -44,6 +56,8 @@ const createGame = (history) => async (dispatch, getState) => {
     await db.collection("games").doc(id).set(data);
     dispatch({ type: CREATING_GAME_SUCCESS, payload: data });
     history.push(`/game/${id}`);
+
+    sendSlackMessage(displayName, id);
   } catch (error) {
     console.error(error);
     dispatch({ type: CREATING_GAME_FAIL, payload: data });
