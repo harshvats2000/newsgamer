@@ -18,7 +18,7 @@ import { getCurrentDateAndTime } from "helpers";
 const db = firebase.firestore();
 
 const sendSlackMessage = (host, gameid) => {
-  fetch(`https://hooks.slack.com/services/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`, {
+  fetch(`https://hooks.slack.com/services/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`, {
     method: "POST",
 
     body: JSON.stringify({
