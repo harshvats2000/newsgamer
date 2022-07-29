@@ -4,7 +4,7 @@ import React from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { RootState } from "store";
 import styled from "styled-components";
-import { content, header_height } from "../constants";
+import { content, header_height, theme } from "../constants";
 
 export const NewsPaper = () => {
   const { game } = useSelector((state: RootState) => state.game);
@@ -80,7 +80,8 @@ const disableRightClick = (e: any) => {
 const Wrapper = styled.div`
   white-space: pre-wrap;
   padding: 20px;
-  background-color: gainsboro;
+  background-color: ${theme.colors.surface};
+  color: rgb(255 255 255 / 50%);
   line-height: 2.5rem;
   margin-top: ${header_height};
   text-align: justify;

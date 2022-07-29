@@ -1,5 +1,6 @@
 import React from "react";
 import styled from "styled-components";
+import { theme } from "../constants";
 interface Props {
   color?: string;
   size?: string;
@@ -14,20 +15,16 @@ interface Props {
 export const Para = (props: Props) => {
   const {
     children,
-    color = "black",
+    color = theme.colors.textDim,
     size = "16px",
     lh = "1rem",
     weight = 400,
     align = "left",
     m = "10px",
-    style = {},
+    style = {}
   } = props;
 
-  return (
-    <ParaEl {...{ color, size, weight, m, lh, align, style }}>
-      {children}
-    </ParaEl>
-  );
+  return <ParaEl {...{ color, size, weight, m, lh, align, style }}>{children}</ParaEl>;
 };
 
 const ParaEl = styled.p<Props>`

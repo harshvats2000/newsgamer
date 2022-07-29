@@ -65,5 +65,15 @@ During the virtual ceremony, the costume designer received the 2,694th star in r
 "What a pleasure it is to be celebrating today Ms. Ruth E. Carter on her historic Hollywood Walk of Fame induction," exclaimed guest Oprah Winfrey. "I personally had the opportunity to work with Ruth on Lee Daniels' The Butler and I could tell instantly that her passion for clothes, costumes and design were matched by her intention in creating a nuanced portrayal of a Black family through the decades. What I first observed on The Butler and then again on Selma was a woman who was deeply intentional about creating clothing to represent the culture and journey of African Americans because both of those stories involved African Americans. And now we all know her esteemed credit list, both fictional and historical, and what strikes me most is the ease in which she works to create an entire mood through her impeccable design choices, and what this does is allow any actress who is working with Ruth to really surrender."
 
 "Thank you for seeing the depth of culture, history, artistry, and welcoming my vision of Afrofuture into the lexicon of American filmmaking," proclaimed honoree Ruth E. Carter. "Most of all, I dedicate this star to all the young and aspiring filmmakers. I drove to Hollywood 36 years ago...nothing was handed to me. Every moment, every sacrifice, every effort was hard work inspired by my passion. It's my hope that anyone who sacrifices, who beats these streets of Hollywood, carrying their dreams in heavy garment bags full of costumes, desiring to be the best, like I did, that when you gaze upon my star feel my energy, feel the power of your own unique story to realize your dreams so you too can reach your star. Wakanda Forever."
-`,
+`
 ];
+
+export const theme = {
+  colors: {
+    bgDark: "#121212",
+    textLight: "#bababa",
+    textDim: "rgb(256, 256, 256, 0.6)",
+    surface: "#1D1D1D",
+    surface2: "#2D2D2D"
+  }
+};

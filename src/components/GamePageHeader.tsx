@@ -1,7 +1,7 @@
 import React from "react";
 import { useSelector } from "react-redux";
 import styled from "styled-components";
-import { header_height } from "../constants";
+import { header_height, theme } from "../constants";
 import { RootState } from "store";
 import { GameInterface } from "interfaces";
 import { Link } from "react-router-dom";
@@ -16,20 +16,14 @@ export const GamePageHeader = ({ game }: Props) => {
     .sort()
     .forEach((key) => (players[key] = game.players[key]));
   const {
-    user: { uid: currentUserUid },
+    user: { uid: currentUserUid }
   } = useSelector((state: RootState) => state.auth);
 
   return (
     <Wrapper>
       <Container>
         <Back to="/">
-          <svg
-            xmlns="http://www.w3.org/2000/svg"
-            width="16"
-            height="16"
-            fill="white"
-            viewBox="0 0 16 16"
-          >
+          <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="white" viewBox="0 0 16 16">
             <path
               fillRule="evenodd"
               d="M15 8a.5.5 0 0 0-.5-.5H2.707l3.147-3.146a.5.5 0 1 0-.708-.708l-4 4a.5.5 0 0 0 0 .708l4 4a.5.5 0 0 0 .708-.708L2.707 8.5H14.5A.5.5 0 0 0 15 8z"
@@ -49,10 +43,7 @@ export const GamePageHeader = ({ game }: Props) => {
           {Object.keys(players).length > 0
             ? Object.keys(players).map((key, i) => {
                 return (
-                  <li
-                    key={players[key].uid}
-                    style={{ color: currentUserUid === players[key].uid ? "green" : "red" }}
-                  >
+                  <li key={players[key].uid} style={{ color: currentUserUid === players[key].uid ? "green" : "red" }}>
                     <div>{players[key].name.split(" ")[0]}</div>
                     <div style={{ fontSize: "2rem" }}>{players[key].words.length}</div>
                   </li>
@@ -69,17 +60,15 @@ const Wrapper = styled.div`
   height: ${header_height};
   position: fixed;
   top: 0;
-  background: white;
   width: 100vw;
   padding: 10px 10px 0 10px;
-  box-shadow: 0 0 10px grey;
-  color: grey;
+  box-shadow: 0 1px 7px 0 rgba(0, 0, 0, 0.6);
+  background: ${theme.colors.surface};
 `;
 
 const Container = styled.div`
   span {
     font-weight: bold;
-    color: black;
   }
 `;
 
@@ -93,6 +82,10 @@ const Flex = styled.div`
   padding-left: 15px;
   > div {
     text-align: center;
+    color: grey;
+    > span {
+      color: ${theme.colors.textDim};
+    }
   }
 `;
 
@@ -114,7 +107,7 @@ const Back = styled(Link)`
   top: 7px;
   left: 5px;
   padding: 10px;
-  background: black;
+  background: ${theme.colors.surface2};
   border-radius: 50%;
   width: 30px;
   height: 30px;

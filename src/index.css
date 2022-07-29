@@ -1,4 +1,10 @@
 body {
   margin: 0;
   font-family: "Lato";
+  color: #bababa;
+  background: #121212;
+}
+
+.fa {
+  color: #bababa;
 }

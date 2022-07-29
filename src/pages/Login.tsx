@@ -1,7 +1,7 @@
 import React from "react";
 import { Redirect } from "react-router-dom";
 import { Header } from "components";
-import { max_score } from "../constants";
+import { max_score, theme } from "../constants";
 import { useDispatch, useSelector } from "react-redux";
 import { login } from "actions";
 import { Button, Para } from "ui";
@@ -10,7 +10,7 @@ import { RootState } from "store";
 
 const Body = styled.div`
   height: 100vh;
-  background-color: gainsboro;
+  background-color: ${theme.colors.bgDark};
   display: grid;
   place-items: center;
   & > div {
