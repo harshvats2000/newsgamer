@@ -39,8 +39,6 @@ export const GamePage = () => {
         dispatch(addNewPlayerToCurrGame(gameId));
       }
 
-      console.log(game);
-
       const { winner } = findWinner(game);
       if (winner && !game.winner) {
         dispatch(gameOver(gameId, winner));

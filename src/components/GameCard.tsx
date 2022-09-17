@@ -8,6 +8,7 @@ import { isAdmin } from "helpers";
 import { RootState } from "store";
 import { GameInterface } from "../interfaces";
 import { theme } from "../constants";
+import moment from "moment";
 
 interface Props {
   game: GameInterface;
@@ -45,7 +46,7 @@ export function GameCard({ game, dispatch }: Props) {
         <Players>
           {totalPlayers} {totalPlayers === 1 ? "player" : "players"}
         </Players>
-        <TimeAgo>{timeSince(createdAt)} ago</TimeAgo>
+        <TimeAgo>{moment(createdAt).fromNow()}</TimeAgo>
       </Row2>
     </Card>
   );

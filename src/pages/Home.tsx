@@ -63,7 +63,7 @@ export const Home = () => {
 
           {refreshLine()}
 
-          <hr />
+          <hr className="mt-0" />
 
           {loading ? (
             <Loader />

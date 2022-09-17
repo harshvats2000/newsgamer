@@ -35,7 +35,7 @@ export const HostInitialScreen = ({ gameId }: Props) => {
               start game
             </Button>
           ) : (
-            <p>You will be able to start this game once someone joins.</p>
+            <p className="px-1">You will be able to start this game once someone joins.</p>
           )}
           <div style={{ marginTop: "10px" }}>
             <Button variant="green" onClick={() => invitePlayers(gameId)}>
@@ -45,7 +45,7 @@ export const HostInitialScreen = ({ gameId }: Props) => {
           </div>
           <div>
             <Para color="red" style={{ textAlign: "center" }}>
-              *Starting the game will reveal the paragraph to everyone in the game.
+              *Starting the game will reveal the paragraph to every participant.
             </Para>
           </div>
         </Container>

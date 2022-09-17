@@ -12,7 +12,6 @@ interface Props {
 
 export const GamePageHeader = ({ game }: Props) => {
   const players = {} as any;
-  console.log(game.players);
   Object.keys(game.players)
     .sort()
     .forEach((key) => (players[key] = game.players[key]));

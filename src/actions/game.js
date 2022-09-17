@@ -39,6 +39,7 @@ const createGame = (history) => async (dispatch, getState) => {
   const paraIndex = Math.floor(Math.random() * content.length);
   let letter = generateLetter(paraIndex);
   const id = uuidv4();
+  history.push(`/game/${id}`);
 
   const data = {
     players: { [uid]: { name: displayName, photoURL, email, uid, words: [] } },
@@ -55,7 +56,6 @@ const createGame = (history) => async (dispatch, getState) => {
   try {
     await db.collection("games").doc(id).set(data);
     dispatch({ type: CREATING_GAME_SUCCESS, payload: data });
-    history.push(`/game/${id}`);
 
     // sendSlackMessage(displayName, id);
   } catch (error) {
