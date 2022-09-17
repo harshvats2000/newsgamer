@@ -1,6 +1,7 @@
 import React, { useEffect } from "react";
 import { useSelector, useDispatch } from "react-redux";
 import "./App.css";
+import "./styles/bootstra-utilities.css";
 import { Route, Switch } from "react-router-dom";
 import { Loader } from "components";
 import PrivateRoute from "./routes/PrivateRoute";
@@ -18,7 +19,7 @@ function App() {
 
   useEffect(() => {
     dispatch({
-      type: LOGGING_IN,
+      type: LOGGING_IN
     });
 
     dispatch(listenToAuthChanges());

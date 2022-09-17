@@ -1,5 +1,5 @@
 export const max_score = 10;
-export const header_height = "103px";
+export const header_height = "110px";
 export const adminUid = "0hL11HkSadVguTNpVcCWqDhFy6r2"; // vatsvatsharsh2000@gmail.com
 export const POINTS_ON_WIN = 10;
 export const GAME_UPDATING_INTERVAL = 30;

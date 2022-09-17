@@ -29,7 +29,7 @@ export function GameCard({ game, dispatch }: Props) {
   };
 
   return (
-    <Card key={gameId} to={`/game/${gameId}`}>
+    <Card key={gameId} to={`/game/${gameId}`} className="mb-2">
       <Row1>
         <Text>
           Game by <span>{hostName}</span>.
@@ -56,7 +56,6 @@ const Card = styled(Link)`
   text-decoration: none;
   box-shadow: 0 1px 7px 0 rgba(0, 0, 0, 0.6);
   background: ${theme.colors.surface};
-  margin-bottom: 35px;
   padding: 10px;
   border-radius: 4px;
 `;

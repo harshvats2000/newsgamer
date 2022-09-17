@@ -26,7 +26,10 @@ export const NewsPaper = () => {
     if (game?.players[uid]) {
       game.players[uid].words.forEach((id: string) => {
         let el = document.getElementById(id);
-        if (el) el.style.backgroundColor = "yellow";
+        if (el) {
+          el.style.backgroundColor = "yellow";
+          el.style.color = "black";
+        }
       });
     }
   }, [game, uid]);

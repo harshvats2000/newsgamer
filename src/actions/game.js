@@ -8,7 +8,7 @@ import {
   UPDATING_SCORE,
   UPDATING_SCORE_FAIL,
   UPDATING_SCORE_SUCCESS,
-  FETCHING_CURRENT_GAME,
+  FETCHING_CURRENT_GAME
 } from ".";
 import { fetchGames } from "./games";
 import { FETCHING_CURRENT_GAME_SUCCESS, RESET_CURRENT_GAME } from "actions";
@@ -17,23 +17,23 @@ import { getCurrentDateAndTime } from "helpers";
 
 const db = firebase.firestore();
 
-const sendSlackMessage = (host, gameid) => {
-  fetch(`https://hooks.slack.com/services/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`, {
-    method: "POST",
+// const sendSlackMessage = (host, gameid) => {
+//   fetch(`https://hooks.slack.com/services/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`, {
+//     method: "POST",
 
-    body: JSON.stringify({
-      text: `New game created by ${host}. Join https://newsgamer.harshvats.dev/game/${gameid}`,
-    }),
-  }).catch((error) => {
-    console.error(error);
-  });
-};
+//     body: JSON.stringify({
+//       text: `New game created by ${host}. Join https://newsgamer.harshvats.dev/game/${gameid}`,
+//     }),
+//   }).catch((error) => {
+//     console.error(error);
+//   });
+// };
 
 const createGame = (history) => async (dispatch, getState) => {
-  const { uid, displayName } = getState().auth.user;
+  const { uid, displayName, photoURL, email } = getState().auth.user;
 
   dispatch({
-    type: CREATING_GAME,
+    type: CREATING_GAME
   });
 
   const paraIndex = Math.floor(Math.random() * content.length);
@@ -41,15 +41,15 @@ const createGame = (history) => async (dispatch, getState) => {
   const id = uuidv4();
 
   const data = {
-    players: { [uid]: { name: displayName, uid, words: [] } },
-    createdBy: { uid, name: displayName },
+    players: { [uid]: { name: displayName, photoURL, email, uid, words: [] } },
+    createdBy: { uid, name: displayName, email, photoURL },
     gameId: id,
     letter: letter,
     paraIndex: paraIndex,
     creationdate: firebase.database.ServerValue.TIMESTAMP,
     createdAt: Date.now(),
     over: false,
-    start: false,
+    start: false
   };
 
   try {
@@ -57,7 +57,7 @@ const createGame = (history) => async (dispatch, getState) => {
     dispatch({ type: CREATING_GAME_SUCCESS, payload: data });
     history.push(`/game/${id}`);
 
-    sendSlackMessage(displayName, id);
+    // sendSlackMessage(displayName, id);
   } catch (error) {
     console.error(error);
     dispatch({ type: CREATING_GAME_FAIL, payload: data });
@@ -97,7 +97,7 @@ const updateScore = (words) => async (dispatch, getState) => {
   try {
     await game_doc.update({ [`players.${uid}.words`]: words });
     dispatch({
-      type: UPDATING_SCORE_SUCCESS,
+      type: UPDATING_SCORE_SUCCESS
     });
   } catch (error) {
     console.error(error);
@@ -108,10 +108,10 @@ const updateScore = (words) => async (dispatch, getState) => {
 
 const addNewPlayerToCurrGame = (gameId) => async (dispatch, getState) => {
   const game_doc = db.collection("games").doc(gameId);
-  const { uid, displayName } = await getState().auth.user;
+  const { uid, displayName, photoURL, email } = await getState().auth.user;
 
   await game_doc.update({
-    [`players.${uid}`]: { name: displayName, uid, words: [] },
+    [`players.${uid}`]: { name: displayName, photoURL, email, uid, words: [] }
   });
 };
 
@@ -124,7 +124,7 @@ const gameOver = (gameId, winner) => async (dispatch, getState) => {
       over: true,
       winner: winner,
       overdate,
-      overtime,
+      overtime
     });
 
     const { user } = getState().auth;
@@ -132,18 +132,11 @@ const gameOver = (gameId, winner) => async (dispatch, getState) => {
       .collection("users")
       .doc(user.uid)
       .update({
-        points: firebase.firestore.FieldValue.increment(POINTS_ON_WIN),
+        points: firebase.firestore.FieldValue.increment(POINTS_ON_WIN)
       });
   } catch (error) {
     console.error(error);
   }
 };
 
-export {
-  createGame,
-  deleteGame,
-  updateScore,
-  listenToRealTimeGameChanges,
-  addNewPlayerToCurrGame,
-  gameOver,
-};
+export { createGame, deleteGame, updateScore, listenToRealTimeGameChanges, addNewPlayerToCurrGame, gameOver };

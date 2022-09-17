@@ -12,6 +12,7 @@ interface Props {
 
 export const GamePageHeader = ({ game }: Props) => {
   const players = {} as any;
+  console.log(game.players);
   Object.keys(game.players)
     .sort()
     .forEach((key) => (players[key] = game.players[key]));
@@ -39,13 +40,16 @@ export const GamePageHeader = ({ game }: Props) => {
           </div>
         </Flex>
 
-        <PlayerNamesList>
+        <PlayerNamesList className="mt-1">
           {Object.keys(players).length > 0
             ? Object.keys(players).map((key, i) => {
                 return (
                   <li key={players[key].uid} style={{ color: currentUserUid === players[key].uid ? "green" : "red" }}>
-                    <div>{players[key].name.split(" ")[0]}</div>
-                    <div style={{ fontSize: "2rem" }}>{players[key].words.length}</div>
+                    <div>
+                      <img src={players[key].photoURL} alt="" width="30" className="rounded" />
+                    </div>
+                    {/* <div>{players[key].name.split(" ")[0]}</div> */}
+                    <div style={{ fontSize: "1.8rem" }}>{players[key].words.length}</div>
                   </li>
                 );
               })
@@ -91,11 +95,11 @@ const Flex = styled.div`
 
 const PlayerNamesList = styled.ul`
   display: flex;
-  padding: 10px 0 0;
   list-style-type: none;
   text-align: center;
   margin: 0;
   justify-content: center;
+  padding: 0;
 
   li {
     padding: 0 10px;

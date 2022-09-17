@@ -2,12 +2,7 @@ import React, { useEffect } from "react";
 import { useLocation } from "react-router-dom";
 import { header_height } from "../constants";
 import { useSelector, useDispatch } from "react-redux";
-import {
-  addNewPlayerToCurrGame,
-  gameOver,
-  listenToRealTimeGameChanges,
-  RESET_CURRENT_GAME,
-} from "actions";
+import { addNewPlayerToCurrGame, gameOver, listenToRealTimeGameChanges, RESET_CURRENT_GAME } from "actions";
 import { findWinner } from "utils";
 import {
   HostInitialScreen,
@@ -16,7 +11,7 @@ import {
   NewsPaper,
   GamePageHeader,
   GameDoesNotExistScreen,
-  GameOverScreen,
+  GameOverScreen
 } from "components";
 import { RootState } from "store";
 
@@ -26,7 +21,7 @@ export const GamePage = () => {
   const gameId = location.pathname.split("/")[2];
   const { game, fetchingGame: fetching } = useSelector((state: RootState) => state.game);
   const {
-    user: { uid },
+    user: { uid }
   } = useSelector((state: RootState) => state.auth);
 
   useEffect(() => {
@@ -44,8 +39,10 @@ export const GamePage = () => {
         dispatch(addNewPlayerToCurrGame(gameId));
       }
 
+      console.log(game);
+
       const { winner } = findWinner(game);
-      if (winner) {
+      if (winner && !game.winner) {
         dispatch(gameOver(gameId, winner));
       }
     }

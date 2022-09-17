@@ -5,7 +5,7 @@ import styled from "styled-components";
 export const Loader = () => {
   return (
     <Wrapper>
-      <BarLoader />
+      <BarLoader color="white" />
     </Wrapper>
   );
 };

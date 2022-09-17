@@ -7,8 +7,8 @@ button:focus {
 }
 
 a {
-  color: #e3e3e3;
-  text-decoration: none;
+  color: #e3e3e3 !important;
+  text-decoration: none !important;
 }
 
 hr {
@@ -18,4 +18,8 @@ hr {
 .btn-icon {
   margin-right: 8px;
   vertical-align: baseline;
+}
+
+.text-center {
+  text-align: center;
 }
