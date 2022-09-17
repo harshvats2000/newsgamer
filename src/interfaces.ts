@@ -8,7 +8,8 @@ export interface GameInterface {
   gameId: string;
   paraIndex: number;
   start: boolean;
-  winner: { uid: string; name: string };
+  winner: { uid: string; name: string; photoURL: string; email: string };
+  overtimestamp: number;
 }
 
 export interface UserInterface {

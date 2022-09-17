@@ -14,6 +14,7 @@ import { fetchGames } from "./games";
 import { FETCHING_CURRENT_GAME_SUCCESS, RESET_CURRENT_GAME } from "actions";
 import { generateLetter } from "helpers";
 import { getCurrentDateAndTime } from "helpers";
+import moment from "moment";
 
 const db = firebase.firestore();
 
@@ -117,14 +118,13 @@ const addNewPlayerToCurrGame = (gameId) => async (dispatch, getState) => {
 
 const gameOver = (gameId, winner) => async (dispatch, getState) => {
   const game_doc = db.collection("games").doc(gameId);
-  const { overdate, overtime } = getCurrentDateAndTime();
+  const overtimestamp = new Date().getTime();
 
   try {
     await game_doc.update({
       over: true,
       winner: winner,
-      overdate,
-      overtime
+      overtimestamp
     });
 
     const { user } = getState().auth;

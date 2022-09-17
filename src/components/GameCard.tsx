@@ -55,7 +55,7 @@ export function GameCard({ game, dispatch }: Props) {
 const Card = styled(Link)`
   display: block;
   text-decoration: none;
-  box-shadow: 0 1px 7px 0 rgba(0, 0, 0, 0.6);
+  /* box-shadow: 0 1px 7px 0 rgba(0, 0, 0, 0.6); */
   background: ${theme.colors.surface};
   padding: 10px;
   border-radius: 4px;

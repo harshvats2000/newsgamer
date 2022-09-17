@@ -9,11 +9,12 @@ interface Props {
   children: {};
   onClick?: () => void;
   style?: {};
+  className?: string;
 }
 
 export const Button = (props: Props) => {
-  const { children, color = "white", size = "16px", variant = "black", onClick, style = {} } = props;
-  return <ButtonEl {...{ color, size, variant, onClick, style }}>{children}</ButtonEl>;
+  const { children, color = "white", size = "16px", variant = "black", onClick, style = {}, className = "" } = props;
+  return <ButtonEl {...{ color, size, variant, onClick, style, className }}>{children}</ButtonEl>;
 };
 
 const backgroundStyles = (variant: string) => {
@@ -43,7 +44,7 @@ interface ButtonProps {
 const ButtonEl = styled.button<ButtonProps>`
   ${(props) => backgroundStyles(props.variant)}
   font-size: ${(props) => props.size};
-  padding: 12px 20px;
+  padding: 8px 16px;
   border-radius: 4px;
   border: none;
   text-transform: capitalize;
