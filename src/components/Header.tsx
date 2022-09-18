@@ -21,7 +21,7 @@ export const Header = () => {
         </NewsGamer>
         <animated.div style={drop}>
           <Link to="/how-to-play">
-            <i className="fa fa-question-circle" style={{ paddingRight: "8px", fontSize: "2.4rem" }} />
+            <i className="fa fa-question-circle" style={{ paddingRight: "8px", fontSize: "2rem" }} />
           </Link>
         </animated.div>
       </Container>

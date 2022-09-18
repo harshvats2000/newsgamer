@@ -44,7 +44,7 @@ interface ButtonProps {
 const ButtonEl = styled.button<ButtonProps>`
   ${(props) => backgroundStyles(props.variant)}
   font-size: ${(props) => props.size};
-  padding: 8px 16px;
+  padding: 8px 12px;
   border-radius: 4px;
   border: none;
   text-transform: capitalize;

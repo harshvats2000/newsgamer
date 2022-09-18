@@ -3,6 +3,7 @@ import React from "react";
 import { Link } from "react-router-dom";
 import styled from "styled-components";
 import { Button } from "ui";
+import Confetti from "react-confetti";
 
 interface Props {
   game: GameInterface;
@@ -29,6 +30,7 @@ export const GameOverScreen = ({ game, uid }: Props) => {
 
   return (
     <>
+      {game.winner.uid === uid && <Confetti />}
       <Wrapper>
         <div style={{ marginTop: -100 }}>
           <h1 className="text-center">Game Over</h1>
@@ -39,10 +41,10 @@ export const GameOverScreen = ({ game, uid }: Props) => {
               return (
                 <div
                   key={player.uid}
-                  style={{
-                    color: player.uid === uid ? "green" : "red"
-                  }}
-                  className="py-2"
+                  // style={{
+                  //   color: player.uid === uid ? "green" : "unset"
+                  // }}
+                  className={`py-2 ${player.uid === uid ? "text-success" : ""}`}
                 >
                   <div className="d-flex align-items-center justify-content-between">
                     <div className="d-flex align-items-center">
@@ -61,9 +63,12 @@ export const GameOverScreen = ({ game, uid }: Props) => {
               );
             })}
           </Players>
-          <div className="text-center">
+          <div className="text-center mt-3">
             <Link to="/">
-              <Button style={{ marginTop: "20px" }}>Go back to home page</Button>
+              <Button>Go To Home</Button>
+            </Link>
+            <Link to="/profile/me" className="ms-2">
+              <Button>Go To Profile</Button>
             </Link>
           </div>
         </div>

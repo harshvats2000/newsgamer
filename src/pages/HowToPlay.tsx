@@ -6,7 +6,7 @@ import { Para } from "ui";
 
 const rules = [
   "To play this game, you must be logged in with a Google account.",
-  "Click on create new game. This will take you to game page. The game will be created but will not start until you click on start game button.",
+  "Click on create game. This will take you to game page. The game will be created but will not start until you click on start game button.",
   "Anyone who will visit the new game page url will automatically be joined to the game.",
   "All the participants can see each other's name and score at the top of game page.",
   "A letter will appear at the top of game page. It will be same for all players so that the difficulty level is same for all players.",

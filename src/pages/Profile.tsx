@@ -9,6 +9,7 @@ import { RootState } from "store";
 import { GameInterface } from "interfaces";
 import styled from "styled-components";
 import moment from "moment";
+import { Link } from "react-router-dom";
 
 const db = firebase.firestore();
 
@@ -50,12 +51,18 @@ export const Profile = () => {
             <img src={user.photoURL} alt="" className="rounded" />
           </div>
           <div className="ps-2">
-            <h4 style={{ width: "calc(100vw - 120px)" }} className="m-0 text-truncate">
+            <h4 style={{ width: "calc(100vw - 120px)", maxWidth: 250 }} className="m-0 text-truncate">
               {user.displayName}
             </h4>
-            <p style={{ width: "calc(100vw - 120px)" }} className="mb-1 text-muted text-truncate">
+            <p style={{ width: "calc(100vw - 120px)", maxWidth: 250 }} className="mb-1 text-muted text-truncate">
               {user.email}
             </p>
+            <Link to="/" className="me-2">
+              <Button>
+                {/* <i className="fa fa-arrow-left btn-icon" /> */}
+                Go To Home
+              </Button>
+            </Link>
             <Button className="bg-danger text-white" variant="red" onClick={() => dispatch(logout())}>
               <i className="fa fa-sign-out btn-icon text-white" />
               Logout
@@ -64,30 +71,37 @@ export const Profile = () => {
         </div>
 
         {/* <h3 style={{ textAlign: "center" }}>Winning % = {!isNaN(winPercent) && winPercent.toFixed(2)}</h3> */}
+
         {fetching ? (
           <Loader />
         ) : (
           <>
             <h3 className="my-3">
-              {playedGames?.length} <span className="text-muted fs-4">games played</span>
+              {playedGames?.length}{" "}
+              <span className="text-muted fs-4">{playedGames?.length === 1 ? "game" : "games"} played</span>
             </h3>
 
             {playedGames.map((game: GameInterface) => (
               <div key={game.gameId} className="p-2 bg-dark mb-2">
-                <div style={{ color: user.uid === game.winner.uid ? "green" : "red" }}>
-                  {user.uid === game.winner.uid ? "Won" : "Lost"}
+                <div className="d-flex align-items-center justify-content-between">
+                  <div style={{ color: user.uid === game.winner.uid ? "green" : "red" }}>
+                    {user.uid === game.winner.uid ? "Won" : "Lost"}
+                  </div>
+                  <Link to={`/game/${game.gameId}`}>View Score</Link>
                 </div>
-                <div className="mb-2">{moment(game.overtimestamp).fromNow()}</div>
-                {/* <div>{moment(game.overtimestamp).format("MMMM Do YYYY, h:mm:ss a")}</div> */}
-                <div>
-                  {Object.keys(game.players).map((player) => (
-                    <img
-                      src={game.players[player].photoURL}
-                      key={game.players[player].uid}
-                      width="30"
-                      className="rounded me-1"
-                    />
-                  ))}
+
+                <div className="d-flex align-items-center justify-content-between pt-2">
+                  <div>
+                    {Object.keys(game.players).map((player) => (
+                      <img
+                        src={game.players[player].photoURL}
+                        key={game.players[player].uid}
+                        width="30"
+                        className="rounded me-1"
+                      />
+                    ))}
+                  </div>
+                  <div>{moment(game.overtimestamp).fromNow()}</div>
                 </div>
               </div>
             ))}

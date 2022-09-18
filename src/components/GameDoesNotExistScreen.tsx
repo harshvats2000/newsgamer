@@ -12,9 +12,12 @@ export const GameDoesNotExistScreen = () => {
         <div className="text-center">
           <Link to="/">
             <Button>
-              <i className="fa fa-arrow-left btn-icon" />
-              Go Back To Home
+              {/* <i className="fa fa-arrow-left btn-icon" /> */}
+              Go To Home
             </Button>
+          </Link>
+          <Link to="/profile/me">
+            <Button>Go To Profile</Button>
           </Link>
         </div>
       </div>

@@ -25,28 +25,38 @@ export const Home = () => {
 
   const nameAndActions = () => {
     return (
-      <NameAndActions>
-        <DisplayName>{user?.displayName}</DisplayName>
-        <Link to="/profile/me" style={{ marginRight: "10px" }}>
-          <Button variant="green">
-            <i className="fa fa-user btn-icon" />
-            Profile
-          </Button>
-        </Link>
-        <Button variant="green" onClick={() => dispatch(createGame(history))}>
-          <i className="fa fa-plus btn-icon" />
-          create new game
-        </Button>
-      </NameAndActions>
+      <div className="d-flex">
+        <img src={user.photoURL} key={user.uid} className="rounded" />
+        <div className="ps-2">
+          <h4 style={{ width: "calc(100vw - 120px)", maxWidth: 250 }} className="m-0 text-truncate">
+            {user.displayName}
+          </h4>
+          <p style={{ width: "calc(100vw - 120px)", maxWidth: 250 }} className="mb-1 text-muted text-truncate">
+            {user.email}
+          </p>
+          <div className="d-flex align-items-center">
+            <Link to="/profile/me" className="me-2">
+              <Button variant="green">
+                <i className="fa fa-user btn-icon" />
+                Profile
+              </Button>
+            </Link>
+            <Button variant="green" onClick={() => dispatch(createGame(history))}>
+              <i className="fa fa-plus btn-icon" />
+              Create Game
+            </Button>
+          </div>
+        </div>
+      </div>
     );
   };
 
   const refreshLine = () => {
     return (
       <Refresh>
-        <Para m="0px" size="13px">
+        <p className="m-0 fs-6">
           The games are updated every <Seconds>{GAME_UPDATING_INTERVAL}</Seconds> seconds.
-        </Para>
+        </p>
         <div>
           <i className="fa fa-refresh" id="refresh-icon" onClick={(e) => dispatch(fetchGames())} />
         </div>
@@ -90,22 +100,12 @@ const Body = styled.div`
   margin: auto;
   padding: 10px;
 `;
-const NameAndActions = styled.div`
-  padding: 0px 10px 10px;
-  text-align: center;
-`;
-const DisplayName = styled.h2`
-  color: green;
-  text-transform: capitalize;
-  margin-top: 5px;
-`;
 const Refresh = styled.div`
   display: flex;
   justify-content: space-between;
-  padding: 0 20px 0 10px;
   align-items: center;
   font-size: 1.5rem;
-  padding: 10px;
+  padding: 10px 0;
 `;
 const AvailGamesWrapper = styled.div`
   padding: 10px 0;

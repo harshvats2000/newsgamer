@@ -13,8 +13,6 @@ import {
 import { fetchGames } from "./games";
 import { FETCHING_CURRENT_GAME_SUCCESS, RESET_CURRENT_GAME } from "actions";
 import { generateLetter } from "helpers";
-import { getCurrentDateAndTime } from "helpers";
-import moment from "moment";
 
 const db = firebase.firestore();
 
