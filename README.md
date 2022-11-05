@@ -13,7 +13,7 @@
     A real-time multiplayer web game.
     <br />
     <br />
-    <a href="https://newsgamer.vercel.app">Play Now</a>
+    <a href="https://newsgamer.harshvats.dev">Play Now</a>
     ·
     <a href="https://github.com/harshvats2000/newsgamer/issues">Report Bug</a>
     ·

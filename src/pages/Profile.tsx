@@ -31,14 +31,12 @@ export const Profile = () => {
         snap.forEach((doc: any) => {
           doc.data().over && games.push(doc.data());
         });
-        console.log(games);
 
         games = games.sort((a: GameInterface, b: GameInterface) => b.overtimestamp - a.overtimestamp);
 
         setPlayedGames(games);
         setFetching(false);
       });
-    // console.log(user);
   }, [user.uid]);
 
   return (
@@ -48,7 +46,7 @@ export const Profile = () => {
       <div className={classes.body}>
         <div className="d-flex">
           <div>
-            <img src={user.photoURL} alt="" className="rounded" />
+            <img src={user.photoURL} alt="" className="rounded" referrerPolicy="no-referrer" />
           </div>
           <div className="ps-2">
             <h4 style={{ width: "calc(100vw - 120px)", maxWidth: 250 }} className="m-0 text-truncate">
@@ -98,6 +96,7 @@ export const Profile = () => {
                         key={game.players[player].uid}
                         width="30"
                         className="rounded me-1"
+                        referrerPolicy="no-referrer"
                       />
                     ))}
                   </div>

@@ -26,7 +26,7 @@ export const Home = () => {
   const nameAndActions = () => {
     return (
       <div className="d-flex">
-        <img src={user.photoURL} key={user.uid} className="rounded" />
+        <img src={user.photoURL} key={user.uid} className="rounded" referrerPolicy="no-referrer" />
         <div className="ps-2">
           <h4 style={{ width: "calc(100vw - 120px)", maxWidth: 250 }} className="m-0 text-truncate">
             {user.displayName}

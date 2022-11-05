@@ -45,7 +45,13 @@ export const GamePageHeader = ({ game }: Props) => {
                 return (
                   <li key={players[key].uid} style={{ color: currentUserUid === players[key].uid ? "green" : "red" }}>
                     <div>
-                      <img src={players[key].photoURL} alt="" width="30" className="rounded" />
+                      <img
+                        src={players[key].photoURL}
+                        alt=""
+                        width="30"
+                        className="rounded"
+                        referrerPolicy="no-referrer"
+                      />
                     </div>
                     {/* <div>{players[key].name.split(" ")[0]}</div> */}
                     <div style={{ fontSize: "1.8rem" }}>{players[key].words.length}</div>

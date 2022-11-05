@@ -8,7 +8,7 @@ const invitePlayers = (gameId: string) => {
     navigator.share({
       title: "Come play NewsGamer with me.",
       text: "Come play NewsGamer with me.",
-      url: "https://newsgamer.vercel.app/game/" + gameId
+      url: "https://newsgamer.harshvats.dev/game/" + gameId
     });
   }
 };

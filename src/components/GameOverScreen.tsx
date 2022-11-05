@@ -1,9 +1,11 @@
 import { GameInterface } from "interfaces";
-import React from "react";
+import React, { useEffect } from "react";
 import { Link } from "react-router-dom";
 import styled from "styled-components";
 import { Button } from "ui";
 import Confetti from "react-confetti";
+import { RootState } from "store";
+import { useSelector } from "react-redux";
 
 interface Props {
   game: GameInterface;
@@ -18,6 +20,7 @@ interface Player {
 }
 
 export const GameOverScreen = ({ game, uid }: Props) => {
+  const { user: currentUser } = useSelector((state: RootState) => state.auth);
   const initial_array: Player[] = Object.keys(game.players).map((key: string) => ({
     uid: key,
     score: game.players[key].words.length,
@@ -49,11 +52,11 @@ export const GameOverScreen = ({ game, uid }: Props) => {
                   <div className="d-flex align-items-center justify-content-between">
                     <div className="d-flex align-items-center">
                       <div className="me-2">{i + 1}</div>
-                      <img src={player.photoURL} alt="" width="50" className="rounded" />
+                      <img src={player.photoURL} alt="" width="50" className="rounded" referrerPolicy="no-referrer" />
                       <div className="d-flex align-items-center">
                         <div className="px-2">
-                          <div>{player.name}</div>
-                          <div className="text-muted">{player.email}</div>
+                          <div>{player.uid === currentUser.uid ? "You" : player.name}</div>
+                          {/* <div className="text-muted">{player.email}</div> */}
                         </div>
                       </div>
                     </div>
