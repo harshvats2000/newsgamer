@@ -1,6 +1,6 @@
 import { isProduction } from "helpers";
 
-export const max_score = isProduction() ? 10 : 1;
+export const max_score = isProduction() ? 10 : 3;
 export const header_height = "110px";
 export const adminUid = "0hL11HkSadVguTNpVcCWqDhFy6r2"; // vatsvatsharsh2000@gmail.com
 export const POINTS_ON_WIN = 10;

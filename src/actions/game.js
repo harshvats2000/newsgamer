@@ -35,8 +35,8 @@ const createGame = (history) => async (dispatch, getState) => {
     type: CREATING_GAME
   });
 
-  const paraIndex = Math.floor(Math.random() * content.length);
-  let letter = generateLetter(paraIndex);
+  const para = content[Math.floor(Math.random() * content.length)];
+  let letter = generateLetter(para);
   const id = uuidv4();
   history.push(`/game/${id}`);
 
@@ -45,7 +45,7 @@ const createGame = (history) => async (dispatch, getState) => {
     createdBy: { uid, name: displayName, email, photoURL },
     gameId: id,
     letter: letter,
-    paraIndex: paraIndex,
+    para,
     creationdate: firebase.database.ServerValue.TIMESTAMP,
     createdAt: Date.now(),
     over: false,

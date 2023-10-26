@@ -17,16 +17,16 @@ const isAdmin = (uid: string) => {
   return uid === adminUid;
 };
 
-const generateLetter = (paraIndex: number): any => {
+const generateLetter = (para: string): any => {
   let letter = getRandomAlphabet();
 
   // Check if paragraph contains enough words with alphabet
-  let arr = content[paraIndex].split(" ").filter((word: string) => word.toLowerCase().indexOf(letter) === 0);
+  let arr = para.split(" ").filter((word: string) => word.toLowerCase().indexOf(letter) === 0);
 
   if (arr.length >= max_score && arr.length <= max_score + 5) {
     return letter;
   } else {
-    return generateLetter(paraIndex);
+    return generateLetter(para);
   }
 };
 

@@ -52,7 +52,7 @@ export const NewsPaper = () => {
 
   return (
     <Wrapper onContextMenu={() => false}>
-      {content[game.paraIndex].split(" ").map((word: string, i: number) => {
+      {game.para.split(" ").map((word: string, i: number) => {
         let id = word.trim().replace("”", "").replace("“", "").replace(",", "") + i;
         return (
           <span key={i} style={{ whiteSpace: "initial" }}>

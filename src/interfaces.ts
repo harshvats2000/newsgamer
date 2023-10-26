@@ -6,7 +6,7 @@ export interface GameInterface {
   over: boolean;
   creationDate: {};
   gameId: string;
-  paraIndex: number;
+  para: string;
   start: boolean;
   winner: { uid: string; name: string; photoURL: string; email: string };
   overtimestamp: number;
