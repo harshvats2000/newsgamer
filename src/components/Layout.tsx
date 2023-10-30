@@ -11,4 +11,7 @@ export const Layout = ({ children }: Props) => {
 
 const Wrapper = styled.main`
   margin-top: 56px;
+  max-width: 1000px;
+  margin-left: auto;
+  margin-right: auto;
 `;
