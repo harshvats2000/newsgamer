@@ -1,5 +1,5 @@
 import { GameInterface } from "interfaces";
-import React, { useEffect } from "react";
+import React from "react";
 import { Link } from "react-router-dom";
 import styled from "styled-components";
 import { Button } from "ui";

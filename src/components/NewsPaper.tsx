@@ -4,7 +4,7 @@ import React from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { RootState } from "store";
 import styled from "styled-components";
-import { content, header_height, theme } from "../constants";
+import { header_height, theme } from "../constants";
 
 export const NewsPaper = () => {
   const { game } = useSelector((state: RootState) => state.game);

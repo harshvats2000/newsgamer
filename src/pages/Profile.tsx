@@ -7,7 +7,6 @@ import { logout } from "actions";
 import { Button } from "ui";
 import { RootState } from "store";
 import { GameInterface } from "interfaces";
-import styled from "styled-components";
 import moment from "moment";
 import { Link } from "react-router-dom";
 
@@ -92,6 +91,7 @@ export const Profile = () => {
                   <div>
                     {Object.keys(game.players).map((player) => (
                       <img
+                        alt=""
                         src={game.players[player].photoURL}
                         key={game.players[player].uid}
                         width="30"

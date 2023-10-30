@@ -1,5 +1,5 @@
 import { adminUid } from "../constants";
-import { content, max_score } from "../constants";
+import { max_score } from "../constants";
 
 const isProduction = () => process.env.NODE_ENV === "production";
 

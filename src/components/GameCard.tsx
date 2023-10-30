@@ -2,7 +2,6 @@ import React from "react";
 import { Link } from "react-router-dom";
 import { deleteGame } from "actions";
 import styled from "styled-components";
-import { timeSince } from "utils";
 import { useSelector } from "react-redux";
 import { isAdmin } from "helpers";
 import { RootState } from "store";
