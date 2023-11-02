@@ -26,7 +26,7 @@ function App() {
   }, [dispatch]);
 
   return (
-    <div className="App">
+    <div>
       {authenticating ? (
         <Loader />
       ) : (
