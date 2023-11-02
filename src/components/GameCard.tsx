@@ -35,7 +35,7 @@ export function GameCard({ game, dispatch }: Props) {
           Game by <span>{hostName}</span>.
           <br />
         </Text>
-        {user.uid === createdBy.uid || isAdmin(user.uid) ? (
+        {user.uid === createdBy.uid || isAdmin(user.email) ? (
           <Actions>
             <TrashIcon className="fa fa-trash" onClick={handleDelete} />
           </Actions>

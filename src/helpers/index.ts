@@ -1,4 +1,4 @@
-import { adminUid } from "../constants";
+import { adminEmail } from "../constants";
 import { max_score } from "../constants";
 
 const isProduction = () => process.env.NODE_ENV === "production";
@@ -13,8 +13,8 @@ const invitePlayers = (gameId: string) => {
   }
 };
 
-const isAdmin = (uid: string) => {
-  return uid === adminUid;
+const isAdmin = (email: string) => {
+  return email === adminEmail;
 };
 
 const generateLetter = (para: string): any => {
