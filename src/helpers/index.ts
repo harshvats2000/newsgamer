@@ -8,7 +8,7 @@ const invitePlayers = (gameId: string) => {
     navigator.share({
       title: "Come play NewsGamer with me.",
       text: "Come play NewsGamer with me.",
-      url: "https://newsgamer.harshvats.dev/game/" + gameId
+      url: "https://newsgamer-old.harshvats.dev/game/" + gameId
     });
   }
 };
